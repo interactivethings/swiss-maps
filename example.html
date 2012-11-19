@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Swiss Maps</title>
+    <script src="http://d3js.org/d3.v2.min.js"></script>
+    <script src="https://raw.github.com/mbostock/topojson/master/topojson.js"></script>
+    <style type="text/css">
+      path {
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Swiss Maps</h1>
+    <select id="map-data-select"></select>
+    <div id="map-container"></div>
+
+    <script type="text/javascript">
+      var dimensions = {
+        width: 800,
+        height: 500
+      },
+      mapDataSources = [
+        {name: 'Cantons – GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons.geojson'},
+        {name: 'Cantons – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons-simplified.geojson'},
+        // {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.topojson'},
+        {name: 'Municipalities – GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities.geojson'},
+        {name: 'Municipalities – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities-simplified.geojson'},
+        // {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.topojson'}
+      ],
+      mapDataSelect = d3.select('#map-data-select'),
+      map = d3.select('#map-container').append('svg')
+        .attr(dimensions);
+
+      mapDataSelect.on('change', function() {
+        updateMap(d3.select(this).property('value'));
+      });
+
+      mapDataSelect.selectAll('option')
+          .data(mapDataSources, function(d) { return d.name })
+        .enter().append('option')
+          .text(function(d) { return d.name })
+          .property('value', function(d) { return d.src });
+
+
+      // Create geo path generator with Switzerland centered and zoomed in
+      var swissLonLat = [8.231726, 46.798473], 
+      scale = 60000,
+      projection = d3.geo.mercator().scale(scale),
+      center = projection(swissLonLat);
+
+      projection.translate([dimensions.width/2 + 480 - center[0], dimensions.height/2 + 250 - center[1]])
+
+      var geoPath = d3.geo.path()
+        .projection(projection)
+
+      // Kickstart
+      updateMap(mapDataSelect.property('value'));
+
+      function updateMap(mapDataSource) {
+        d3.json(mapDataSource, function(mapData) {
+          switch(mapData.type) {
+            case 'FeatureCollection':
+              renderGeoJSON(mapData);
+              break;
+            case 'Topology':
+              renderTopoJSON(mapData);
+              break;
+          }
+        });
+      }
+
+      function renderGeoJSON(mapData) {
+        map.selectAll('path').remove() // Ugly! Rather use a data key function which differentiates between municipality and canton IDs.
+
+        mapShapes = map.selectAll('path')
+          .data(mapData.features);
+
+        mapShapes.enter().append('path')
+          .attr('d', geoPath);
+
+        mapShapes.exit().remove();
+      }
+
+      function renderTopoJSON(mapData) {
+        map.selectAll('path').remove()
+
+        map.append('path')
+          .datum(topojson.mesh(mapData))
+          .attr('d', geoPath)
+      }
+
+    </script>
+  </body>
+</html>
