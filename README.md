@@ -1,6 +1,6 @@
 # Swiss Maps
 
-This repo contains Swiss cantons and municipality maps in open formats that can be used to build static and interactive maps (mainly with [D3](http://d3js.org)).
+This repo hosts Swiss canton and municipality geodata in open formats that can be used to build static and interactive maps (e.g. with [D3](http://d3js.org)).
 
 Data source is the Swiss Federal Office of Topography, [swissBOUNDARIES3D](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/landscape/swissBOUNDARIES3D.html) 2012.
 
@@ -20,11 +20,11 @@ The ESRI Shapefiles are generated with [QGIS](http://qgis.org) using the 'V200' 
 
 The CRS is set to *WGS84* because that's the default for GeoJSON.
 
-The simplified are created with [MapShaper](http://mapshaper.org), using the Visvalingam algorithm with 50% simplification.
+The simplified shapefiles are created with [MapShaper](http://mapshaper.org), using the Visvalingam algorithm with 50% simplification.
 
 ## GeoJSON
 
-The GeoJSON files are derived directly from the shapefiles with `ogr2ogr -f geoJSON file.geojson file.shp`. The simplified versions are additionally compressed with [LilJSON](https://github.com/migurski/LilJSON)
+The GeoJSON files are derived directly from the shapefiles with `ogr2ogr -f geoJSON file.geojson file.shp`. The simplified versions are additionally compressed with [LilJSON](https://github.com/migurski/LilJSON).
 
 ### License
 
