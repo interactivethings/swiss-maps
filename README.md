@@ -4,7 +4,7 @@ This repo contains Swiss cantons and municipality maps in open formats that can 
 
 Data source is the Swiss Federal Office of Topography, [swissBOUNDARIES3D](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/landscape/swissBOUNDARIES3D.html) 2012.
 
-It currently contain:
+Following formats are available or planned for the near future:
 
 - [ESRI Shapefile](http://en.wikipedia.org/wiki/Shapefile)
 - [GeoJSON](http://www.geojson.org/)
