@@ -1,6 +1,6 @@
 # Swiss Maps
 
-This repo contains Swiss cantons and municipality maps in open formats that can be used to build static and interactive maps (mainly with [D3](http://d3js.org).
+This repo contains Swiss cantons and municipality maps in open formats that can be used to build static and interactive maps (mainly with [D3](http://d3js.org)).
 
 Data source is the Swiss Federal Office of Topography, [swissBOUNDARIES3D](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/landscape/swissBOUNDARIES3D.html) 2012.
 
