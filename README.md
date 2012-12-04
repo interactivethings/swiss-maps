@@ -6,7 +6,7 @@ Following formats are available or planned for the near future:
 
 - [ESRI Shapefile](http://en.wikipedia.org/wiki/Shapefile)
 - [GeoJSON](http://www.geojson.org/)
-- [TopoJSON](https://github.com/mbostock/topojson) (soon!)
+- [TopoJSON](https://github.com/mbostock/topojson)
 
 ## Development Notes
 
