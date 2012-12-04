@@ -22,6 +22,10 @@ The simplified shapefiles are generated with [MapShaper](http://mapshaper.org), 
 
 Run `rake geojson` to generate the GeoJSON files from the shapefiles. Useful feature properties are automatically populated and converted to camelCase. Coordinates are rounded to a precision of 3 with [LilJSON](https://github.com/migurski/LilJSON).
 
+### TopoJSON
+
+Run `rake topojson` to generate the TopoJSON files from the GeoJSON files. Note that the simplified files are using the non-simplified GeoJSON as input and are simplified using TopoJSON with the `-s 1000` setting.
+
 ## Copyright and License
 
 ### Author
