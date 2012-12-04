@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Swiss Maps</title>
     <script src="http://d3js.org/d3.v2.min.js"></script>
-    <script src="https://raw.github.com/mbostock/topojson/master/topojson.js"></script>
+    <script src="lib/topojson.js"></script>
     <style type="text/css">
       path {
         fill: #fff;
@@ -26,10 +26,12 @@
       mapDataSources = [
         {name: 'Cantons – GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons.geojson'},
         {name: 'Cantons – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons-simplified.geojson'},
-        // {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.topojson'},
+        {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.topojson'},
+        {name: 'Cantons – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons-simplified.topojson'},
         {name: 'Municipalities – GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities.geojson'},
         {name: 'Municipalities – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities-simplified.geojson'},
-        // {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.topojson'}
+        {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.topojson'},
+        {name: 'Municipalities – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities-simplified.topojson'}
       ],
       mapDataSelect = d3.select('#map-data-select'),
       map = d3.select('#map-container').append('svg')
@@ -74,7 +76,7 @@
       }
 
       function renderGeoJSON(mapData) {
-        map.selectAll('path').remove() // Ugly! Rather use a data key function which differentiates between municipality and canton IDs.
+        map.selectAll('path').remove() // FIXME! Rather use a data key function which differentiates between municipality and canton IDs.
 
         mapShapes = map.selectAll('path')
           .data(mapData.features);
@@ -86,11 +88,20 @@
       }
 
       function renderTopoJSON(mapData) {
-        map.selectAll('path').remove()
+        map.selectAll('path').remove();
 
-        map.append('path')
-          .datum(topojson.mesh(mapData))
-          .attr('d', geoPath)
+        var objects = mapData.objects["swiss-cantons.geojson"] || mapData.objects["swiss-municipalities.geojson"]; // FIXME
+
+        mapShapes = map.selectAll('path')
+          .data(topojson.object(mapData, objects).geometries)
+
+        mapShapes.enter().append('path')
+          .attr('d', geoPath);
+
+        mapShapes.exit().remove();
+        // map.append('path')
+        //   .datum(topojson.mesh(mapData))
+        //   .attr('d', geoPath)
       }
 
     </script>
