@@ -20,7 +20,7 @@ The simplified shapefiles are generated with [MapShaper](http://mapshaper.org), 
 
 ### GeoJSON
 
-The GeoJSON files are derived directly from the shapefiles with `ogr2ogr -f geoJSON file.geojson file.shp`. The simplified versions are additionally compressed with [LilJSON](https://github.com/migurski/LilJSON).
+Run `rake geojson` to generate the GeoJSON files from the shapefiles. Useful feature properties are automatically populated and converted to camelCase. Coordinates are rounded to a precision of 3 with [LilJSON](https://github.com/migurski/LilJSON).
 
 ## Copyright and License
 
