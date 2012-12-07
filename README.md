@@ -2,7 +2,7 @@
 
 This repo hosts Swiss canton and municipality geodata in open formats that can be used to build static and interactive maps (e.g. with [D3](http://d3js.org)).
 
-Following formats are available or planned for the near future:
+The following formats are available:
 
 - [ESRI Shapefile](http://en.wikipedia.org/wiki/Shapefile)
 - [GeoJSON](http://www.geojson.org/)
@@ -25,6 +25,10 @@ Run `rake geojson` to generate the GeoJSON files from the shapefiles. Useful fea
 ### TopoJSON
 
 Run `rake topojson` to generate the TopoJSON files from the GeoJSON files. Note that the simplified files are using the non-simplified GeoJSON as input and are simplified using TopoJSON with the `-s 1000` setting.
+
+## Demo
+
+Have a look at this [demo using d3.js](http://bl.ocks.org/4207744) to see how you can integrate the TopoJSON files with [d3.js](http://d3js.org/).
 
 ## Copyright and License
 
