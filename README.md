@@ -26,9 +26,10 @@ Run `rake geojson` to generate the GeoJSON files from the shapefiles. Useful fea
 
 Run `rake topojson` to generate the TopoJSON files from the GeoJSON files. Note that the simplified files are using the non-simplified GeoJSON as input and are simplified using TopoJSON with the `-s 1000` setting.
 
-## Demo
+## Examples
 
-Have a look at this [demo using d3.js](http://bl.ocks.org/4207744) to see how you can integrate the TopoJSON files with [d3.js](http://d3js.org/).
+* [TopoJSON Cantons and Municipalities](http://bl.ocks.org/4327678) (stored in a single file!)
+* [TopoJSON Cantons](http://bl.ocks.org/4207744)
 
 ## Copyright and License
 
