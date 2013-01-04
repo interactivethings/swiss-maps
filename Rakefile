@@ -26,6 +26,6 @@ task :topojson do
     system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s 1000 --properties"
   end
 
-  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/swiss-cantons-municipalities.json' --properties"
-  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/swiss-cantons-municipalities-simplified.json' -s 1000 --properties"
+  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland.json' --properties"
+  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s 1000 --properties"
 end
