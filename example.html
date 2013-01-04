@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Swiss Maps</title>
-    <script src="http://d3js.org/d3.v2.min.js"></script>
-    <script src="lib/topojson.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v0.min.js"></script>
     <style type="text/css">
       path {
         fill: #fff;
         stroke: #000;
-        stroke-width: 1;
+        stroke-width: 1px;
       }
     </style>
   </head>
@@ -20,7 +20,7 @@
 
     <script type="text/javascript">
       var dimensions = {
-        width: 800,
+        width: 960,
         height: 500
       },
       mapDataSources = [
@@ -49,12 +49,10 @@
 
 
       // Create geo path generator with Switzerland centered and zoomed in
-      var swissLonLat = [8.231726, 46.798473], 
-      scale = 60000,
-      projection = d3.geo.mercator().scale(scale),
-      center = projection(swissLonLat);
-
-      projection.translate([dimensions.width/2 + 480 - center[0], dimensions.height/2 + 250 - center[1]])
+      var projection = d3.geo.albers()
+        .rotate([0, 0])
+        .center([8.43, 46.8])
+        .scale(13600);
 
       var geoPath = d3.geo.path()
         .projection(projection)
@@ -63,7 +61,7 @@
       updateMap(mapDataSelect.property('value'));
 
       function updateMap(mapDataSource) {
-        d3.json(mapDataSource, function(mapData) {
+        d3.json(mapDataSource, function(error, mapData) {
           switch(mapData.type) {
             case 'FeatureCollection':
               renderGeoJSON(mapData);
@@ -96,7 +94,13 @@
           .data(topojson.object(mapData, objects).geometries)
 
         mapShapes.enter().append('path')
-          .attr('d', geoPath);
+          .attr('d', geoPath)
+          .on('click', function(d) {
+            var centroid = d3.geo.centroid(d);
+            projection.center(centroid).scale(18000);
+            mapShapes.transition()
+              .attr('d', geoPath);
+          });
 
         mapShapes.exit().remove();
         // map.append('path')
