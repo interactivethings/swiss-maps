@@ -24,14 +24,14 @@
         height: 500
       },
       mapDataSources = [
-        {name: 'Cantons – GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons.geojson'},
-        {name: 'Cantons – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons-simplified.geojson'},
-        {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.topojson'},
-        {name: 'Cantons – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons-simplified.topojson'},
-        {name: 'Municipalities – GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities.geojson'},
-        {name: 'Municipalities – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities-simplified.geojson'},
-        {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.topojson'},
-        {name: 'Municipalities – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities-simplified.topojson'}
+        {name: 'Cantons – GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons.json'},
+        {name: 'Cantons – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons-simplified.json'},
+        {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.json'},
+        {name: 'Cantons – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons-simplified.json'},
+        {name: 'Municipalities – GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities.json'},
+        {name: 'Municipalities – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities-simplified.json'},
+        {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.json'},
+        {name: 'Municipalities – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities-simplified.json'}
       ],
       mapDataSelect = d3.select('#map-data-select'),
       map = d3.select('#map-container').append('svg')
@@ -90,7 +90,7 @@
       function renderTopoJSON(mapData) {
         map.selectAll('path').remove();
 
-        var objects = mapData.objects["swiss-cantons.geojson"] || mapData.objects["swiss-municipalities.geojson"]; // FIXME
+        var objects = mapData.objects["swiss-cantons"] || mapData.objects["swiss-municipalities"]; // FIXME
 
         mapShapes = map.selectAll('path')
           .data(topojson.object(mapData, objects).geometries)
