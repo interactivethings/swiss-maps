@@ -24,7 +24,7 @@ Run `rake geojson` to generate the GeoJSON files from the shapefiles. Useful fea
 
 ### TopoJSON
 
-Run `rake topojson` to generate the TopoJSON files from the GeoJSON files. Note that the simplified files are using the non-simplified GeoJSON as input and are simplified using TopoJSON with the `-s 1000` setting.
+Run `rake topojson` to generate the TopoJSON files from the GeoJSON files. Note that the simplified files are using the non-simplified GeoJSON as input and are simplified using TopoJSON with the `-s 10e-9` setting.
 
 ## Examples
 
