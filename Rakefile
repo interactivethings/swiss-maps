@@ -1,4 +1,5 @@
 LILJSON_PRECISION = 3
+TOPOJSON_PRECISION = 10e-9 # 1 nsr, see http://en.wikipedia.org/wiki/Steradian
 
 desc "Generate GeoJSON files"
 task :geojson do
@@ -23,9 +24,9 @@ task :topojson do
 
   src.each do |file_name|
     system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' --properties"
-    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s 1000 --properties"
+    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
   end
 
   system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland.json' --properties"
-  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s 1000 --properties"
+  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
 end
