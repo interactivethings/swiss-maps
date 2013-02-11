@@ -6,13 +6,21 @@ task :geojson do
   rm Dir.glob("geojson/*.*json")
 
   %w{ swiss-cantons swiss-cantons-simplified }.each do |file_name|
+    puts "Converting Cantons ..."
     system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/#{file_name}/#{file_name}.shp' -sql \"SELECT NR AS no, ABKUERZUNG AS abbr, NAME AS name FROM '#{file_name}'\""
     system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
   end
 
   %w{ swiss-municipalities swiss-municipalities-simplified }.each do |file_name|
+    puts "Converting Municipalities ..."
     system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/#{file_name}/#{file_name}.shp' -sql \"SELECT BFSNR AS bfsNo, GEMTEIL AS municipalityPart, KANTONSNR AS cantonNo, GEMNAME AS name FROM '#{file_name}'\""
     system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
+  end
+
+  %w{ swiss-contours-1000 }.each do |file_name|
+    puts "Converting Contours ..."
+    system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/swiss-contours/#{file_name}.shp'"
+    # system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
   end
 end
 
@@ -22,11 +30,16 @@ task :topojson do
 
   src = %w{ swiss-cantons swiss-municipalities }
 
-  src.each do |file_name|
-    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' --properties"
-    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
+  # src.each do |file_name|
+  #   system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' --properties"
+  #   system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
+  # end
+
+  %w{ swiss-contours-1000 }.each do |file_name|
+    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' -p ELEV --id-property ID"
+    # system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s 10e-6 --properties"
   end
 
-  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland.json' --properties"
-  system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
+  # system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland.json' --properties --id-property ID"
+  # system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
 end
