@@ -7,7 +7,7 @@
     <script src="http://d3js.org/topojson.v0.js"></script>
     <style type="text/css">
       path {
-        fill: #fff;
+        fill: none;
         stroke: #000;
         stroke-width: 1px;
       }
@@ -24,17 +24,7 @@
         height: 500
       },
       mapDataSources = [
-        {name: 'Cantons – GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons.json'},
-        {name: 'Cantons – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-cantons-simplified.json'},
-        {name: 'Cantons – TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons.json'},
-        {name: 'Cantons – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-cantons-simplified.json'},
-        {name: 'Municipalities – GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities.json'},
-        {name: 'Municipalities – Simplified GeoJSON', type: 'geojson', src: 'geojson/swiss-municipalities-simplified.json'},
-        {name: 'Contours – GeoJSON', type: 'geojson', src: 'geojson/swiss-contours-1000.json'},
-        {name: 'Municipalities – TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities.json'},
-        {name: 'Municipalities – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-municipalities-simplified.json'},
-        {name: 'Contours – TopoJSON', type: 'topojson', src: 'topojson/swiss-contours-1000.json'},
-        {name: 'Contours – Simplified TopoJSON', type: 'topojson', src: 'topojson/swiss-contours-1000-simplified.json'}
+        {name: 'Contours – TopoJSON', type: 'topojson', src: 'topojson/contours-200.json'}
       ],
       mapDataSelect = d3.select('#map-data-select'),
       map = d3.select('#map-container').append('svg')
@@ -91,13 +81,18 @@
       function renderTopoJSON(mapData) {
         map.selectAll('path').remove();
 
-        var objects = mapData.objects["swiss-cantons"] || mapData.objects["swiss-municipalities"] || mapData.objects["swiss-contours-1000"]; // FIXME
+        var objects = mapData.objects["swiss-cantons"] || mapData.objects["swiss-municipalities"] || mapData.objects["contours-200"]; // FIXME
+
+        var color = d3.scale.linear()
+          .domain([0, 5000])
+          .range(["#fff", "#f00"]);
 
         mapShapes = map.selectAll('path')
           .data(topojson.object(mapData, objects).geometries)
 
         mapShapes.enter().append('path')
           .attr('d', geoPath)
+          .style("stroke", function(d) { return color(d.ELEV) } )
           // .on('click', function(d) {
           //   var centroid = d3.geo.centroid(d);
           //   projection.center(centroid).scale(18000);

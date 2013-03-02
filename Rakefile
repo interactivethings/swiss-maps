@@ -1,5 +1,28 @@
+require "rake/clean"
+
+CLEAN.include "tmp/**/*"
+CLOBBER.include "shp/contours/*"
 LILJSON_PRECISION = 3
 TOPOJSON_PRECISION = 10e-9 # 1 nsr, see http://en.wikipedia.org/wiki/Steradian
+
+
+file "tmp/shp/contours/contours-200.shp" => ["src/contours/DHM200.asc"] do |t|
+  p t.name 
+  p t.prerequisites
+  mkdir_p "tmp/shp/contours"
+  system "gdal_contour -a ELEV -i 1000 #{t.prerequisites.first} #{t.name}"
+end
+
+file "shp/contours/contours-200.shp" => ["tmp/shp/contours/contours-200.shp"] do |t|
+  mkdir_p "shp/contours"
+  system "ogr2ogr -s_srs EPSG:21781 -t_srs EPSG:4326 -overwrite #{t.name} #{t.prerequisites.first}"
+end
+
+file "topojson/contours-200.json" => ["shp/contours/contours-200.shp"] do |t|
+  system "topojson #{t.prerequisites.first} -o #{t.name} -p ELEV --id-property ID"
+end
+
+# Old stuff
 
 desc "Generate GeoJSON files"
 task :geojson do
@@ -35,8 +58,8 @@ task :topojson do
   #   system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
   # end
 
-  %w{ swiss-contours-1000 }.each do |file_name|
-    system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' -p ELEV --id-property ID"
+  %w{ contours }.each do |file_name|
+    system "topojson 'shp/#{file_name}/#{file_name}.json' -o 'topojson/#{file_name}.json' -p ELEV --id-property ID"
     # system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s 10e-6 --properties"
   end
 
