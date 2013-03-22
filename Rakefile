@@ -1,68 +1,97 @@
 require "rake/clean"
 
-CLEAN.include "tmp/**/*"
-CLOBBER.include "shp/contours/*"
-LILJSON_PRECISION = 3
-TOPOJSON_PRECISION = 10e-9 # 1 nsr, see http://en.wikipedia.org/wiki/Steradian
+CLEAN.include "tmp"
+CLOBBER.include ["shp", "topo", "geo"]
 
+TOPOJSON = "./node_modules/.bin/topojson"
+TOPOJSON_PRECISION = 1e-9 # 1 nsr, see http://en.wikipedia.org/wiki/Steradian
 
-file "tmp/shp/contours/contours-200.shp" => ["src/contours/DHM200.asc"] do |t|
-  p t.name 
-  p t.prerequisites
-  mkdir_p "tmp/shp/contours"
-  system "gdal_contour -a ELEV -i 1000 #{t.prerequisites.first} #{t.name}"
+# Country
+
+file "shp/ch-country.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp"] do |t|
+  mkdir_p "shp"
+  # Reproject to WGS84 and filter out non-swiss country parts
+  system "ogr2ogr -t_srs EPSG:4326 #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM '#{File.basename(t.prerequisites.first, ".shp")}' WHERE NAME = 'Schweiz'\""
 end
 
-file "shp/contours/contours-200.shp" => ["tmp/shp/contours/contours-200.shp"] do |t|
-  mkdir_p "shp/contours"
-  system "ogr2ogr -s_srs EPSG:21781 -t_srs EPSG:4326 -overwrite #{t.name} #{t.prerequisites.first}"
+file "geo/ch-country.json" => ["shp/ch-country.shp"] do |t|
+  mkdir_p "geo"
+  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT NAME as name FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
 end
 
-file "topojson/contours-200.json" => ["shp/contours/contours-200.shp"] do |t|
-  system "topojson #{t.prerequisites.first} -o #{t.name} -p ELEV --id-property ID"
+# TopoJSON currently fails with shp as source
+file "topo/ch-country.json" => ["geo/ch-country.json"] do |t|
+  mkdir_p "topo"
+  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} -- country=#{t.prerequisites.first}"
 end
 
-# Old stuff
+# Cantons
 
-desc "Generate GeoJSON files"
-task :geojson do
-  rm Dir.glob("geojson/*.*json")
-
-  %w{ swiss-cantons swiss-cantons-simplified }.each do |file_name|
-    puts "Converting Cantons ..."
-    system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/#{file_name}/#{file_name}.shp' -sql \"SELECT NR AS no, ABKUERZUNG AS abbr, NAME AS name FROM '#{file_name}'\""
-    system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
-  end
-
-  %w{ swiss-municipalities swiss-municipalities-simplified }.each do |file_name|
-    puts "Converting Municipalities ..."
-    system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/#{file_name}/#{file_name}.shp' -sql \"SELECT BFSNR AS bfsNo, GEMTEIL AS municipalityPart, KANTONSNR AS cantonNo, GEMNAME AS name FROM '#{file_name}'\""
-    system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
-  end
-
-  %w{ swiss-contours-1000 }.each do |file_name|
-    puts "Converting Contours ..."
-    system "ogr2ogr -f geoJSON 'geojson/#{file_name}.json' 'shp/swiss-contours/#{file_name}.shp'"
-    # system "python lib/liljson.py -p #{LILJSON_PRECISION} 'geojson/#{file_name}.json' 'geojson/#{file_name}.json'"
-  end
+file "shp/ch-cantons.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp"] do |t|
+  mkdir_p "shp"
+  # Reproject to WGS84
+  system "ogr2ogr -t_srs EPSG:4326 #{t.name} #{t.prerequisites.first}"
 end
 
-desc "Generate TopoJSON files"
-task :topojson do
-  rm Dir.glob("topojson/*.*json")
-
-  src = %w{ swiss-cantons swiss-municipalities }
-
-  # src.each do |file_name|
-  #   system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}.json' --properties"
-  #   system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
-  # end
-
-  %w{ contours }.each do |file_name|
-    system "topojson 'shp/#{file_name}/#{file_name}.json' -o 'topojson/#{file_name}.json' -p ELEV --id-property ID"
-    # system "topojson 'geojson/#{file_name}.json' -o 'topojson/#{file_name}-simplified.json' -s 10e-6 --properties"
-  end
-
-  # system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland.json' --properties --id-property ID"
-  # system "topojson #{src.map { |f| "'geojson/#{f}.json'" }.join(" ")} -o 'topojson/switzerland-simplified.json' -s #{TOPOJSON_PRECISION} --properties"
+# TODO: filter properties, maybe convert cantons to MultiPolygons
+file "geo/ch-cantons.json" => ["shp/ch-cantons.shp"] do |t|
+  mkdir_p "geo"
+  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
 end
+
+file "topo/ch-cantons.json" => ["geo/ch-cantons.json"] do |t|
+  mkdir_p "topo"
+  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} -- cantons=#{t.prerequisites.first}"
+end
+
+# Municipalities
+
+file "shp/ch-municipalities.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp"] do |t|
+  mkdir_p "shp"
+  # Reproject to WGS84 and filter out non-swiss municipalities
+  system "ogr2ogr -t_srs EPSG:4326 #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM #{File.basename(t.prerequisites.first, ".shp")} WHERE ICC = 'CH'\""
+end
+
+# TODO: filter properties
+file "geo/ch-municipalities.json" => ["shp/ch-municipalities.shp"] do |t|
+  mkdir_p "geo"
+  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
+end
+
+file "topo/ch-municipalities.json" => ["geo/ch-municipalities.json"] do |t|
+  mkdir_p "topo"
+  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} -- municipalities=#{t.prerequisites.first}"
+end
+
+# Elevation
+
+# file "tmp/shp/contours/contours.shp" => ["src/contours/DHM200.asc"] do |t|
+#   mkdir_p "tmp/shp/contours"
+#   system "gdal_contour -a ELEV -i 200 #{t.prerequisites.first} #{t.name}"
+# end
+
+# file "shp/contours/contours.shp" => ["tmp/shp/contours/contours.shp"] do |t|
+#   mkdir_p "shp/contours"
+#   system "ogr2ogr -s_srs EPSG:21781 -t_srs EPSG:4326 -overwrite #{t.name} #{t.prerequisites.first}"
+# end
+
+# file "tmp/geo/contours.json" => ["shp/contours/contours.shp"] do |t|
+#   mkdir_p "tmp/geo"
+#   system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first}"
+# end
+
+# file "topojson/contours.json" => ["shp/contours/contours.shp"] do |t|
+#   mkdir_p "topojson"
+#   system "#{TOPOJSON} #{t.prerequisites.first} -o #{t.name} -p --id-attribute ID -s #{TOPOJSON_PRECISION}"
+# end
+
+# Names
+
+task :default => :all
+
+task :all => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"] do
+  puts "hello"
+end
+
+task :topo  => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"]
+
