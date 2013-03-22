@@ -1,0 +1,21 @@
+{
+  "name": "swiss-maps",
+  "version": "2.0.0",
+  "description": "Swiss canton and municipality geodata in open formats.",
+  "keywords": [
+    "topojson",
+    "geojson",
+    "shapefile"
+  ],
+  "author": {
+    "name": "Jeremy Stucki",
+    "url": "http://interactivethings.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/interactivethings/swiss-maps.git"
+  },
+  "devDependencies": {
+    "topojson": ">=0.0.37"
+  }
+}
