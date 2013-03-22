@@ -16,7 +16,7 @@ end
 
 file "geo/ch-country.json" => ["shp/ch-country.shp"] do |t|
   mkdir_p "geo"
-  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT NAME as name FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
+  system "ogr2ogr -f GeoJSON #{t.name} -lco ENCODING=UTF-8 #{t.prerequisites.first} -sql \"SELECT NAME as name FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
 end
 
 # TopoJSON currently fails with shp as source
@@ -30,7 +30,7 @@ end
 file "shp/ch-cantons.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp"] do |t|
   mkdir_p "shp"
   # Reproject to WGS84
-  system "ogr2ogr -t_srs EPSG:4326 #{t.name} #{t.prerequisites.first}"
+  system "ogr2ogr -t_srs EPSG:4326 -lco ENCODING=UTF-8 #{t.name} #{t.prerequisites.first}"
 end
 
 # TODO: filter properties, maybe convert cantons to MultiPolygons
@@ -49,7 +49,7 @@ end
 file "shp/ch-municipalities.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp"] do |t|
   mkdir_p "shp"
   # Reproject to WGS84 and filter out non-swiss municipalities
-  system "ogr2ogr -t_srs EPSG:4326 #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM #{File.basename(t.prerequisites.first, ".shp")} WHERE ICC = 'CH'\""
+  system "ogr2ogr -t_srs EPSG:4326 -lco ENCODING=UTF-8 #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM #{File.basename(t.prerequisites.first, ".shp")} WHERE ICC = 'CH'\""
 end
 
 # TODO: filter properties
