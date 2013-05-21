@@ -6,6 +6,13 @@ CLOBBER.include ["shp", "topo", "geo"]
 TOPOJSON = "./node_modules/.bin/topojson"
 TOPOJSON_PRECISION = 1e-9 # 1 nsr, see http://en.wikipedia.org/wiki/Steradian
 
+task :default => :all
+
+task :all => [:shp, :geo, :topo]
+task :shp => ["shp/ch-country.shp", "shp/ch-cantons.shp", "shp/ch-municipalities.shp"]
+task :geo => ["geo/ch-country.json", "geo/ch-cantons.json", "geo/ch-municipalities.json"]
+task :topo  => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"]
+
 # Country
 
 file "shp/ch-country.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp"] do |t|
@@ -86,12 +93,4 @@ end
 # end
 
 # Names
-
-task :default => :all
-
-task :all => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"] do
-  puts "hello"
-end
-
-task :topo  => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"]
 
