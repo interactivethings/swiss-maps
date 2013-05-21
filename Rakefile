@@ -43,12 +43,12 @@ end
 # TODO: filter properties, maybe convert cantons to MultiPolygons
 file "geo/ch-cantons.json" => ["shp/ch-cantons.shp"] do |t|
   mkdir_p "geo"
-  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
+  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT NAME as name, KANTONSNUM as cantonNumber FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
 end
 
 file "topo/ch-cantons.json" => ["geo/ch-cantons.json"] do |t|
   mkdir_p "topo"
-  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} -- cantons=#{t.prerequisites.first}"
+  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} --id-property=cantonNumber -- cantons=#{t.prerequisites.first}"
 end
 
 # Municipalities
@@ -62,12 +62,12 @@ end
 # TODO: filter properties
 file "geo/ch-municipalities.json" => ["shp/ch-municipalities.shp"] do |t|
   mkdir_p "geo"
-  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT * FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
+  system "ogr2ogr -f GeoJSON #{t.name} #{t.prerequisites.first} -sql \"SELECT NAME as name, GEM_TEIL as municipalityPart, KANTONSNUM as cantonNumber, BFS_NUMMER as bfsNumber, SHN as shn FROM '#{File.basename(t.prerequisites.first, ".shp")}'\""
 end
 
 file "topo/ch-municipalities.json" => ["geo/ch-municipalities.json"] do |t|
   mkdir_p "topo"
-  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} -- municipalities=#{t.prerequisites.first}"
+  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_PRECISION} --id-property=shn -- municipalities=#{t.prerequisites.first}"
 end
 
 # Elevation
