@@ -14,7 +14,7 @@ task :default => :all
 task :all => [:shp, :topo]
 task :shp => ["shp/ch/country.shp", "shp/ch/cantons.shp", "shp/ch/municipalities.shp"]
 # task :geo => ["geo/ch-country.json", "geo/ch-cantons.json", "geo/ch-municipalities.json"]
-task :topo  => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"]
+task :topo  => ["topo/ch-country.json", "topo/ch-cantons.json", "topo/ch-municipalities.json"] + CANTONS.map { |canton| "topo/#{canton}-municipalities.json" }
 
 # Country
 
@@ -68,7 +68,7 @@ end
 
 file "topo/ch-municipalities.json" => ["shp/ch/municipalities.shp"] do |t|
   mkdir_p "topo"
-  system "#{TOPOJSON} -o #{t.name} -p -s #{TOPOJSON_SIMPLIFY} --id-property=shn -- municipalities=#{t.prerequisites.first}"
+  system "#{TOPOJSON} -s #{TOPOJSON_SIMPLIFY} --id-property=+BFS_NUMMER -p name=NAME,part=+GEM_TEIL,bfsNumber=+BFS_NUMMER,cantonNumber=+KANTONSNUM -- municipalities=#{t.prerequisites.first} > #{t.name}"
 end
 
 CANTONS.each_with_index do |canton, i|
@@ -79,7 +79,7 @@ CANTONS.each_with_index do |canton, i|
 
   file "topo/#{canton}-municipalities.json" => ["shp/#{canton}/municipalities.shp"] do |t|
     mkdir_p "topo"
-    system "#{TOPOJSON} -s #{TOPOJSON_SIMPLIFY} --id-property=SHN -p name=NAME,part=+GEM_TEIL,bfsNumber=+BFS_NUMMER,cantonNumber=+KANTONSNUM -- municipalities=#{t.prerequisites.first} > #{t.name}"
+    system "#{TOPOJSON} -s #{TOPOJSON_SIMPLIFY} --id-property=+BFS_NUMMER -p name=NAME,part=+GEM_TEIL,bfsNumber=+BFS_NUMMER,cantonNumber=+KANTONSNUM -- municipalities=#{t.prerequisites.first} > #{t.name}"
   end
 end
 
