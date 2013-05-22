@@ -34,11 +34,6 @@ file "topo/ch-country.json" => ["shp/ch/country.shp"] do |t|
   system "#{TOPOJSON} -p -s #{TOPOJSON_SIMPLIFY} -- country=#{t.prerequisites.first} > #{t.name}"
 end
 
-file "topo/ch-water.json" => ["shp/ch/water.shp"] do |t|
-  mkdir_p "topo"
-  system "#{TOPOJSON} -s #{TOPOJSON_SIMPLIFY} -p -- water=#{t.prerequisites.first} > #{t.name}"
-end
-
 # Cantons
 
 file "shp/ch/cantons.shp" => ["src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp"] do |t|
@@ -94,6 +89,11 @@ end
 file "shp/ch/water.shp" => ["src/switzerland-natural-shape/natural.shp"] do |t|
   mkdir_p "shp/ch"
   system "ogr2ogr #{t.name} #{t.prerequisites.first} -where \"type = 'water'\""
+end
+
+file "topo/ch-water.json" => ["shp/ch/water.shp"] do |t|
+  mkdir_p "topo"
+  system "#{TOPOJSON} -s #{TOPOJSON_SIMPLIFY} -p -- water=#{t.prerequisites.first} > #{t.name}"
 end
 
 file "shp/zh/water.shp" => ["shp/ch/water.shp"] do |t|
