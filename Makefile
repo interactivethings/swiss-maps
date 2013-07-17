@@ -8,7 +8,28 @@ CANTONS = \
 WIDTH = 960
 HEIGHT = 500
 
-all: topo/ch.json;
+all: topo geo
+
+topo: node_modules \
+	topo/ch-country.json \
+	topo/ch-cantons.json \
+	topo/ch-municipalities.json \
+	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
+	topo/ch.json
+
+geo: node_modules \
+	geo/ch-country.json \
+	geo/ch-cantons.json \
+	geo/ch-municipalities.json \
+	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
+
+node_modules:
+	npm install
+
+clean:
+	rm -rf shp geo topo tmp
+
+.PHONY: clean topo geo
 
 ##################################################
 # Shapefiles
@@ -192,28 +213,30 @@ topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.j
 
 geo/ch-country.json: topo/ch-country.json
 	mkdir -p $(dir $@)
+	mkdir -p tmp/geo-ch
 	$(GEOJSON) \
 	--precision 3 \
-	-o $(dir $@) \
+	-o tmp/geo-ch/ \
 	-- $<
-	mv $(dir $@)country.json $@
+	mv tmp/geo-ch/country.json $@
+	rm -rf tmp/geo-ch/
 
 geo/ch-cantons.json: topo/ch-cantons.json
 	mkdir -p $(dir $@)
+	mkdir -p tmp/geo-ch
 	$(GEOJSON) \
 	--precision 3 \
-	-o $(dir $@) \
+	-o tmp/geo-ch/ \
 	-- $<
-	mv $(dir $@)cantons.json $@
+	mv tmp/geo-ch/cantons.json $@
+	rm -rf tmp/geo-ch/
 
 geo/%-municipalities.json: topo/%-municipalities.json
 	mkdir -p $(dir $@)
+	mkdir -p tmp/geo-$*
 	$(GEOJSON) \
 	--precision 3 \
-	-o $(dir $@) \
+	-o tmp/geo-$*/ \
 	-- $<
-	mv $(dir $@)municipalities.json $@
-
-.PHONY: clean
-clean:
-	-rm -rf shp/* geo/* topo/*
+	mv tmp/geo-$*/municipalities.json $@
+	rm -rf tmp/geo-$*/
