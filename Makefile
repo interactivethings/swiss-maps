@@ -145,7 +145,7 @@ topo/ch-country.json: shp/ch/country.shp
 	--height $(HEIGHT) \
 	--id-property NAME \
 	-p name=NAME \
-	-- country=$< | bin/topomergebyid country > $@
+	-- country=$< | bin/topomergeids country > $@
 
 topo/ch-cantons.json: shp/ch/cantons.shp
 	mkdir -p $(dir $@)
@@ -156,7 +156,7 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
 	-p name=NAME,abbr=ABBR \
-	-- cantons=$< | bin/topomergebyid cantons > $@
+	-- cantons=$< | bin/topomergeids cantons > $@
 
 topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
@@ -166,7 +166,7 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 	--height $(HEIGHT) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME,cantonId=+KANTONSNUM \
-	-- municipalities=$< | bin/topomergebyid municipalities > $@
+	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/%-municipalities.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
@@ -176,7 +176,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	--height $(HEIGHT) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME,cantonId=+KANTONSNUM \
-	-- municipalities=$< | bin/topomergebyid municipalities > $@
+	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
