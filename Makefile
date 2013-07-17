@@ -37,18 +37,15 @@ clean:
 
 shp/ch/country.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "NAME = 'Schweiz'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "NAME = 'Schweiz'" $@ $<
 
 shp/ch/cantons.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
 	mkdir -p $(dir $@)
-	cp $(basename $<).shp $@
-	cp $(basename $<).dbf $(basename $@).dbf
-	cp $(basename $<).prj $(basename $@).prj
-	cp $(basename $<).shx $(basename $@).shx
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) $@ $<
 
 shp/ch/municipalities.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
 shp/zh/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
@@ -161,9 +158,8 @@ shp/ju/municipalities.shp: shp/ch/municipalities.shp
 topo/ch-country.json: shp/ch/country.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
-	--simplify 1 \
-	--width $(WIDTH) \
-	--height $(HEIGHT) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property NAME \
 	-p name=NAME \
 	-- country=$< | bin/topomergeids country > $@
@@ -171,9 +167,8 @@ topo/ch-country.json: shp/ch/country.shp
 topo/ch-cantons.json: shp/ch/cantons.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
-	--simplify 1 \
-	--width $(WIDTH) \
-	--height $(HEIGHT) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
 	-p name=NAME,abbr=ABBR \
@@ -182,9 +177,8 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
-	--simplify 1 \
-	--width $(WIDTH) \
-	--height $(HEIGHT) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME,cantonId=+KANTONSNUM \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
@@ -192,9 +186,8 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 topo/%-municipalities.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
-	--simplify 1 \
-	--width $(WIDTH) \
-	--height $(HEIGHT) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME,cantonId=+KANTONSNUM \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
@@ -202,8 +195,6 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
-	--width $(WIDTH) \
-	--height $(HEIGHT) \
 	-p \
 	-- $^ > $@
 
