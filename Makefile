@@ -13,6 +13,7 @@ all: topo geo
 topo: node_modules \
 	topo/ch-country.json \
 	topo/ch-cantons.json \
+	topo/ch-districts.json \
 	topo/ch-municipalities.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	topo/ch.json
@@ -20,6 +21,7 @@ topo: node_modules \
 geo: node_modules \
 	geo/ch-country.json \
 	geo/ch-cantons.json \
+	geo/ch-districts.json \
 	geo/ch-municipalities.json \
 	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
 
@@ -41,7 +43,11 @@ shp/ch/country.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET
 
 shp/ch/cantons.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+
+shp/ch/districts.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
 shp/ch/municipalities.shp: src/swissBOUNDARIES3D/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp
 	mkdir -p $(dir $@)
@@ -174,6 +180,15 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 	-p name=NAME,abbr=ABBR \
 	-- cantons=$< | bin/topomergeids cantons > $@
 
+topo/ch-districts.json: shp/ch/districts.shp
+	mkdir -p $(dir $@)
+	$(TOPOJSON) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	--id-property +BEZIRKSNUM \
+	-p name=NAME \
+	-- districts=$< | bin/topomergeids districts > $@
+
 topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
@@ -192,7 +207,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	-p name=NAME,cantonId=+KANTONSNUM \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
-topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
+topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	-p \
@@ -202,24 +217,14 @@ topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.j
 # GeoJSON
 ##################################################
 
-geo/ch-country.json: topo/ch-country.json
+geo/ch-%.json: topo/ch-%.json
 	mkdir -p $(dir $@)
 	mkdir -p tmp/geo-ch
 	$(GEOJSON) \
 	--precision 3 \
 	-o tmp/geo-ch/ \
 	-- $<
-	mv tmp/geo-ch/country.json $@
-	rm -rf tmp/geo-ch/
-
-geo/ch-cantons.json: topo/ch-cantons.json
-	mkdir -p $(dir $@)
-	mkdir -p tmp/geo-ch
-	$(GEOJSON) \
-	--precision 3 \
-	-o tmp/geo-ch/ \
-	-- $<
-	mv tmp/geo-ch/cantons.json $@
+	mv tmp/geo-ch/$*.json $@
 	rm -rf tmp/geo-ch/
 
 geo/%-municipalities.json: topo/%-municipalities.json
