@@ -1,10 +1,10 @@
 # Swiss Maps
 
-This repository provides a mechanism to bring publicly available (but difficult to access) [swisstopo](http://www.swisstopo.admin.ch/internet/swisstopo/en/home.html) geodata into open formats like [TopoJSON](https://github.com/mbostock/topojson) and [GeoJSON](http://www.geojson.org/).
+This repository provides a mechanism to generate [TopoJSON](https://github.com/mbostock/topojson) and [GeoJSON](http://www.geojson.org/) from publicly available (but difficult to access) [swisstopo](http://www.swisstopo.admin.ch/internet/swisstopo/en/home.html) geodata.
 
 ## Getting Started
 
-To build the TopoJSON and GeoJSON files you need to install Node.js, either with the [official Node.js installer](http://nodejs.org/) or via [Homebrew](http://mxcl.github.io/homebrew/):
+To generate the TopoJSON and GeoJSON files you need to install Node.js, either with the [official Node.js installer](http://nodejs.org/) or via [Homebrew](http://mxcl.github.io/homebrew/):
 
     brew install node
 
@@ -14,7 +14,7 @@ To get started, clone this repository and run `make`.
     cd swiss-maps
     make
 
-`make` or `make all` builds the following TopoJSON and GeoJSON files:
+`make` or `make all` generates the following TopoJSON and GeoJSON files:
 
 * `ch-country.json`
 * `ch-cantons.json`
@@ -25,7 +25,7 @@ To get started, clone this repository and run `make`.
 
 TopoJSON and GeoJSON files are placed in the `topo/` and `geo/` directories respectively.
 
-You also can build individual files, e.g.
+You also can generate individual files, e.g.
 
     make topo/ch-cantons.json
 
@@ -33,7 +33,7 @@ You also can build individual files, e.g.
 
 The coordinates of the source files is the official Swiss reference system [CH1903](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/topics/survey/sys/refsys/switzerland.html) with already [projected coordinates](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/topics/survey/sys/refsys/projections.html).
 
-Per default, `make` will build output files with the following characteristics:
+Per default, `make` will generate output files with the following characteristics:
 
 * Projected, *cartesian* coordinates
 * *Scaled* and *simplified* to a size of **960 × 500** pixels
@@ -51,11 +51,11 @@ However, there are a few cases where you want something different.
 
 ### Changing Dimensions
 
-If you're targeting another output dimensions, you can easily change them by changing the `WIDTH` and `HEIGHT` variables:
+If you're targeting another output dimensions, you can easily change them by setting the `WIDTH` and `HEIGHT` variables:
 
     make topo/ch-cantons.json WIDTH=2000 HEIGHT=1000
 
-Make sure you run `make clean` if you've built files before because `make` won't overwrite them if they already exist.
+Make sure you run `make clean` if you've generated files before because `make` won't overwrite them if they already exist.
 
 ### Reproject to Spherical Coordinates
 
@@ -63,9 +63,40 @@ If you want to combine your JSON files with other libraries like [Leaflet](http:
 
     make topo/ch-cantons.json REPROJECT=true
 
-It's double important that you run `make clean` or `rm -rf shp` first if you've built files in cartesian coordinates (the default mode) before. Otherwise TopoJSON will throw an error. The `WIDTH` and `HEIGHT` variables will be ignored.
+It's double important that you run `make clean` or `rm -rf shp` first if you've generated files in cartesian coordinates (the default mode) before. Otherwise TopoJSON will throw an error. The `WIDTH` and `HEIGHT` variables will be ignored.
 
-For everything else you can modify the `Makefile` or run `ogr2ogr` and `topojson` directly. Mike Bostock's tutorial [Let's Make a Map](http://bost.ocks.org/mike/map/), the [TopoJSON wiki](https://github.com/mbostock/topojson/wiki), and [ogr2ogr documentation](http://www.gdal.org/ogr2ogr.html) should cover most of your need.
+## Metadata
+
+Although the source files contain a slew of metadata such as population and area, data source, year of change etc., only the most basic properties are retained by default:
+
+**Country**
+
+* *id* ('Schweiz')
+
+**Canton**
+
+* *id* (the official canton number)
+* *name*
+* *abbr* (e.g. 'BE')
+
+**District**
+
+* *id* (the official district number)
+* *name*
+* *cantonId* (ID of the canton the district belongs to)
+
+**Municipality**
+
+* *id* (the official municipality or 'BFS' number)
+* *name*
+* *cantonId*
+* *districtId*
+
+This keeps file sizes to a reasonable amount and in most cases, you will join other data to your map anyway. If you want to generate your files with more (or less) properties, jump right to the next section.
+
+## Other Modifications
+
+For everything else you can modify the `Makefile` or run `ogr2ogr` and `topojson` directly. Mike Bostock's tutorial [Let's Make a Map](http://bost.ocks.org/mike/map/), the [TopoJSON wiki](https://github.com/mbostock/topojson/wiki), and [ogr2ogr documentation](http://www.gdal.org/ogr2ogr.html) should cover most of your needs.
 
 ## Examples
 
