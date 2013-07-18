@@ -186,7 +186,7 @@ topo/ch-districts.json: shp/ch/districts.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property +BEZIRKSNUM \
-	-p name=NAME \
+	-p name=NAME,cantonId=+KANTONSNUM \
 	-- districts=$< | bin/topomergeids districts > $@
 
 topo/ch-municipalities.json: shp/ch/municipalities.shp
@@ -195,7 +195,7 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property +BFS_NUMMER \
-	-p name=NAME,cantonId=+KANTONSNUM \
+	-p name=NAME,cantonId=+KANTONSNUM,districtId=+BEZIRKSNUM \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/%-municipalities.json: shp/%/municipalities.shp
@@ -204,7 +204,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
 	--id-property +BFS_NUMMER \
-	-p name=NAME,cantonId=+KANTONSNUM \
+	-p name=NAME,cantonId=+KANTONSNUM,districtId=+BEZIRKSNUM \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json topo/ch-municipalities.json
