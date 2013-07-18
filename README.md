@@ -71,7 +71,8 @@ Although the source files contain a slew of metadata such as population and area
 
 **Country**
 
-* *id* ('Schweiz')
+* *id* ('CH')
+* *name* ('Schweiz')
 
 **Canton**
 
@@ -83,16 +84,13 @@ Although the source files contain a slew of metadata such as population and area
 
 * *id* (the official district number)
 * *name*
-* *cantonId* (ID of the canton the district belongs to)
 
 **Municipality**
 
 * *id* (the official municipality or 'BFS' number)
 * *name*
-* *cantonId*
-* *districtId*
 
-This keeps file sizes to a reasonable amount and in most cases, you will join other data to your map anyway. If you want to generate your files with more (or less) properties, jump right to the next section.
+This keeps files to a reasonable size and in most cases you will join other data to your map anyway. If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
 
 ## Other Modifications
 
