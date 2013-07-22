@@ -9,7 +9,7 @@ var topology = JSON.parse(fs.readFileSync("/dev/stdin")),
     geometry;
 
 object.geometries.forEach(function(g) {
-  if (!g.id) throw new Error("Geometry has no ID");
+  if (typeof g.id === 'undefined' || g.id === null) throw new Error("Geometry has no ID");
   if (!(geometry = geometriesById[g.id])) {
     // "Clone" geometry with new type and empty arcs
     geometry = geometriesById[g.id] = {};
