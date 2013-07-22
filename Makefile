@@ -15,6 +15,7 @@ topo: node_modules \
 	topo/ch-cantons.json \
 	topo/ch-districts.json \
 	topo/ch-municipalities.json \
+	topo/ch-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	topo/ch.json
 
@@ -23,6 +24,7 @@ geo: node_modules \
 	geo/ch-cantons.json \
 	geo/ch-districts.json \
 	geo/ch-municipalities.json \
+	geo/ch-lakes.json \
 	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
 
 node_modules:
@@ -157,6 +159,10 @@ shp/ju/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNUM = 26" $@ $<
 
+shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
+
 ##################################################
 # TopoJSON
 ##################################################
@@ -207,7 +213,16 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	-p name=NAME \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
-topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json topo/ch-municipalities.json
+topo/ch-lakes.json: shp/ch/lakes.shp
+	mkdir -p $(dir $@)
+	$(TOPOJSON) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	--id-property +SEENR \
+	-p name=SEENAME \
+	-- lakes=$< | bin/topomergeids lakes > $@
+
+topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json topo/ch-municipalities.json topo/ch-lakes.json
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	-p \
