@@ -20,6 +20,7 @@ To get started, clone this repository and run `make`.
 * `ch-cantons.json`
 * `ch-districts.json`
 * `ch-municipalities.json`
+* `ch-lakes.json`
 * For each canton a file with its municipalities e.g. `zh-municipalities.json`
 * `ch.json`, containing all of the above (only TopoJSON)
 
@@ -88,6 +89,11 @@ Although the source files contain a slew of metadata such as population and area
 **Municipality**
 
 * *id* (the official municipality or 'BFS' number)
+* *name*
+
+**Lake**
+
+* *id* (the official lake or 'SEENR' number)
 * *name*
 
 This keeps files to a reasonable size and in most cases you will join other data to your map anyway. If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
