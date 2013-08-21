@@ -8,6 +8,8 @@ CANTONS = \
 WIDTH = 960
 HEIGHT = 500
 
+CONTOUR_INTERVAL = 500
+
 all: topo geo
 
 topo: node_modules \
@@ -163,6 +165,26 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
+shp/ch/contours.shp: tmp/contours_0.shp
+	mkdir -p $(dir $@)
+	ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -nlt POLYGON $@ $<
+	i=$(CONTOUR_INTERVAL); while [ $$i -lt 5000 ]; do \
+		ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -update -append -nln contours -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
+		((i = i + $(CONTOUR_INTERVAL))); \
+	done
+
+tmp/contours_0.shp: src/DHM200/DHM200.asc
+	mkdir -p $(dir $@)
+	i=0; while [ $$i -lt 5000 ]; do \
+		if [ $$i = 0 ]; then \
+			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="0"  --NoDataValue=-1; \
+		else \
+			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="$$i*(A>$$i)" --NoDataValue=0; \
+		fi; \
+		gdal_polygonize.py -f "ESRI Shapefile" $(dir $@)contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
+		((i = i + $(CONTOUR_INTERVAL))); \
+	done
+
 ##################################################
 # TopoJSON
 ##################################################
@@ -227,6 +249,14 @@ topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json t
 	$(TOPOJSON) \
 	-p \
 	-- $^ > $@
+
+topo/ch-contours.json: shp/ch/contours.shp
+	mkdir -p $(dir $@)
+	$(TOPOJSON) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	--id-property +elev \
+	-- contours=$< | bin/topomergeids contours > $@
 
 ##################################################
 # GeoJSON
