@@ -168,14 +168,14 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 shp/ch/contours.shp: tmp/contours_0.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -nlt POLYGON $@ $<
-	i=$(CONTOUR_INTERVAL); while [ $$i -lt 5000 ]; do \
+	i=$(CONTOUR_INTERVAL); while [ $$i -lt 4446 ]; do \
 		ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -update -append -nln contours -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
 		((i = i + $(CONTOUR_INTERVAL))); \
 	done
 
 tmp/contours_0.shp: src/DHM200/DHM200.asc
 	mkdir -p $(dir $@)
-	i=0; while [ $$i -lt 5000 ]; do \
+	i=0; while [ $$i -lt 4446 ]; do \
 		if [ $$i = 0 ]; then \
 			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="0"  --NoDataValue=-1; \
 		else \
