@@ -23,6 +23,7 @@ To get started, clone this repository and run `make`.
 * `ch-lakes.json`
 * For each canton a file with its municipalities e.g. `zh-municipalities.json`
 * `ch.json`, containing all of the above (only TopoJSON)
+* `ch-contours.json`
 
 TopoJSON and GeoJSON files are placed in the `topo/` and `geo/` directories respectively.
 
@@ -55,6 +56,8 @@ However, there are a few cases where you want something different.
 If you're targeting another output dimensions, you can easily change them by setting the `WIDTH` and `HEIGHT` variables:
 
     make topo/ch-cantons.json WIDTH=2000 HEIGHT=1000
+
+Per default, a 10px margin is included which can be changed by setting the `MARGIN` variable.
 
 Make sure you run `make clean` if you've generated files before because `make` won't overwrite them if they already exist.
 
@@ -95,6 +98,10 @@ Although the source files contain a slew of metadata such as population and area
 
 * *id* (the official lake or 'SEENR' number)
 * *name*
+
+**Contours**
+
+* *id* (elevation)
 
 This keeps files to a reasonable size and in most cases you will join other data to your map anyway. If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
 
