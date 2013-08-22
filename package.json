@@ -1,7 +1,7 @@
 {
   "name": "swiss-maps",
   "version": "2.0.0",
-  "description": "Swiss canton and municipality geodata in open formats.",
+  "description": "Swiss geodata in open formats.",
   "keywords": [
     "topojson",
     "geojson",
