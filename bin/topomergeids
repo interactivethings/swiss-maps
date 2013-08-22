@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+var fs = require("fs");
+
+var topology = JSON.parse(fs.readFileSync("/dev/stdin")),
+    object = topology.objects[process.argv[2]],
+    geometriesById = {},
+    type,
+    geometry;
+
+object.geometries.forEach(function(g) {
+  if (typeof g.id === 'undefined' || g.id === null) throw new Error("Geometry has no ID");
+  if (!(geometry = geometriesById[g.id])) {
+    // "Clone" geometry with new type and empty arcs
+    geometry = geometriesById[g.id] = {};
+    geometry.type = /^Multi/.test(g.type) ? g.type : "Multi" + g.type;
+    geometry.id = g.id;
+    geometry.properties = g.properties;
+    geometry.arcs = [];
+  }
+  switch (type = g.type) {
+    case "MultiPolygon": case "MultiLineString": g.arcs.forEach(function(c) { geometry.arcs.push(c); }); break;
+    case "Polygon": case "LineString": geometry.arcs.push(g.arcs); break;
+    case null: break; // ignore null
+    default: throw new Error("unsupported type: " + g.type);
+  }
+});
+
+object.geometries = Object.keys(geometriesById).map(function(id) { return geometriesById[id]; });
+
+console.log(JSON.stringify(topology));
