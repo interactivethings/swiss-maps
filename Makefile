@@ -7,6 +7,7 @@ CANTONS = \
 
 WIDTH = 960
 HEIGHT = 500
+MARGIN = 10
 
 CONTOUR_INTERVAL = 500
 
@@ -195,7 +196,7 @@ topo/ch-country.json: shp/ch/country.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property ICC \
 	-p name=NAME \
 	-- country=$< | bin/topomergeids country > $@
@@ -204,7 +205,7 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
 	-p name=NAME,abbr=ABBR \
@@ -214,7 +215,7 @@ topo/ch-districts.json: shp/ch/districts.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BEZIRKSNUM \
 	-p name=NAME \
 	-- districts=$< | bin/topomergeids districts > $@
@@ -223,7 +224,7 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
@@ -232,7 +233,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
 	-p name=NAME \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
@@ -241,7 +242,7 @@ topo/ch-lakes.json: shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +SEENR \
 	-p name=SEENAME \
 	-- lakes=$< | bin/topomergeids lakes > $@
@@ -256,7 +257,7 @@ topo/ch-contours.json: shp/ch/contours.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT)) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +elev \
 	-- contours=$< | bin/topomergeids contours > $@
 
