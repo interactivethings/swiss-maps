@@ -165,13 +165,15 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
-shp/ch/contours.shp: tmp/contours_0.shp
+shp/ch/contours.shp: tmp/contours_0.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -nlt POLYGON $@ $<
+	ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -nlt POLYGON tmp/contours.shp $<
 	i=$(CONTOUR_INTERVAL); while [ $$i -lt 4446 ]; do \
-		ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -update -append -nln contours -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
+		ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -update -append -nln contours -nlt POLYGON tmp/contours.shp tmp/contours_$$i.shp; \
 		((i = i + $(CONTOUR_INTERVAL))); \
 	done
+	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
+	rm -f tmp/contours*
 
 tmp/contours_0.shp: src/DHM200/DHM200.asc
 	mkdir -p $(dir $@)
