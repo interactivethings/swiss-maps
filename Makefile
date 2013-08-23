@@ -21,6 +21,7 @@ topo: node_modules \
 	topo/ch-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	topo/ch.json
+	topo/ch-contours.json
 
 geo: node_modules \
 	geo/ch-country.json \
@@ -29,6 +30,7 @@ geo: node_modules \
 	geo/ch-municipalities.json \
 	geo/ch-lakes.json \
 	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
+	geo/ch-contours.json
 
 node_modules:
 	npm install
