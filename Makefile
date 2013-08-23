@@ -249,7 +249,7 @@ topo/ch-lakes.json: shp/ch/lakes.shp
 	-p name=SEENAME \
 	-- lakes=$< | bin/topomergeids lakes > $@
 
-topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-districts.json topo/ch-municipalities.json topo/ch-lakes.json
+topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	-p \
