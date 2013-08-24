@@ -36,7 +36,7 @@ node_modules:
 	npm install
 
 clean:
-	rm -rf shp geo topo tmp
+	rm -rf shp geo topo tmp tif zip
 
 .PHONY: clean topo geo
 
@@ -168,17 +168,22 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
-shp/ch/contours.shp: tmp/contours_0.shp shp/ch/country.shp
+shp/ch/contours.shp: shp/ch/contours-unclipped.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -nlt POLYGON tmp/contours.shp $<
+	mkdir -p tmp/
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) tmp/contours.shp $<
+	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
+	rm -f tmp/contours.*
+
+shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
+	mkdir -p $(dir $@)
+	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
 	i=$(CONTOUR_INTERVAL); while [ $$i -lt 4446 ]; do \
-		ogr2ogr -s_srs EPSG:21781 $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) -update -append -nln contours -nlt POLYGON tmp/contours.shp tmp/contours_$$i.shp; \
+		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
 		((i = i + $(CONTOUR_INTERVAL))); \
 	done
-	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
-	rm -f tmp/contours*
 
-tmp/contours_0.shp: src/DHM200/DHM200.asc
+tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
 	mkdir -p $(dir $@)
 	i=0; while [ $$i -lt 4446 ]; do \
 		if [ $$i = 0 ]; then \
@@ -186,9 +191,34 @@ tmp/contours_0.shp: src/DHM200/DHM200.asc
 		else \
 			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="$$i*(A>$$i)" --NoDataValue=0; \
 		fi; \
-		gdal_polygonize.py -f "ESRI Shapefile" $(dir $@)contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
 		((i = i + $(CONTOUR_INTERVAL))); \
 	done
+
+shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVAL).tif
+	mkdir -p $(dir $@)
+	i=0; while [ $$i -lt 4446 ]; do \
+		gdal_polygonize.py -f "ESRI Shapefile" tif/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
+		((i = i + $(CONTOUR_INTERVAL))); \
+	done
+
+##################################################
+# SRTM elevation data
+##################################################
+
+tif/srtm/srtm.tif: tif/srtm/srtm_38_03.tif tif/srtm/srtm_39_03.tif
+	mkdir -p $(dir $@)
+	# gdal_merge.py -ul_lr 5.95662 47.8099 10.4935 45.8192 -o $@ $^
+	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
+
+tif/srtm/%.tif: zip/srtm/%.zip
+	mkdir -p $(dir $@)
+	unzip -o -d $(dir $@) $<
+	touch $@
+
+zip/srtm/%.zip:
+	mkdir -p $(dir $@)
+	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
+	mv $@.download $@
 
 ##################################################
 # TopoJSON
