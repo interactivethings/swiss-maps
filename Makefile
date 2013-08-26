@@ -20,7 +20,7 @@ topo: node_modules \
 	topo/ch-municipalities.json \
 	topo/ch-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
-	topo/ch.json
+	topo/ch.json \
 	topo/ch-contours.json
 
 geo: node_modules \
@@ -29,7 +29,7 @@ geo: node_modules \
 	geo/ch-districts.json \
 	geo/ch-municipalities.json \
 	geo/ch-lakes.json \
-	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
+	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	geo/ch-contours.json
 
 node_modules:
