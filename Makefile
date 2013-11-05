@@ -178,27 +178,24 @@ shp/ch/contours.shp: shp/ch/contours-unclipped.shp shp/ch/country.shp
 shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
 	mkdir -p $(dir $@)
 	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
-	i=$(CONTOUR_INTERVAL); while [ $$i -lt 4446 ]; do \
+	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
 		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
-		((i = i + $(CONTOUR_INTERVAL))); \
 	done
 
 tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
 	mkdir -p $(dir $@)
-	i=0; while [ $$i -lt 4446 ]; do \
+	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
 		if [ $$i = 0 ]; then \
 			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="0"  --NoDataValue=-1; \
 		else \
 			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="$$i*(A>$$i)" --NoDataValue=0; \
 		fi; \
-		((i = i + $(CONTOUR_INTERVAL))); \
 	done
 
 shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVAL).tif
 	mkdir -p $(dir $@)
-	i=0; while [ $$i -lt 4446 ]; do \
+	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
 		gdal_polygonize.py -f "ESRI Shapefile" tif/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
-		((i = i + $(CONTOUR_INTERVAL))); \
 	done
 
 ##################################################
