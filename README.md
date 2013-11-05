@@ -7,6 +7,10 @@ This repository provides a mechanism to generate [TopoJSON](https://github.com/m
 To generate the TopoJSON and GeoJSON files you need to install Node.js, either with the [official Node.js installer](http://nodejs.org/) or via [Homebrew](http://mxcl.github.io/homebrew/):
 
     brew install node
+    
+You also need GDAL and the corresponding python-gdal library installed. Links to the binaries are in the [GDAL Wiki](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries). On OS X you can also use Homebrew:
+
+    brew install gdal
 
 To get started, clone this repository and run `make`.
 
