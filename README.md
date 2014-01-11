@@ -119,7 +119,7 @@ For instructions on how to specify the properties, consult the [TopoJSON Command
 
 ## Historical Municipality Boundaries
 
-Municipality boundaries from 2010 – 2013 are also available (thanks @l00mi!). If you want boundaries from another year than 2013, define the `YEAR` variable:
+Municipality boundaries from 2010 – 2013 are also available (thanks [Michael](https://github.com/l00mi)!). If you want boundaries from another year than 2013, define the `YEAR` variable:
 
     make topo/ch-municipalities.json YEAR=2010
 
