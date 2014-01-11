@@ -11,6 +11,8 @@ MARGIN = 10
 
 YEAR = 2013
 
+PROPERTIES = name=NAME,abbr=ABBR,name=SEENAME
+
 CONTOUR_INTERVAL = 500
 
 all: topo geo
@@ -229,7 +231,7 @@ topo/ch-country.json: shp/ch/country.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property ICC \
-	-p name=NAME \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- country=$< | bin/topomergeids country > $@
 
 topo/ch-cantons.json: shp/ch/cantons.shp
@@ -239,7 +241,7 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
-	-p name=NAME,abbr=ABBR \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- cantons=$< | bin/topomergeids cantons > $@
 
 topo/ch-districts.json: shp/ch/districts.shp
@@ -248,7 +250,7 @@ topo/ch-districts.json: shp/ch/districts.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BEZIRKSNUM \
-	-p name=NAME \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- districts=$< | bin/topomergeids districts > $@
 
 topo/ch-municipalities.json: shp/ch/municipalities.shp
@@ -257,7 +259,7 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
-	-p name=NAME \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/%-municipalities.json: shp/%/municipalities.shp
@@ -266,7 +268,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
-	-p name=NAME \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
 topo/ch-lakes.json: shp/ch/lakes.shp
@@ -275,7 +277,7 @@ topo/ch-lakes.json: shp/ch/lakes.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +SEENR \
-	-p name=SEENAME \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- lakes=$< | bin/topomergeids lakes > $@
 
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
