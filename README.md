@@ -109,6 +109,20 @@ Although the source files contain a slew of metadata such as population and area
 
 This keeps files to a reasonable size and in most cases you will join other data to your map anyway. If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
 
+### Custom Properties
+
+To include other properties, define the `PROPERTIES` variable:
+
+    make topo/ch-cantons.json PROPERTIES=id=+KANTONSNUM,name=NAME,abbr=ABBR
+
+For specifics on how to specify the properties, consult the [TopoJSON Command Line Reference](https://github.com/mbostock/topojson/wiki/Command-Line-Reference#properties).
+
+## Historical Municipality Boundaries
+
+Municipality boundaries from 2010 – 2013 are also available. If you want boundaries from another year than 2013, define the `YEAR` variable:
+
+    make topo/ch-municipalities.json YEAR=2010
+
 ## Other Modifications
 
 For everything else you can modify the `Makefile` or run `ogr2ogr` and `topojson` directly. Mike Bostock's tutorial [Let's Make a Map](http://bost.ocks.org/mike/map/), the [TopoJSON wiki](https://github.com/mbostock/topojson/wiki), and [ogr2ogr documentation](http://www.gdal.org/ogr2ogr.html) should cover most of your needs.
