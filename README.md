@@ -129,8 +129,9 @@ For everything else you can modify the `Makefile` or run `ogr2ogr` and `topojson
 
 ## Examples
 
-* [TopoJSON Cantons and Municipalities](http://bl.ocks.org/4327678) (stored in a single file!)
-* [TopoJSON Cantons](http://bl.ocks.org/4207744)
+* [TopoJSON Cantons and Municipalities](http://bl.ocks.org/herrstucki/4327678) (stored in a single file!)
+* [TopoJSON Cantons](http://bl.ocks.org/mbostock/4207744)
+* [Swiss Topography](http://bl.ocks.org/herrstucki/6312708)
 
 ## Copyright and License
 
