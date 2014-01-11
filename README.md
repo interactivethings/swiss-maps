@@ -115,7 +115,7 @@ To include other properties, define the `PROPERTIES` variable:
 
     make topo/ch-cantons.json PROPERTIES=id=+KANTONSNUM,name=NAME,abbr=ABBR
 
-For specifics on how to specify the properties, consult the [TopoJSON Command Line Reference](https://github.com/mbostock/topojson/wiki/Command-Line-Reference#properties).
+For instructions on how to specify the properties, consult the [TopoJSON Command Line Reference](https://github.com/mbostock/topojson/wiki/Command-Line-Reference#properties).
 
 ## Historical Municipality Boundaries
 
