@@ -46,15 +46,15 @@ clean:
 # Shapefiles
 ##################################################
 
-shp/ch/country.shp: src/swissBOUNDARIES3D/$(YEAR)/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
+shp/ch/country.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
-shp/ch/cantons.shp: src/swissBOUNDARIES3D/$(YEAR)/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
+shp/ch/cantons.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
-shp/ch/districts.shp: src/swissBOUNDARIES3D/$(YEAR)/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
+shp/ch/districts.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
