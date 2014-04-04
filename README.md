@@ -155,4 +155,4 @@ It is licensed under the following terms:
 
 ### License
 
-[BSD](blob/master/license/LICENSE) (where the data source's license does not apply).
+[BSD](license/LICENSE) (where the data source's license does not apply).
