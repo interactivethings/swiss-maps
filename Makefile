@@ -1,5 +1,5 @@
 TOPOJSON = node_modules/.bin/topojson
-GEOJSON = node_modules/.bin/geojson
+GEOJSON = node_modules/.bin/topojson-geojson
 CANTONS = \
 	zh be lu ur sz ow nw gl zg \
 	fr so bs bl sh ar ai sg gr \
@@ -9,7 +9,7 @@ WIDTH = 960
 HEIGHT = 500
 MARGIN = 10
 
-YEAR = 2013
+YEAR = 2014
 
 PROPERTIES = name=NAME,abbr=ABBR,name=SEENAME
 
@@ -24,8 +24,7 @@ topo: node_modules \
 	topo/ch-municipalities.json \
 	topo/ch-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
-	topo/ch.json \
-	topo/ch-contours.json
+	topo/ch.json
 
 geo: node_modules \
 	geo/ch-country.json \
@@ -33,8 +32,7 @@ geo: node_modules \
 	geo/ch-districts.json \
 	geo/ch-municipalities.json \
 	geo/ch-lakes.json \
-	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS))) \
-	geo/ch-contours.json
+	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
 
 node_modules: package.json
 	npm install
@@ -49,15 +47,15 @@ clean:
 # Shapefiles
 ##################################################
 
-shp/ch/country.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
+shp/ch/country.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
-shp/ch/cantons.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
+shp/ch/cantons.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
-shp/ch/districts.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
+shp/ch/districts.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
 
