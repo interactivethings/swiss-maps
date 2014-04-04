@@ -36,11 +36,12 @@ geo: node_modules \
 	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	geo/ch-contours.json
 
-node_modules:
+node_modules: package.json
 	npm install
+	touch $@
 
 clean:
-	rm -rf shp geo topo tmp tif zip
+	rm -rf shp geo topo tmp tif zip node_modules
 
 .PHONY: clean topo geo
 
