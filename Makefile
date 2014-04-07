@@ -41,7 +41,7 @@ node_modules: package.json
 clean: clean-generated clean-downloads
 
 clean-generated:
-	rm -rf shp geo topo tmp tif
+	rm -rf shp geo topo tif
 
 clean-downloads:
 	rm -rf downloads
@@ -178,12 +178,13 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
-shp/ch/contours.shp: shp/ch/contours-unclipped.shp shp/ch/country.shp
+shp/ch/contours.shp: shp/ch/contours-projected.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
-	mkdir -p tmp/
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) tmp/contours.shp $<
-	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
-	rm -f tmp/contours.*
+	ogr2ogr -clipsrc shp/ch/country.shp $@ $<
+
+shp/ch/contours-projected.shp: shp/ch/contours-unclipped.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) $@ $<
 
 shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
 	mkdir -p $(dir $@)
@@ -333,20 +334,16 @@ topo/ch-contours.json: shp/ch/contours.shp
 
 geo/ch-%.json: topo/ch-%.json
 	mkdir -p $(dir $@)
-	mkdir -p tmp/geo-ch
 	$(GEOJSON) \
 	--precision 3 \
-	-o tmp/geo-ch/ \
+	-o $(dir $@) \
 	-- $<
-	mv tmp/geo-ch/$*.json $@
-	rm -rf tmp/geo-ch/
+	mv $(dir $@)$*.json $@
 
 geo/%-municipalities.json: topo/%-municipalities.json
 	mkdir -p $(dir $@)
-	mkdir -p tmp/geo-$*
 	$(GEOJSON) \
 	--precision 3 \
-	-o tmp/geo-$*/ \
+	-o $(dir $@) \
 	-- $<
-	mv tmp/geo-$*/municipalities.json $@
-	rm -rf tmp/geo-$*/
+	mv $(dir $@)municipalities.json $@
