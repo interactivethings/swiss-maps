@@ -1,4 +1,5 @@
 TOPOJSON = node_modules/.bin/topojson
+MERGE = node_modules/.bin/topojson-merge
 GROUP = node_modules/.bin/topojson-group
 GEOJSON = node_modules/.bin/topojson-geojson
 CANTONS = \
@@ -313,7 +314,12 @@ topo/ch-lakes.json: shp/ch/lakes.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +SEENR \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- lakes=$< | $(GROUP) -p > $@
+	-- lakes=$< \
+	| $(MERGE) \
+	-p \
+	--io lakes \
+	--oo lakes \
+	> $@
 
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
