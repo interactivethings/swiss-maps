@@ -48,6 +48,8 @@ clean-downloads:
 
 .PHONY: clean clean-generated clean-downloads topo geo
 
+.SECONDARY:
+
 ##################################################
 # Shapefiles
 ##################################################
