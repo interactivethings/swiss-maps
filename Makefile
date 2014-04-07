@@ -293,6 +293,15 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- municipalities=$< | bin/topomergeids municipalities > $@
 
+topo/ch-plz.json: shp/ch/plz.shp
+	mkdir -p $(dir $@)
+	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
+	--id-property +PLZ \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
+	-- plz=$< > $@
+
 topo/ch-lakes.json: shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
