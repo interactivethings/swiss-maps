@@ -1,4 +1,5 @@
 TOPOJSON = node_modules/.bin/topojson
+GROUP = node_modules/.bin/topojson-group
 GEOJSON = node_modules/.bin/topojson-geojson
 CANTONS = \
 	zh be lu ur sz ow nw gl zg \
@@ -257,7 +258,7 @@ topo/ch-country.json: shp/ch/country.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property ICC \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- country=$< | bin/topomergeids country > $@
+	-- country=$< | $(GROUP) -p > $@
 
 topo/ch-cantons.json: shp/ch/cantons.shp
 	mkdir -p $(dir $@)
@@ -267,7 +268,7 @@ topo/ch-cantons.json: shp/ch/cantons.shp
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- cantons=$< | bin/topomergeids cantons > $@
+	-- cantons=$< | $(GROUP) -p > $@
 
 topo/ch-districts.json: shp/ch/districts.shp
 	mkdir -p $(dir $@)
@@ -276,7 +277,7 @@ topo/ch-districts.json: shp/ch/districts.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BEZIRKSNUM \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- districts=$< | bin/topomergeids districts > $@
+	-- districts=$< | $(GROUP) -p > $@
 
 topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
@@ -285,7 +286,7 @@ topo/ch-municipalities.json: shp/ch/municipalities.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- municipalities=$< | bin/topomergeids municipalities > $@
+	-- municipalities=$< | $(GROUP) -p > $@
 
 topo/%-municipalities.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
@@ -294,7 +295,7 @@ topo/%-municipalities.json: shp/%/municipalities.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +BFS_NUMMER \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- municipalities=$< | bin/topomergeids municipalities > $@
+	-- municipalities=$< | $(GROUP) -p > $@
 
 topo/ch-plz.json: shp/ch/plz.shp
 	mkdir -p $(dir $@)
@@ -312,7 +313,7 @@ topo/ch-lakes.json: shp/ch/lakes.shp
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +SEENR \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- lakes=$< | bin/topomergeids lakes > $@
+	-- lakes=$< | $(GROUP) -p > $@
 
 topo/ch.json: topo/ch-country.json topo/ch-cantons.json topo/ch-municipalities.json
 	mkdir -p $(dir $@)
@@ -326,7 +327,7 @@ topo/ch-contours.json: shp/ch/contours.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--id-property +elev \
-	-- contours=$< | bin/topomergeids contours > $@
+	-- contours=$< | $(GROUP) > $@
 
 ##################################################
 # GeoJSON
