@@ -257,94 +257,109 @@ downloads/srtm/%.zip:
 
 # Unscaled topologies
 
-topo/unscaled/ch-country.json: shp/ch/country.shp
+topo/ch-country.json: shp/ch/country.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property ICC \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- country=$< | $(GROUP) -p > $@
 
-topo/unscaled/ch-cantons.json: shp/ch/cantons.shp
+topo/ch-cantons.json: shp/ch/cantons.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--e meta/cantons.csv \
 	--id-property +KANTONSNUM \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- cantons=$< | $(GROUP) -p > $@
 
-topo/unscaled/ch-districts.json: shp/ch/districts.shp
+topo/ch-districts.json: shp/ch/districts.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +BEZIRKSNUM \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- districts=$< | $(GROUP) -p > $@
 
-topo/unscaled/ch-municipalities.json: shp/ch/municipalities.shp
+topo/ch-municipalities.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +BFS_NUMMER \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- municipalities=$< | $(GROUP) -p > $@
 
-topo/unscaled/%-municipalities.json: shp/%/municipalities.shp
+topo/%-municipalities.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +BFS_NUMMER \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- municipalities=$< | $(GROUP) -p > $@
 
-topo/unscaled/ch-plz.json: shp/ch/plz.shp
+topo/ch-plz.json: shp/ch/plz.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +PLZ \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
 	-- plz=$< > $@
 
-topo/unscaled/ch-lakes.json: shp/ch/lakes.shp
+topo/ch-lakes.json: shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
+	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +SEENR \
 	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- lakes=$< \
-	| $(MERGE) \
-	-p \
-	--io lakes \
-	--oo lakes \
-	> $@
+	-- lakes=$< | $(MERGE) -p --io lakes --oo lakes > $@
 
 # Combined files
 
-topo/ch.json: topo/unscaled/ch-country.json topo/unscaled/ch-cantons.json topo/unscaled/ch-municipalities.json topo/unscaled/ch-lakes.json
+topo/ch.json: shp/ch/country.shp shp/ch/cantons.shp shp/ch/municipalities.shp shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	-p \
-	-- $^ > $@
+	--id-property +SEENR,+BFS_NUMMER,+KANTONSNUM,ICC \
+	--e meta/cantons.csv \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
+	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
 
-topo/ch-country-lakes.json: topo/unscaled/ch-country.json topo/unscaled/ch-lakes.json
+topo/ch-country-lakes.json: shp/ch/country.shp shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	-p \
-	-- $^ > $@
+	--id-property +SEENR,ICC \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
+	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
 
-topo/ch-cantons-lakes.json: topo/unscaled/ch-cantons.json topo/unscaled/ch-lakes.json
+topo/ch-cantons-lakes.json: shp/ch/cantons.shp shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	-p \
-	-- $^ > $@
+	--id-property +SEENR,+KANTONSNUM \
+	--e meta/cantons.csv \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
+	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
 
-topo/ch-municipalities-lakes.json: topo/unscaled/ch-municipalities.json topo/unscaled/ch-lakes.json
+topo/ch-municipalities-lakes.json: shp/ch/municipalities.shp shp/ch/lakes.shp
 	mkdir -p $(dir $@)
 	$(TOPOJSON) \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
-	-p \
-	-- $^ > $@
+	--id-property +SEENR,+BFS_NUMMER \
+	$(if $(PROPERTIES),-p $(PROPERTIES),) \
+	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
 
 # Contours
 
@@ -355,15 +370,6 @@ topo/ch-contours.json: shp/ch/contours.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +elev \
 	-- contours=$< | $(GROUP) > $@
-
-# Scale the rest
-
-topo/%.json: topo/unscaled/%.json
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	-p \
-	-- $< > $@
 
 ##################################################
 # GeoJSON
