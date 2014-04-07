@@ -38,10 +38,15 @@ node_modules: package.json
 	npm install
 	touch $@
 
-clean:
-	rm -rf shp geo topo tmp tif zip node_modules
+clean: clean-generated clean-downloads
 
-.PHONY: clean topo geo
+clean-generated:
+	rm -rf shp geo topo tmp tif
+
+clean-downloads:
+	rm -rf downloads
+
+.PHONY: clean clean-generated clean-downloads topo geo
 
 ##################################################
 # Shapefiles
@@ -202,6 +207,24 @@ shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVA
 	done
 
 ##################################################
+# PLZ (ZIP code) data
+##################################################
+
+shp/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
+	mkdir -p $(dir $@)
+	unzip -o -j -d $(dir $@) $<
+	touch $@
+
+shp/ch/plz.shp: shp/ch/plz/PLZO_PLZ.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) $@ $<
+
+downloads/plz.zip:
+	mkdir -p $(dir $@)
+	curl http://data.geo.admin.ch.s3.amazonaws.com/ch.swisstopo-vd.ortschaftenverzeichnis_plz/PLZO_SHP_LV03.zip -L -o $@.download
+	mv $@.download $@
+
+##################################################
 # SRTM elevation data
 ##################################################
 
@@ -210,12 +233,12 @@ tif/srtm/srtm.tif: tif/srtm/srtm_38_03.tif tif/srtm/srtm_39_03.tif
 	# gdal_merge.py -ul_lr 5.95662 47.8099 10.4935 45.8192 -o $@ $^
 	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
 
-tif/srtm/%.tif: zip/srtm/%.zip
+tif/srtm/%.tif: downloads/srtm/%.zip
 	mkdir -p $(dir $@)
 	unzip -o -d $(dir $@) $<
 	touch $@
 
-zip/srtm/%.zip:
+downloads/srtm/%.zip:
 	mkdir -p $(dir $@)
 	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
 	mv $@.download $@
