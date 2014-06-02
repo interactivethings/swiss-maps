@@ -51,19 +51,19 @@ clean:
 
 shp/ch/country.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') -where "ICC = 'CH'" $@ $<
 
 shp/ch/cantons.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') -where "ICC = 'CH'" $@ $<
 
 shp/ch/districts.shp: src/swissBOUNDARIES3D/2013/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') -where "ICC = 'CH'" $@ $<
 
 shp/ch/municipalities.shp: src/swissBOUNDARIES3D/$(YEAR)/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') -where "ICC = 'CH'" $@ $<
 
 shp/zh/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
@@ -171,12 +171,12 @@ shp/ju/municipalities.shp: shp/ch/municipalities.shp
 
 shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
 shp/ch/contours.shp: shp/ch/contours-unclipped.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
 	mkdir -p tmp/
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) tmp/contours.shp $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326',-t_srs EPSG:21781) tmp/contours.shp $<
 	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
 	rm -f tmp/contours.*
 
