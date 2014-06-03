@@ -176,7 +176,7 @@ shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
 shp/ch/contours.shp: shp/ch/contours-unclipped.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
 	mkdir -p tmp/
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) tmp/contours.shp $<
+	ogr2ogr $(if $(REPROJECT),-t_srs 'EPSG:4326' -s_srs 'EPSG:21781') tmp/contours.shp $<
 	ogr2ogr -clipsrc shp/ch/country.shp $@ tmp/contours.shp
 	rm -f tmp/contours.*
 
