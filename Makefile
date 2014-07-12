@@ -13,7 +13,7 @@ MARGIN = 10
 
 YEAR = 2014
 
-PROPERTIES = name=NAME,abbr=ABBR,name=SEENAME
+PROPERTIES = name=GEMNAME
 
 CONTOUR_INTERVAL = 500
 
@@ -56,132 +56,128 @@ clean-downloads:
 .SECONDARY:
 
 ##################################################
-# Shapefiles
+# Boundaries
 ##################################################
 
-shp/ch/country.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
+shp/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
-
-shp/ch/cantons.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_KANTONSGEBIET.shp
-	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
-
-shp/ch/districts.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_BEZIRKSGEBIET.shp
-	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
-
-shp/ch/municipalities.shp: src/swissBOUNDARIES3D/$(YEAR)/swissBOUNDARIES3D_1_1_TLM_HOHEITSGEBIET.shp
-	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "ICC = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
 
 shp/zh/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 1" $@ $<
+	ogr2ogr -where "KANTONSNR = 1" $@ $<
 
 shp/be/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 2" $@ $<
+	ogr2ogr -where "KANTONSNR = 2" $@ $<
 
 shp/lu/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 3" $@ $<
+	ogr2ogr -where "KANTONSNR = 3" $@ $<
 
 shp/ur/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 4" $@ $<
+	ogr2ogr -where "KANTONSNR = 4" $@ $<
 
 shp/sz/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 5" $@ $<
+	ogr2ogr -where "KANTONSNR = 5" $@ $<
 
 shp/ow/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 6" $@ $<
+	ogr2ogr -where "KANTONSNR = 6" $@ $<
 
 shp/nw/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 7" $@ $<
+	ogr2ogr -where "KANTONSNR = 7" $@ $<
 
 shp/gl/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 8" $@ $<
+	ogr2ogr -where "KANTONSNR = 8" $@ $<
 
 shp/zg/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 9" $@ $<
+	ogr2ogr -where "KANTONSNR = 9" $@ $<
 
 shp/fr/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 10" $@ $<
+	ogr2ogr -where "KANTONSNR = 10" $@ $<
 
 shp/so/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 11" $@ $<
+	ogr2ogr -where "KANTONSNR = 11" $@ $<
 
 shp/bs/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 12" $@ $<
+	ogr2ogr -where "KANTONSNR = 12" $@ $<
 
 shp/bl/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 13" $@ $<
+	ogr2ogr -where "KANTONSNR = 13" $@ $<
 
 shp/sh/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 14" $@ $<
+	ogr2ogr -where "KANTONSNR = 14" $@ $<
 
 shp/ar/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 15" $@ $<
+	ogr2ogr -where "KANTONSNR = 15" $@ $<
 
 shp/ai/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 16" $@ $<
+	ogr2ogr -where "KANTONSNR = 16" $@ $<
 
 shp/sg/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 17" $@ $<
+	ogr2ogr -where "KANTONSNR = 17" $@ $<
 
 shp/gr/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 18" $@ $<
+	ogr2ogr -where "KANTONSNR = 18" $@ $<
 
 shp/ag/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 19" $@ $<
+	ogr2ogr -where "KANTONSNR = 19" $@ $<
 
 shp/tg/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 20" $@ $<
+	ogr2ogr -where "KANTONSNR = 20" $@ $<
 
 shp/ti/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 21" $@ $<
+	ogr2ogr -where "KANTONSNR = 21" $@ $<
 
 shp/vd/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 22" $@ $<
+	ogr2ogr -where "KANTONSNR = 22" $@ $<
 
 shp/vs/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 23" $@ $<
+	ogr2ogr -where "KANTONSNR = 23" $@ $<
 
 shp/ne/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 24" $@ $<
+	ogr2ogr -where "KANTONSNR = 24" $@ $<
 
 shp/ge/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 25" $@ $<
+	ogr2ogr -where "KANTONSNR = 25" $@ $<
 
 shp/ju/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	ogr2ogr -where "KANTONSNUM = 26" $@ $<
+	ogr2ogr -where "KANTONSNR = 26" $@ $<
 
-shp/ch/lakes.shp: src/V200/VEC200_Commune.shp
+##################################################
+# Lakes
+##################################################
+
+shp/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) -where "SEENR < 9999 AND SEENR > 0" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
+
+##################################################
+# Elevation contours
+##################################################
 
 shp/ch/contours.shp: shp/ch/contours-projected.shp shp/ch/country.shp
 	mkdir -p $(dir $@)
@@ -225,7 +221,7 @@ shp/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
 
 shp/ch/plz.shp: shp/ch/plz/PLZO_PLZ.shp
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326) $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
 
 downloads/plz.zip:
 	mkdir -p $(dir $@)
@@ -255,117 +251,78 @@ downloads/srtm/%.zip:
 # TopoJSON
 ##################################################
 
-# Unscaled topologies
-
-topo/ch-country.json: shp/ch/country.shp
+build/%-municipalities-unmerged.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property ICC \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- country=$< | $(GROUP) -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=+BFSNR \
+		-- municipalities=$<
 
-topo/ch-cantons.json: shp/ch/cantons.shp
+build/ch-cantons-unmerged.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--e meta/cantons.csv \
-	--id-property +KANTONSNUM \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- cantons=$< | $(GROUP) -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=+KANTONSNR \
+		-- cantons=$<
 
-topo/ch-districts.json: shp/ch/districts.shp
+build/ch-districts-unmerged.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +BEZIRKSNUM \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- districts=$< | $(GROUP) -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=+BEZIRKSNR \
+		-- districts=$<
 
-topo/ch-municipalities.json: shp/ch/municipalities.shp
+build/ch-country-unmerged.json: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +BFS_NUMMER \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- municipalities=$< | $(GROUP) -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=COUNTRY \
+		-- country=$<
 
-topo/%-municipalities.json: shp/%/municipalities.shp
+build/ch-lakes-unmerged.json: shp/ch/lakes.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +BFS_NUMMER \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- municipalities=$< | $(GROUP) -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=+SEENR \
+		-- lakes=$<
 
-topo/ch-plz.json: shp/ch/plz.shp
+build/%.json: build/%-unmerged.json
+	node_modules/.bin/topojson-merge \
+		-o $@ \
+		--in-object=$(lastword $(subst -, ,$*)) \
+		--out-object=$(lastword $(subst -, ,$*)) \
+		-- $<
+
+topo/%.json: build/%.json
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +PLZ \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- plz=$< > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
+		--no-pre-quantization \
+		--post-quantization=1e5 \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		-- $^
 
-topo/ch-lakes.json: shp/ch/lakes.shp
+topo/%-lakes.json: build/%.json build/ch-lakes.json
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +SEENR \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- lakes=$< | $(MERGE) -p --io lakes --oo lakes > $@
-
-# Combined files
-
-topo/ch.json: shp/ch/country.shp shp/ch/cantons.shp shp/ch/municipalities.shp shp/ch/lakes.shp
-	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +SEENR,+BFS_NUMMER,+KANTONSNUM,ICC \
-	--e meta/cantons.csv \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
-
-topo/ch-country-lakes.json: shp/ch/country.shp shp/ch/lakes.shp
-	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +SEENR,ICC \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
-
-topo/ch-cantons-lakes.json: shp/ch/cantons.shp shp/ch/lakes.shp
-	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +SEENR,+KANTONSNUM \
-	--e meta/cantons.csv \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
-
-topo/ch-municipalities-lakes.json: shp/ch/municipalities.shp shp/ch/lakes.shp
-	mkdir -p $(dir $@)
-	$(TOPOJSON) \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +SEENR,+BFS_NUMMER \
-	$(if $(PROPERTIES),-p $(PROPERTIES),) \
-	-- $^ | $(GROUP) -p | $(MERGE) --io lakes --oo lakes -p > $@
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
+		--no-pre-quantization \
+		--post-quantization=1e5 \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		-- $^
 
 # Contours
 
 topo/ch-contours.json: shp/ch/contours.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) \
+	node_modules/.bin/topojson \
 	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +elev \
