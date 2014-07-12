@@ -1,7 +1,7 @@
 {
   "name": "swiss-maps",
   "version": "3.0.0",
-  "description": "Swiss geodata in open formats.",
+  "description": "Swiss geodata as TopoJSON.",
   "keywords": [
     "topojson",
     "geojson",
