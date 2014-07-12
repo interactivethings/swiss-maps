@@ -1,10 +1,10 @@
 # Swiss Maps
 
-This repository provides a mechanism to generate [TopoJSON](https://github.com/mbostock/topojson) and [GeoJSON](http://www.geojson.org/) from publicly available (but difficult to access) [swisstopo](http://www.swisstopo.admin.ch/internet/swisstopo/en/home.html) geodata.
+This repository provides a mechanism to generate [TopoJSON](https://github.com/mbostock/topojson) from publicly available (but difficult to access) [swisstopo](http://www.swisstopo.admin.ch/internet/swisstopo/en/home.html) geodata.
 
 ## Getting Started
 
-To generate the TopoJSON and GeoJSON files you need to install Node.js, either with the [official Node.js installer](http://nodejs.org/) or via [Homebrew](http://mxcl.github.io/homebrew/):
+To generate the TopoJSON files you need to install Node.js, either with the [official Node.js installer](http://nodejs.org/) or via [Homebrew](http://mxcl.github.io/homebrew/):
 
     brew install node
     
@@ -18,20 +18,28 @@ To get started, clone this repository and run `make`.
     cd swiss-maps
     make
 
-`make` or `make all` generates the following TopoJSON and GeoJSON files:
+`make` or `make all` generates the following TopoJSON files:
 
 * `ch-country.json`
 * `ch-cantons.json`
 * `ch-districts.json`
 * `ch-municipalities.json`
+* `ch-country-lakes.json` (country boundaries + lakes)
+* `ch-cantons-lakes.json` (canton boundaries + lakes)
+* `ch-districts-lakes.json` (district boundaries + lakes)
+* `ch-municipalities-lakes.json` (municipality boundaries + lakes)
 * `ch-lakes.json`
-* For each canton a file with its municipalities e.g. `zh-municipalities.json`
-* `ch.json`, containing all of the above (only TopoJSON)
-* `ch-contours.json`
+* `ch.json` (all of the above combined)
+* For each canton a file with its municipalities, e.g. `zh-municipalities.json`
 
-TopoJSON and GeoJSON files are placed in the `topo/` and `geo/` directories respectively.
+Additionally, PLZ (zip code) boundaries and elevation contours can be built:
 
-You also can generate individual files, e.g.
+* `ch-plz.json`
+* `ch-contours.json` (the `CONTOUR_INTERVAL` variable can be set to the desired interval in meters (default: 500))
+
+TopoJSON files are generated in the `topo/` directory.
+
+You can also generate individual files, e.g.
 
     make topo/ch-cantons.json
 
@@ -75,53 +83,25 @@ It's double important that you run `make clean` or `rm -rf shp` first if you've 
 
 ## Metadata
 
-Although the source files contain a slew of metadata such as population and area, data source, year of change etc., only the most basic properties are retained by default:
+Although the source files contain a slew of metadata such as population and area, data source, year of change etc., *no properties are included by default*, only the feature ID is set. This keeps files as small as possible and in most cases you will join other data to your map anyway.
 
-**Country**
+You can easily include the following properties
 
-* *id* ('CH')
-* *name* ('Schweiz')
+* *id* (the official ID of the feature, i.e. municipality (BFS), canton, district, or lake number)
+* *name* (the name of the feature in its main language)
+* *abbr* (only for cantons, e.g. 'BE')
 
-**Canton**
+To include some or all of these properties, define the `PROPERTIES` variable:
 
-* *id* (the official canton number)
-* *name*
-* *abbr* (e.g. 'BE')
+    make topo/ch-cantons.json PROPERTIES=name,abbr
 
-**District**
-
-* *id* (the official district number)
-* *name*
-
-**Municipality**
-
-* *id* (the official municipality or 'BFS' number)
-* *name*
-
-**Lake**
-
-* *id* (the official lake or 'SEENR' number)
-* *name*
-
-**Contours**
-
-* *id* (elevation)
-
-This keeps files to a reasonable size and in most cases you will join other data to your map anyway. If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
-
-### Custom Properties
-
-To include other properties, define the `PROPERTIES` variable:
-
-    make topo/ch-cantons.json PROPERTIES=id=+KANTONSNUM,name=NAME,abbr=ABBR
-
-For instructions on how to specify the properties, consult the [TopoJSON Command Line Reference](https://github.com/mbostock/topojson/wiki/Command-Line-Reference#properties).
+If you want to generate your files with more (or less) properties, you should modify the `Makefile`.
 
 ## Historical Municipality Boundaries
 
-Municipality boundaries from 2010 – 2013 are also available (thanks [Michael](https://github.com/l00mi)!). If you want boundaries from another year than 2013, define the `YEAR` variable:
+Municipality boundaries from 2013 are also available. If you want boundaries from another year than 2014, define the `YEAR` variable:
 
-    make topo/ch-municipalities.json YEAR=2010
+    make topo/ch-municipalities.json YEAR=2013
 
 ## Other Modifications
 
