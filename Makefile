@@ -1,7 +1,3 @@
-TOPOJSON = node_modules/.bin/topojson
-MERGE = node_modules/.bin/topojson-merge
-GROUP = node_modules/.bin/topojson-group
-GEOJSON = node_modules/.bin/topojson-geojson
 CANTONS = \
 	zh be lu ur sz ow nw gl zg \
 	fr so bs bl sh ar ai sg gr \
@@ -56,7 +52,7 @@ clean-downloads:
 .SECONDARY:
 
 ##################################################
-# Boundaries
+# Boundaries and lakes
 ##################################################
 
 shp/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
@@ -167,89 +163,9 @@ shp/ju/municipalities.shp: shp/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 26" $@ $<
 
-##################################################
-# Lakes
-##################################################
-
 shp/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
-
-##################################################
-# Elevation contours
-##################################################
-
-shp/ch/contours.shp: shp/ch/contours-projected.shp shp/ch/country.shp
-	mkdir -p $(dir $@)
-	ogr2ogr -clipsrc shp/ch/country.shp $@ $<
-
-shp/ch/contours-projected.shp: shp/ch/contours-unclipped.shp
-	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) $@ $<
-
-shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
-	mkdir -p $(dir $@)
-	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
-	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
-		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
-	done
-
-tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
-	mkdir -p $(dir $@)
-	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
-		if [ $$i = 0 ]; then \
-			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="0"  --NoDataValue=-1; \
-		else \
-			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="$$i*(A>$$i)" --NoDataValue=0; \
-		fi; \
-	done
-
-shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVAL).tif
-	mkdir -p $(dir $@)
-	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
-		gdal_polygonize.py -f "ESRI Shapefile" tif/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
-	done
-
-##################################################
-# PLZ (ZIP code) data
-##################################################
-
-shp/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
-	mkdir -p $(dir $@)
-	unzip -o -j -d $(dir $@) $<
-	touch $@
-
-shp/ch/plz.shp: shp/ch/plz/PLZO_PLZ.shp
-	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
-
-downloads/plz.zip:
-	mkdir -p $(dir $@)
-	curl http://data.geo.admin.ch.s3.amazonaws.com/ch.swisstopo-vd.ortschaftenverzeichnis_plz/PLZO_SHP_LV03.zip -L -o $@.download
-	mv $@.download $@
-
-##################################################
-# SRTM elevation data
-##################################################
-
-tif/srtm/srtm.tif: tif/srtm/srtm_38_03.tif tif/srtm/srtm_39_03.tif
-	mkdir -p $(dir $@)
-	# gdal_merge.py -ul_lr 5.95662 47.8099 10.4935 45.8192 -o $@ $^
-	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
-
-tif/srtm/%.tif: downloads/srtm/%.zip
-	mkdir -p $(dir $@)
-	unzip -o -d $(dir $@) $<
-	touch $@
-
-downloads/srtm/%.zip:
-	mkdir -p $(dir $@)
-	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
-	mv $@.download $@
-
-##################################################
-# TopoJSON
-##################################################
 
 build/%-municipalities-unmerged.json: shp/%/municipalities.shp
 	mkdir -p $(dir $@)
@@ -318,7 +234,74 @@ topo/%-lakes.json: build/%.json build/ch-lakes.json
 		--simplify $(if $(REPROJECT),1e-9,.5) \
 		-- $^
 
-# Contours
+##################################################
+# PLZ (ZIP code) data
+##################################################
+
+shp/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
+	mkdir -p $(dir $@)
+	unzip -o -j -d $(dir $@) $<
+	touch $@
+
+shp/ch/plz.shp: shp/ch/plz/PLZO_PLZ.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
+
+downloads/plz.zip:
+	mkdir -p $(dir $@)
+	curl http://data.geo.admin.ch.s3.amazonaws.com/ch.swisstopo-vd.ortschaftenverzeichnis_plz/PLZO_SHP_LV03.zip -L -o $@.download
+	mv $@.download $@
+
+
+##################################################
+# Elevation contours
+##################################################
+
+shp/ch/contours.shp: shp/ch/contours-projected.shp shp/ch/country.shp
+	mkdir -p $(dir $@)
+	ogr2ogr -clipsrc shp/ch/country.shp $@ $<
+
+shp/ch/contours-projected.shp: shp/ch/contours-unclipped.shp
+	mkdir -p $(dir $@)
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) $@ $<
+
+shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
+	mkdir -p $(dir $@)
+	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
+	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
+		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
+	done
+
+tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
+	mkdir -p $(dir $@)
+	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
+		if [ $$i = 0 ]; then \
+			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="0"  --NoDataValue=-1; \
+		else \
+			gdal_calc.py -A $< --outfile=$(dir $@)contours_$$i.tif --calc="$$i*(A>$$i)" --NoDataValue=0; \
+		fi; \
+	done
+
+shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVAL).tif
+	mkdir -p $(dir $@)
+	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
+		gdal_polygonize.py -f "ESRI Shapefile" tif/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
+	done
+
+tif/srtm/srtm.tif: tif/srtm/srtm_38_03.tif tif/srtm/srtm_39_03.tif
+	mkdir -p $(dir $@)
+	# gdal_merge.py -ul_lr 5.95662 47.8099 10.4935 45.8192 -o $@ $^
+	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
+
+tif/srtm/%.tif: downloads/srtm/%.zip
+	mkdir -p $(dir $@)
+	unzip -o -d $(dir $@) $<
+	touch $@
+
+downloads/srtm/%.zip:
+	mkdir -p $(dir $@)
+	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
+	mv $@.download $@
 
 topo/ch-contours.json: shp/ch/contours.shp
 	mkdir -p $(dir $@)
@@ -327,23 +310,3 @@ topo/ch-contours.json: shp/ch/contours.shp
 	--simplify $(if $(REPROJECT),2e-9,1) \
 	--id-property +elev \
 	-- contours=$< | $(GROUP) > $@
-
-##################################################
-# GeoJSON
-##################################################
-
-geo/ch-%.json: topo/ch-%.json
-	mkdir -p $(dir $@)
-	$(GEOJSON) \
-	--precision 3 \
-	-o $(dir $@) \
-	-- $<
-	mv $(dir $@)$*.json $@
-
-geo/%-municipalities.json: topo/%-municipalities.json
-	mkdir -p $(dir $@)
-	$(GEOJSON) \
-	--precision 3 \
-	-o $(dir $@) \
-	-- $<
-	mv $(dir $@)municipalities.json $@
