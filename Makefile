@@ -9,7 +9,7 @@ MARGIN = 10
 
 YEAR = 2014
 
-PROPERTIES = name=GEMNAME
+PROPERTIES =
 
 CONTOUR_INTERVAL = 500
 
@@ -160,28 +160,45 @@ build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
+build/cantons.tsv: src/V200/$(YEAR)/VEC200_ADMLVL1.dbf
+	mkdir -p $(dir $@)
+	node_modules/.bin/dbf2dsv \
+		-o $@ \
+		-- $<
+
+build/districts.tsv: src/V200/$(YEAR)/VEC200_ADMLVL2.dbf
+	mkdir -p $(dir $@)
+	node_modules/.bin/dbf2dsv \
+		-o $@ \
+		-- $<
+
 build/%-municipalities-unmerged.json: build/%/municipalities.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
 		--no-quantization \
 		--id-property=+BFSNR \
+		-p name=GEMNAME,id=+BFSNR \
 		-- municipalities=$<
 
-build/ch-cantons-unmerged.json: build/ch/municipalities.shp
+build/ch-cantons-unmerged.json: build/ch/municipalities.shp build/cantons.tsv
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
 		--no-quantization \
 		--id-property=+KANTONSNR \
+		-e build/cantons.tsv \
+		-p abbr=KUERZEL,name=KANTONSNAM,id=+KANTONSNR \
 		-- cantons=$<
 
-build/ch-districts-unmerged.json: build/ch/municipalities.shp
+build/ch-districts-unmerged.json: build/ch/municipalities.shp build/districts.tsv
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
 		--no-quantization \
 		--id-property=+BEZIRKSNR \
+		-e build/districts.tsv \
+		-p name=BEZIRKSNAM,id=+BEZIRKSNR \
 		-- districts=$<
 
 build/ch-country-unmerged.json: build/ch/municipalities.shp
@@ -198,6 +215,7 @@ build/ch-lakes-unmerged.json: build/ch/lakes.shp
 		-o $@ \
 		--no-quantization \
 		--id-property=+SEENR \
+		-p name=SEENAME,id=+SEENR \
 		-- lakes=$<
 
 build/%.json: build/%-unmerged.json
@@ -215,6 +233,7 @@ topo/%.json: build/%.json
 		--no-pre-quantization \
 		--post-quantization=1e5 \
 		--simplify $(if $(REPROJECT),1e-9,.5) \
+		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $<
 
 topo/%-lakes.json: build/%.json build/ch-lakes.json
@@ -225,6 +244,7 @@ topo/%-lakes.json: build/%.json build/ch-lakes.json
 		--no-pre-quantization \
 		--post-quantization=1e5 \
 		--simplify $(if $(REPROJECT),1e-9,.5) \
+		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
 
 topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons districts country lakes))
@@ -235,6 +255,7 @@ topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons dis
 		--no-pre-quantization \
 		--post-quantization=1e5 \
 		--simplify $(if $(REPROJECT),1e-9,.5) \
+		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
 
 ##################################################

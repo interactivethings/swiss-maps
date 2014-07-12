@@ -16,6 +16,7 @@
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
   "dependencies": {
+    "dbf2dsv": "0.0.4",
     "topojson": "^1.6.14"
   }
 }
