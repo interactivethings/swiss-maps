@@ -23,17 +23,10 @@ topo: node_modules \
 	topo/ch-lakes.json \
 	topo/ch-country-lakes.json \
 	topo/ch-cantons-lakes.json \
+	topo/ch-districts-lakes.json \
 	topo/ch-municipalities-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
 	topo/ch.json
-
-geo: node_modules \
-	geo/ch-country.json \
-	geo/ch-cantons.json \
-	geo/ch-districts.json \
-	geo/ch-municipalities.json \
-	geo/ch-lakes.json \
-	$(addprefix geo/,$(addsuffix -municipalities.json,$(CANTONS)))
 
 node_modules: package.json
 	npm install
@@ -42,7 +35,7 @@ node_modules: package.json
 clean: clean-generated clean-downloads
 
 clean-generated:
-	rm -rf shp geo topo tif
+	rm -rf build topo
 
 clean-downloads:
 	rm -rf downloads
@@ -55,119 +48,119 @@ clean-downloads:
 # Boundaries and lakes
 ##################################################
 
-shp/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
+build/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
 
-shp/zh/municipalities.shp: shp/ch/municipalities.shp
+build/zh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 1" $@ $<
 
-shp/be/municipalities.shp: shp/ch/municipalities.shp
+build/be/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 2" $@ $<
 
-shp/lu/municipalities.shp: shp/ch/municipalities.shp
+build/lu/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 3" $@ $<
 
-shp/ur/municipalities.shp: shp/ch/municipalities.shp
+build/ur/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 4" $@ $<
 
-shp/sz/municipalities.shp: shp/ch/municipalities.shp
+build/sz/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 5" $@ $<
 
-shp/ow/municipalities.shp: shp/ch/municipalities.shp
+build/ow/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 6" $@ $<
 
-shp/nw/municipalities.shp: shp/ch/municipalities.shp
+build/nw/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 7" $@ $<
 
-shp/gl/municipalities.shp: shp/ch/municipalities.shp
+build/gl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 8" $@ $<
 
-shp/zg/municipalities.shp: shp/ch/municipalities.shp
+build/zg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 9" $@ $<
 
-shp/fr/municipalities.shp: shp/ch/municipalities.shp
+build/fr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 10" $@ $<
 
-shp/so/municipalities.shp: shp/ch/municipalities.shp
+build/so/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 11" $@ $<
 
-shp/bs/municipalities.shp: shp/ch/municipalities.shp
+build/bs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 12" $@ $<
 
-shp/bl/municipalities.shp: shp/ch/municipalities.shp
+build/bl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 13" $@ $<
 
-shp/sh/municipalities.shp: shp/ch/municipalities.shp
+build/sh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 14" $@ $<
 
-shp/ar/municipalities.shp: shp/ch/municipalities.shp
+build/ar/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 15" $@ $<
 
-shp/ai/municipalities.shp: shp/ch/municipalities.shp
+build/ai/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 16" $@ $<
 
-shp/sg/municipalities.shp: shp/ch/municipalities.shp
+build/sg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 17" $@ $<
 
-shp/gr/municipalities.shp: shp/ch/municipalities.shp
+build/gr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 18" $@ $<
 
-shp/ag/municipalities.shp: shp/ch/municipalities.shp
+build/ag/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 19" $@ $<
 
-shp/tg/municipalities.shp: shp/ch/municipalities.shp
+build/tg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 20" $@ $<
 
-shp/ti/municipalities.shp: shp/ch/municipalities.shp
+build/ti/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 21" $@ $<
 
-shp/vd/municipalities.shp: shp/ch/municipalities.shp
+build/vd/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 22" $@ $<
 
-shp/vs/municipalities.shp: shp/ch/municipalities.shp
+build/vs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 23" $@ $<
 
-shp/ne/municipalities.shp: shp/ch/municipalities.shp
+build/ne/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 24" $@ $<
 
-shp/ge/municipalities.shp: shp/ch/municipalities.shp
+build/ge/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 25" $@ $<
 
-shp/ju/municipalities.shp: shp/ch/municipalities.shp
+build/ju/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	ogr2ogr -where "KANTONSNR = 26" $@ $<
 
-shp/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
+build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
-build/%-municipalities-unmerged.json: shp/%/municipalities.shp
+build/%-municipalities-unmerged.json: build/%/municipalities.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -175,7 +168,7 @@ build/%-municipalities-unmerged.json: shp/%/municipalities.shp
 		--id-property=+BFSNR \
 		-- municipalities=$<
 
-build/ch-cantons-unmerged.json: shp/ch/municipalities.shp
+build/ch-cantons-unmerged.json: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -183,7 +176,7 @@ build/ch-cantons-unmerged.json: shp/ch/municipalities.shp
 		--id-property=+KANTONSNR \
 		-- cantons=$<
 
-build/ch-districts-unmerged.json: shp/ch/municipalities.shp
+build/ch-districts-unmerged.json: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -191,7 +184,7 @@ build/ch-districts-unmerged.json: shp/ch/municipalities.shp
 		--id-property=+BEZIRKSNR \
 		-- districts=$<
 
-build/ch-country-unmerged.json: shp/ch/municipalities.shp
+build/ch-country-unmerged.json: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -199,7 +192,7 @@ build/ch-country-unmerged.json: shp/ch/municipalities.shp
 		--id-property=COUNTRY \
 		-- country=$<
 
-build/ch-lakes-unmerged.json: shp/ch/lakes.shp
+build/ch-lakes-unmerged.json: build/ch/lakes.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -222,7 +215,7 @@ topo/%.json: build/%.json
 		--no-pre-quantization \
 		--post-quantization=1e5 \
 		--simplify $(if $(REPROJECT),1e-9,.5) \
-		-- $^
+		-- $<
 
 topo/%-lakes.json: build/%.json build/ch-lakes.json
 	mkdir -p $(dir $@)
@@ -234,16 +227,26 @@ topo/%-lakes.json: build/%.json build/ch-lakes.json
 		--simplify $(if $(REPROJECT),1e-9,.5) \
 		-- $^
 
+topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons districts country lakes))
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
+		--no-pre-quantization \
+		--post-quantization=1e5 \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		-- $^
+
 ##################################################
-# PLZ (ZIP code) data
+# PLZ (ZIP code)
 ##################################################
 
-shp/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
+build/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
 	mkdir -p $(dir $@)
 	unzip -o -j -d $(dir $@) $<
 	touch $@
 
-shp/ch/plz.shp: shp/ch/plz/PLZO_PLZ.shp
+build/ch/plz.shp: build/ch/plz/PLZO_PLZ.shp
 	mkdir -p $(dir $@)
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
 
@@ -252,27 +255,34 @@ downloads/plz.zip:
 	curl http://data.geo.admin.ch.s3.amazonaws.com/ch.swisstopo-vd.ortschaftenverzeichnis_plz/PLZO_SHP_LV03.zip -L -o $@.download
 	mv $@.download $@
 
+topo/ch-plz.json: build/ch/plz.shp
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--id-property +PLZ \
+		-- plz=$<
 
 ##################################################
 # Elevation contours
 ##################################################
 
-shp/ch/contours.shp: shp/ch/contours-projected.shp shp/ch/country.shp
+downloads/srtm/%.zip:
 	mkdir -p $(dir $@)
-	ogr2ogr -clipsrc shp/ch/country.shp $@ $<
+	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
+	mv $@.download $@
 
-shp/ch/contours-projected.shp: shp/ch/contours-unclipped.shp
+build/srtm/%.tif: downloads/srtm/%.zip
 	mkdir -p $(dir $@)
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326,-t_srs EPSG:21781) $@ $<
+	unzip -o -d $(dir $@) $<
+	touch $@
 
-shp/ch/contours-unclipped.shp: shp/ch/contours_$(CONTOUR_INTERVAL).shp
+build/srtm/srtm.tif: build/srtm/srtm_38_03.tif build/srtm/srtm_39_03.tif
 	mkdir -p $(dir $@)
-	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
-	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
-		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
-	done
+	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
 
-tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
+build/contours/contours_$(CONTOUR_INTERVAL).tif: build/srtm/srtm.tif
 	mkdir -p $(dir $@)
 	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
 		if [ $$i = 0 ]; then \
@@ -282,31 +292,37 @@ tif/contours/contours_$(CONTOUR_INTERVAL).tif: tif/srtm/srtm.tif
 		fi; \
 	done
 
-shp/ch/contours_$(CONTOUR_INTERVAL).shp: tif/contours/contours_$(CONTOUR_INTERVAL).tif
+build/ch/contours_$(CONTOUR_INTERVAL).shp: build/contours/contours_$(CONTOUR_INTERVAL).tif
 	mkdir -p $(dir $@)
 	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
-		gdal_polygonize.py -f "ESRI Shapefile" tif/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
+		gdal_polygonize.py -f "ESRI Shapefile" build/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
 	done
 
-tif/srtm/srtm.tif: tif/srtm/srtm_38_03.tif tif/srtm/srtm_39_03.tif
+build/ch/country.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
-	# gdal_merge.py -ul_lr 5.95662 47.8099 10.4935 45.8192 -o $@ $^
-	gdal_merge.py -ul_lr 5.8 47.9 10.6 45.7 -o $@ $^
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781,) -where "ICC = 'CH'" $@ $<
 
-tif/srtm/%.tif: downloads/srtm/%.zip
+build/ch/contours-unclipped.shp: build/ch/contours_$(CONTOUR_INTERVAL).shp
 	mkdir -p $(dir $@)
-	unzip -o -d $(dir $@) $<
-	touch $@
+	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
+	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
+		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
+	done
 
-downloads/srtm/%.zip:
+build/ch/contours-projected.shp: build/ch/contours-unclipped.shp
 	mkdir -p $(dir $@)
-	curl http://gis-lab.info/data/srtm-tif/$(notdir $@) -L -o $@.download
-	mv $@.download $@
+	ogr2ogr $(if $(REPROJECT),,-t_srs EPSG:21781 -s_srs EPSG:4326) $@ $<
 
-topo/ch-contours.json: shp/ch/contours.shp
+build/ch/contours.shp: build/ch/contours-projected.shp build/ch/country.shp
+	mkdir -p $(dir $@)
+	ogr2ogr -clipsrc build/ch/country.shp $@ $<
+
+topo/ch-contours.json: build/ch/contours.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
-	$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-	--simplify $(if $(REPROJECT),2e-9,1) \
-	--id-property +elev \
-	-- contours=$< | $(GROUP) > $@
+		$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--id-property=+elev \
+		-- contours=$< \
+	| node_modules/.bin/topojson-group \
+		-o $@
