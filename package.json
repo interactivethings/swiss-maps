@@ -1,6 +1,6 @@
 {
   "name": "swiss-maps",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Swiss geodata in open formats.",
   "keywords": [
     "topojson",
@@ -16,6 +16,7 @@
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
   "dependencies": {
-    "topojson": "~1.4.5"
+    "dbf2dsv": "0.0.4",
+    "topojson": "^1.6.14"
   }
 }
