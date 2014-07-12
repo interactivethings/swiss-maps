@@ -16,6 +16,6 @@
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
   "dependencies": {
-    "topojson": "~1.6.5"
+    "topojson": "^1.6.14"
   }
 }
