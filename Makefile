@@ -13,7 +13,7 @@ PROPERTIES =
 
 CONTOUR_INTERVAL = 500
 
-all: topo geo
+all: topo
 
 topo: node_modules \
 	topo/ch-country.json \
@@ -40,7 +40,7 @@ clean-generated:
 clean-downloads:
 	rm -rf downloads
 
-.PHONY: clean clean-generated clean-downloads topo geo
+.PHONY: clean clean-generated clean-downloads topo
 
 .SECONDARY:
 
