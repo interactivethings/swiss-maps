@@ -50,114 +50,142 @@ clean-downloads:
 
 build/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
 
 build/zh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 1" $@ $<
 
 build/be/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 2" $@ $<
 
 build/lu/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 3" $@ $<
 
 build/ur/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 4" $@ $<
 
 build/sz/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 5" $@ $<
 
 build/ow/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 6" $@ $<
 
 build/nw/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 7" $@ $<
 
 build/gl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 8" $@ $<
 
 build/zg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 9" $@ $<
 
 build/fr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 10" $@ $<
 
 build/so/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 11" $@ $<
 
 build/bs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 12" $@ $<
 
 build/bl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 13" $@ $<
 
 build/sh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 14" $@ $<
 
 build/ar/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 15" $@ $<
 
 build/ai/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 16" $@ $<
 
 build/sg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 17" $@ $<
 
 build/gr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 18" $@ $<
 
 build/ag/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 19" $@ $<
 
 build/tg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 20" $@ $<
 
 build/ti/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 21" $@ $<
 
 build/vd/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 22" $@ $<
 
 build/vs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 23" $@ $<
 
 build/ne/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 24" $@ $<
 
 build/ge/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 25" $@ $<
 
 build/ju/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -where "KANTONSNR = 26" $@ $<
 
 build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
 build/cantons.tsv: src/V200/$(YEAR)/VEC200_ADMLVL1.dbf
@@ -264,11 +292,13 @@ topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons dis
 
 build/ch/plz/PLZO_PLZ.shp: downloads/plz.zip
 	mkdir -p $(dir $@)
+	rm -f $@
 	unzip -o -j -d $(dir $@) $<
 	touch $@
 
 build/ch/plz.shp: build/ch/plz/PLZO_PLZ.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
 
 downloads/plz.zip:
@@ -315,16 +345,19 @@ build/contours/contours_$(CONTOUR_INTERVAL).tif: build/srtm/srtm.tif
 
 build/ch/contours_$(CONTOUR_INTERVAL).shp: build/contours/contours_$(CONTOUR_INTERVAL).tif
 	mkdir -p $(dir $@)
+	rm -f $@
 	for i in `seq 0 $(CONTOUR_INTERVAL) 4445`; do \
 		gdal_polygonize.py -f "ESRI Shapefile" build/contours/contours_$$i.tif $(dir $@)contours_$$i.shp contours_$$i elev; \
 	done
 
 build/ch/country.shp: src/swissBOUNDARIES3D/2014/swissBOUNDARIES3D_1_1_TLM_LANDESGEBIET.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781,) -where "ICC = 'CH'" $@ $<
 
 build/ch/contours-unclipped.shp: build/ch/contours_$(CONTOUR_INTERVAL).shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -nlt POLYGON $@ $(dir $<)contours_0.shp
 	for i in `seq $(CONTOUR_INTERVAL) $(CONTOUR_INTERVAL) 4445`; do \
 		ogr2ogr -update -append -nln contours-unclipped -nlt POLYGON $@ $(dir $<)contours_$$i.shp; \
@@ -332,10 +365,12 @@ build/ch/contours-unclipped.shp: build/ch/contours_$(CONTOUR_INTERVAL).shp
 
 build/ch/contours-projected.shp: build/ch/contours-unclipped.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr $(if $(REPROJECT),,-t_srs EPSG:21781 -s_srs EPSG:4326) $@ $<
 
 build/ch/contours.shp: build/ch/contours-projected.shp build/ch/country.shp
 	mkdir -p $(dir $@)
+	rm -f $@
 	ogr2ogr -clipsrc build/ch/country.shp $@ $<
 
 topo/ch-contours.json: build/ch/contours.shp
