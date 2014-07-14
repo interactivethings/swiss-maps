@@ -57,7 +57,7 @@ clean-downloads:
 build/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH'" $@ $<
 
 build/zh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
