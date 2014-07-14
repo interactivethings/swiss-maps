@@ -30,7 +30,7 @@ To get started, clone this repository and run `make`.
 * `ch-municipalities-lakes.json` (municipality boundaries + lakes)
 * `ch-lakes.json`
 * `ch.json` (all of the above combined)
-* For each canton a file with its municipalities, e.g. `zh-municipalities.json`
+* For each canton a file with its municipalities and lakes, e.g. `zh-municipalities.json` and `zh-municipalities-lakes.json`
 
 Additionally, PLZ (zip code) boundaries and elevation contours can be built:
 

@@ -3,6 +3,11 @@ CANTONS = \
 	fr so bs bl sh ar ai sg gr \
 	ag tg ti vd vs ne ge ju
 
+CANTONS_WITH_LAKES = \
+	zh be lu ur sz ow nw gl zg \
+	fr sh sg \
+	ag tg ti vd vs ne ge
+
 WIDTH = 960
 HEIGHT = 500
 MARGIN = 10
@@ -26,6 +31,7 @@ topo: node_modules \
 	topo/ch-districts-lakes.json \
 	topo/ch-municipalities-lakes.json \
 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
+	$(addprefix topo/,$(addsuffix -municipalities-lakes.json,$(CANTONS_WITH_LAKES))) \
 	topo/ch.json
 
 node_modules: package.json
@@ -188,6 +194,101 @@ build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "SEENR < 9999 AND SEENR > 0" $@ $<
 
+build/zh/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9050, 9040)" $@ $<
+
+build/be/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9089, 9073, 9148, 9151)" $@ $<
+
+build/lu/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9157, 9175, 9179, 9172, 9163)" $@ $<
+
+build/ur/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9179)" $@ $<
+
+build/sz/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9216, 9050, 9179, 9175)" $@ $<
+
+build/ow/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9179, 9239)" $@ $<
+
+build/nw/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9179)" $@ $<
+
+build/gl/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9267)" $@ $<
+
+build/zg/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9270, 9175)" $@ $<
+
+build/fr/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9276, 9151, 9294)" $@ $<
+
+build/sh/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9326)" $@ $<
+
+build/sg/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9050, 9267, 9326)" $@ $<
+
+build/ag/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9172)" $@ $<
+
+build/tg/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9326)" $@ $<
+
+build/ti/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9711, 9710)" $@ $<
+
+build/vd/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9751, 9757, 9151, 9294)" $@ $<
+
+build/vs/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9757)" $@ $<
+
+build/ne/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9148, 9151)" $@ $<
+
+build/ge/lakes.shp: build/ch/lakes.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr -where "SEENR IN (9757)" $@ $<
+
 build/cantons.tsv: src/V200/$(YEAR)/VEC200_ADMLVL1.dbf
 	mkdir -p $(dir $@)
 	node_modules/.bin/dbf2dsv \
@@ -195,6 +296,12 @@ build/cantons.tsv: src/V200/$(YEAR)/VEC200_ADMLVL1.dbf
 		-- $<
 
 build/districts.tsv: src/V200/$(YEAR)/VEC200_ADMLVL2.dbf
+	mkdir -p $(dir $@)
+	node_modules/.bin/dbf2dsv \
+		-o $@ \
+		-- $<
+
+build/municipalities.tsv: src/V200/$(YEAR)/VEC200_Commune.dbf
 	mkdir -p $(dir $@)
 	node_modules/.bin/dbf2dsv \
 		-o $@ \
@@ -237,7 +344,7 @@ build/ch-country-unmerged.json: build/ch/municipalities.shp
 		--id-property=COUNTRY \
 		-- country=$<
 
-build/ch-lakes-unmerged.json: build/ch/lakes.shp
+build/%-lakes-unmerged.json: build/%/lakes.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
@@ -264,7 +371,18 @@ topo/%.json: build/%.json
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $<
 
-topo/%-lakes.json: build/%.json build/ch-lakes.json
+topo/%-municipalities-lakes.json: build/%-municipalities.json build/%-lakes.json
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
+		--no-pre-quantization \
+		--post-quantization=1e5 \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		$(if $(PROPERTIES),-p $(PROPERTIES),) \
+		-- $^
+
+topo/ch-%-lakes.json: build/ch-%.json build/ch-lakes.json
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
