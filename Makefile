@@ -59,6 +59,11 @@ build/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH'" $@ $<
 
+build/ch/municipalities-without-lakes.shp: src/V200/$(YEAR)/VEC200_Commune.shp
+	mkdir -p $(dir $@)
+	rm -f $@
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
+
 build/zh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
@@ -326,14 +331,14 @@ build/ch-cantons-unmerged.json: build/ch/municipalities.shp build/cantons.tsv
 		-p abbr=KUERZEL,name=KANTONSNAM,id=+KANTONSNR \
 		-- cantons=$<
 
-build/ch-districts-unmerged.json: build/ch/municipalities.shp build/districts.tsv
+# Currently without names because joining to build/districts.tsv prevents the 'canton' property to be set on districts where it's needed (i.e. districts with BEZIRKSNR = 0)
+build/ch-districts-unmerged.json: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		-o $@ \
 		--no-quantization \
 		--id-property=+BEZIRKSNR \
-		-e build/districts.tsv \
-		-p name=BEZIRKSNAM,id=+BEZIRKSNR \
+		-p id=+BEZIRKSNR,canton=+KANTONSNR \
 		-- districts=$<
 
 build/ch-country-unmerged.json: build/ch/municipalities.shp
@@ -358,6 +363,15 @@ build/%.json: build/%-unmerged.json
 		-o $@ \
 		--in-object=$(lastword $(subst -, ,$*)) \
 		--out-object=$(lastword $(subst -, ,$*)) \
+		-- $<
+
+# Infer district id for districts with id 0 from the canton number. E.g. Geneva has technically no districts but on district maps it has the id 2500
+build/ch-districts.json: build/ch-districts-unmerged.json
+	node_modules/.bin/topojson-merge \
+		-o $@ \
+		--in-object=districts \
+		--out-object=districts \
+		--key='d.id === 0 ? d.properties.canton * 100 : d.id' \
 		-- $<
 
 topo/%.json: build/%.json
