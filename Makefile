@@ -39,6 +39,7 @@ node_modules: package.json
 	touch $@
 
 clean: clean-generated clean-downloads
+	rm -rf node_modules
 
 clean-generated:
 	rm -rf build topo
