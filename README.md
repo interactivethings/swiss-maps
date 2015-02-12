@@ -99,7 +99,7 @@ If you want to generate your files with more (or less) properties, you should mo
 
 ## Historical Municipality Boundaries
 
-Municipality boundaries from 2013 are also available. If you want boundaries from another year than 2014, define the `YEAR` variable:
+Municipality boundaries from 2013 and 2014 are also available. If you want boundaries from another year than 2015, define the `YEAR` variable:
 
     make topo/ch-municipalities.json YEAR=2013
 
@@ -121,7 +121,7 @@ Jeremy Stucki, [Interactive Things](http://interactivethings.com)
 
 ### Data Source
 
-Data source is the Swiss Federal Office of Topography, [swissBOUNDARIES3D](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/landscape/swissBOUNDARIES3D.html) 2014.
+Data source is the Swiss Federal Office of Topography, [swissBOUNDARIES3D](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/landscape/swissBOUNDARIES3D.html) 2015.
 
 ### License
 
