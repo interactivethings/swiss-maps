@@ -16,6 +16,8 @@ YEAR = 2015
 
 PROPERTIES =
 
+ENCODING = utf8
+
 CONTOUR_INTERVAL = 500
 
 all: topo
@@ -298,18 +300,21 @@ build/ge/lakes.shp: build/ch/lakes.shp
 build/cantons.tsv: src/V200/$(YEAR)/VEC200_ADMLVL1.dbf
 	mkdir -p $(dir $@)
 	node_modules/.bin/dbf2dsv \
+		-e $(ENCODING) \
 		-o $@ \
 		-- $<
 
 build/districts.tsv: src/V200/$(YEAR)/VEC200_ADMLVL2.dbf
 	mkdir -p $(dir $@)
 	node_modules/.bin/dbf2dsv \
+		-e $(ENCODING) \
 		-o $@ \
 		-- $<
 
 build/municipalities.tsv: src/V200/$(YEAR)/VEC200_Commune.dbf
 	mkdir -p $(dir $@)
 	node_modules/.bin/dbf2dsv \
+		-e $(ENCODING) \
 		-o $@ \
 		-- $<
 
