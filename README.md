@@ -43,6 +43,16 @@ You can also generate individual files, e.g.
 
     make topo/ch-cantons.json
 
+## SVG Output
+
+To generate SVG files, the usage is similar, e.g.
+
+    make svg/ch-cantons.svg
+
+If the generated SVG has a corresponding TopoJSON file with multiple objects (e.g. `svg/ch.svg`), the resulting SVG will have multiple layers too!
+
+*Note:* Don't use `REPROJECT=true` when generating SVGs.
+
 ## Projections and Dimensions
 
 The coordinates of the source files is the official Swiss reference system [CH1903](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/topics/survey/sys/refsys/switzerland.html) with already [projected coordinates](http://www.swisstopo.admin.ch/internet/swisstopo/en/home/topics/survey/sys/refsys/projections.html).
