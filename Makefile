@@ -20,6 +20,10 @@ ENCODING = utf8
 
 CONTOUR_INTERVAL = 500
 
+ifndef SIMPLIFY
+	SIMPLIFY = $(if $(REPROJECT),1e-9,.5)
+endif
+
 all: topo
 
 topo: node_modules \
@@ -387,7 +391,7 @@ topo/%.json: build/%.json
 		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
 		--no-pre-quantization \
 		--post-quantization=1e5 \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $<
 
@@ -398,7 +402,7 @@ topo/%-municipalities-lakes.json: build/%-municipalities.json build/%-lakes.json
 		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
 		--no-pre-quantization \
 		--post-quantization=1e5 \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
 
@@ -409,7 +413,7 @@ topo/ch-%-lakes.json: build/ch-%.json build/ch-lakes.json
 		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
 		--no-pre-quantization \
 		--post-quantization=1e5 \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
 
@@ -420,7 +424,7 @@ topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons dis
 		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
 		--no-pre-quantization \
 		--post-quantization=1e5 \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
 
@@ -456,7 +460,7 @@ topo/ch-plz.json: build/ch/plz.shp
 	node_modules/.bin/topojson \
 		-o $@ \
 		$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		--id-property +PLZ \
 		-- plz=$<
 
@@ -522,7 +526,7 @@ topo/ch-contours.json: build/ch/contours.shp
 	mkdir -p $(dir $@)
 	node_modules/.bin/topojson \
 		$(if $(REPROJECT),,--width $(WIDTH) --height $(HEIGHT) --margin $(MARGIN)) \
-		--simplify $(if $(REPROJECT),1e-9,.5) \
+		--simplify=$(SIMPLIFY) \
 		--id-property=+elev \
 		-- contours=$< \
 	| node_modules/.bin/topojson-group \

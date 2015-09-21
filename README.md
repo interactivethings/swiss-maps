@@ -113,6 +113,14 @@ Municipality boundaries from 2013 and 2014 are also available. If you want bound
 
     make topo/ch-municipalities.json YEAR=2013
 
+## Custom Simplification
+
+To use a custom simplification, define the `SIMPLIFY` variable. For example, to create a really blocky version of Switzerland:
+
+    make topo/ch-country.json SIMPLIFY=400
+
+*Note:* The simplify parameter has [different meanings depending on the coordinate system](https://github.com/mbostock/topojson/wiki/Command-Line-Reference#simplification).
+
 ## Other Modifications
 
 For everything else you can modify the `Makefile` or run `ogr2ogr` and `topojson` directly. Mike Bostock's tutorial [Let's Make a Map](http://bost.ocks.org/mike/map/), the [TopoJSON wiki](https://github.com/mbostock/topojson/wiki), and [ogr2ogr documentation](http://www.gdal.org/ogr2ogr.html) should cover most of your needs.
