@@ -44,7 +44,7 @@ clean: clean-generated clean-downloads
 	rm -rf node_modules
 
 clean-generated:
-	rm -rf build topo
+	rm -rf build topo svg
 
 clean-downloads:
 	rm -rf downloads
@@ -423,6 +423,13 @@ topo/ch.json: $(addprefix build/ch-,$(addsuffix .json,municipalities cantons dis
 		--simplify $(if $(REPROJECT),1e-9,.5) \
 		$(if $(PROPERTIES),-p $(PROPERTIES),) \
 		-- $^
+
+svg/%.svg: topo/%.json
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson-svg \
+		-o $@ \
+		-- $<
+
 
 ##################################################
 # PLZ (ZIP code)
