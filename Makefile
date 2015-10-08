@@ -44,16 +44,23 @@ node_modules: package.json
 	npm install
 	touch $@
 
-clean: clean-generated clean-downloads
-	rm -rf node_modules
+# Return repo to a pristine state
+clobber:
+	git clean -dxf
+
+# Clean generated files
+clean:
+	rm -rf build topo svg
 
 clean-generated:
+	@echo "\033[1;33m\`make clean-generated\` is DEPRECATED. Use \`make clean\` instead.\033[0m"
 	rm -rf build topo svg
 
 clean-downloads:
+	@echo "\033[1;33m\`make clean-downloads\` is DEPRECATED. Use \`make clobber\` instead.\033[0m"
 	rm -rf downloads
 
-.PHONY: clean clean-generated clean-downloads topo
+.PHONY: clean clobber clean-generated clean-downloads topo
 
 .SECONDARY:
 
