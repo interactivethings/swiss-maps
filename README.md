@@ -113,6 +113,8 @@ Municipality boundaries from 2013 and 2014 are also available. If you want bound
 
     make topo/ch-municipalities.json YEAR=2013
 
+Make sure you run `make clean` if you've generated files before for another year.
+
 ## Custom Simplification
 
 To use a custom simplification, define the `SIMPLIFY` variable. For example, to create a really blocky version of Switzerland:
