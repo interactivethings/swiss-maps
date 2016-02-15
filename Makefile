@@ -12,7 +12,7 @@ WIDTH = 960
 HEIGHT = 500
 MARGIN = 10
 
-YEAR = 2015
+YEAR = 2016
 
 PROPERTIES =
 
@@ -26,19 +26,23 @@ endif
 
 all: topo
 
+# topo: node_modules \
+# 	topo/ch-country.json \
+# 	topo/ch-cantons.json \
+# 	topo/ch-districts.json \
+# 	topo/ch-municipalities.json \
+# 	topo/ch-lakes.json \
+# 	topo/ch-country-lakes.json \
+# 	topo/ch-cantons-lakes.json \
+# 	topo/ch-districts-lakes.json \
+# 	topo/ch-municipalities-lakes.json \
+# 	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
+# 	$(addprefix topo/,$(addsuffix -municipalities-lakes.json,$(CANTONS_WITH_LAKES))) \
+# 	topo/ch.json
+
 topo: node_modules \
-	topo/ch-country.json \
-	topo/ch-cantons.json \
-	topo/ch-districts.json \
 	topo/ch-municipalities.json \
-	topo/ch-lakes.json \
-	topo/ch-country-lakes.json \
-	topo/ch-cantons-lakes.json \
-	topo/ch-districts-lakes.json \
-	topo/ch-municipalities-lakes.json \
-	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS))) \
-	$(addprefix topo/,$(addsuffix -municipalities-lakes.json,$(CANTONS_WITH_LAKES))) \
-	topo/ch.json
+	$(addprefix topo/,$(addsuffix -municipalities.json,$(CANTONS)))
 
 node_modules: package.json
 	npm install
@@ -68,145 +72,145 @@ clean-downloads:
 # Boundaries and lakes
 ##################################################
 
-build/ch/municipalities.shp: src/V200/$(YEAR)/VEC200_Commune.shp
+build/ch/municipalities.shp: src/V200/$(YEAR)/VECTOR200_HOHEITSGEBIET.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH'" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "CAST(BFS_NUMMER as integer(4)) > 0" $@ $<
 
-build/ch/municipalities-without-lakes.shp: src/V200/$(YEAR)/VEC200_Commune.shp
+build/ch/municipalities-without-lakes.shp: src/V200/$(YEAR)/VECTOR200_HOHEITSGEBIET.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "COUNTRY = 'CH' AND SEENR = 0" $@ $<
+	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) -where "CAST(BFS_NUMMER as integer(4)) > 0 AND CAST(BFS_NUMMER as integer(4)) < 9000" $@ $<
 
-build/zh/municipalities.shp: build/ch/municipalities.shp
+build/zh/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 1" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH01000000'" $@ $<
 
-build/be/municipalities.shp: build/ch/municipalities.shp
+build/be/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 2" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH02000000'" $@ $<
 
-build/lu/municipalities.shp: build/ch/municipalities.shp
+build/lu/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 3" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH03000000'" $@ $<
 
-build/ur/municipalities.shp: build/ch/municipalities.shp
+build/ur/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 4" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH04000000'" $@ $<
 
-build/sz/municipalities.shp: build/ch/municipalities.shp
+build/sz/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 5" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH05000000'" $@ $<
 
-build/ow/municipalities.shp: build/ch/municipalities.shp
+build/ow/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 6" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH06000000'" $@ $<
 
-build/nw/municipalities.shp: build/ch/municipalities.shp
+build/nw/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 7" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH07000000'" $@ $<
 
-build/gl/municipalities.shp: build/ch/municipalities.shp
+build/gl/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 8" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH08000000'" $@ $<
 
-build/zg/municipalities.shp: build/ch/municipalities.shp
+build/zg/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 9" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH09000000'" $@ $<
 
-build/fr/municipalities.shp: build/ch/municipalities.shp
+build/fr/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 10" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH10000000'" $@ $<
 
-build/so/municipalities.shp: build/ch/municipalities.shp
+build/so/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 11" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH11000000'" $@ $<
 
-build/bs/municipalities.shp: build/ch/municipalities.shp
+build/bs/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 12" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH12000000'" $@ $<
 
-build/bl/municipalities.shp: build/ch/municipalities.shp
+build/bl/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 13" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH13000000'" $@ $<
 
-build/sh/municipalities.shp: build/ch/municipalities.shp
+build/sh/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 14" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH14000000'" $@ $<
 
-build/ar/municipalities.shp: build/ch/municipalities.shp
+build/ar/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 15" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH15000000'" $@ $<
 
-build/ai/municipalities.shp: build/ch/municipalities.shp
+build/ai/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 16" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH16000000'" $@ $<
 
-build/sg/municipalities.shp: build/ch/municipalities.shp
+build/sg/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 17" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH17000000'" $@ $<
 
-build/gr/municipalities.shp: build/ch/municipalities.shp
+build/gr/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 18" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH18000000'" $@ $<
 
-build/ag/municipalities.shp: build/ch/municipalities.shp
+build/ag/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 19" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH19000000'" $@ $<
 
-build/tg/municipalities.shp: build/ch/municipalities.shp
+build/tg/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 20" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH20000000'" $@ $<
 
-build/ti/municipalities.shp: build/ch/municipalities.shp
+build/ti/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 21" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH21000000'" $@ $<
 
-build/vd/municipalities.shp: build/ch/municipalities.shp
+build/vd/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 22" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH22000000'" $@ $<
 
-build/vs/municipalities.shp: build/ch/municipalities.shp
+build/vs/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 23" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH23000000'" $@ $<
 
-build/ne/municipalities.shp: build/ch/municipalities.shp
+build/ne/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 24" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH24000000'" $@ $<
 
-build/ge/municipalities.shp: build/ch/municipalities.shp
+build/ge/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 25" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH25000000'" $@ $<
 
-build/ju/municipalities.shp: build/ch/municipalities.shp
+build/ju/municipalities.shp: build/ch/municipalities-without-lakes.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 26" $@ $<
+	ogr2ogr -where "KANTONSNUM = 'CH26000000'" $@ $<
 
 build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
@@ -334,8 +338,8 @@ build/%-municipalities-unmerged.json: build/%/municipalities.shp
 	node_modules/.bin/topojson \
 		-o $@ \
 		--no-quantization \
-		--id-property=+BFSNR \
-		-p name=GEMNAME,id=+BFSNR \
+		--id-property=+BFS_NUMMER \
+		-p name=NAME,id=+BFS_NUMMER \
 		-- municipalities=$<
 
 build/ch-cantons-unmerged.json: build/ch/municipalities.shp build/cantons.tsv
