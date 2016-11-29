@@ -12,6 +12,8 @@ You also need GDAL and the corresponding python-gdal library installed. Links to
 
     brew install gdal
 
+Also make sure you have GDAL and the corresponding python-gdal library installed. You can find the binaries in the [GDAL Wiki](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries).
+
 To get started, clone this repository and run `make`.
 
     git clone https://github.com/interactivethings/swiss-maps.git
