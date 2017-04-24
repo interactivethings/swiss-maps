@@ -457,6 +457,22 @@ build/ch/plz.shp: build/ch/plz/PLZO_PLZ.shp
 	rm -f $@
 	ogr2ogr $(if $(REPROJECT),-t_srs EPSG:4326 -s_srs EPSG:21781) $@ $<
 
+build/plz-unmerged.json: build/ch/plz.shp
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson \
+		-o $@ \
+		--no-quantization \
+		--id-property=+PLZ \
+		-p name=PLZ,id=+PLZ \
+		-- plz=$<
+
+build/ch-plz.json: build/plz-unmerged.json
+	node_modules/.bin/topojson-merge \
+		-o $@ \
+		--in-object=plz \
+		--out-object=plz \
+		-- $<
+
 downloads/plz.zip:
 	mkdir -p $(dir $@)
 	curl http://data.geo.admin.ch.s3.amazonaws.com/ch.swisstopo-vd.ortschaftenverzeichnis_plz/PLZO_SHP_LV03.zip -L -o $@.download
@@ -470,6 +486,17 @@ topo/ch-plz.json: build/ch/plz.shp
 		--simplify=$(SIMPLIFY) \
 		--id-property +PLZ \
 		-- plz=$<
+
+topo/ch-plz-lakes.json: build/ch-plz.json build/ch-lakes.json
+	mkdir -p $(dir $@)
+	node_modules/.bin/topojson \
+		-o $@ \
+		$(if $(REPROJECT),,--width=$(WIDTH) --height=$(HEIGHT) --margin=$(MARGIN)) \
+		--no-pre-quantization \
+		--post-quantization=1e5 \
+		--simplify $(if $(REPROJECT),1e-9,.5) \
+		$(if $(PROPERTIES),-p $(PROPERTIES),) \
+		-- $^
 
 ##################################################
 # Elevation contours
