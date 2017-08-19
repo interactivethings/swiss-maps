@@ -1,6 +1,6 @@
 # Swiss Maps
 
-This repository provides a mechanism to generate [TopoJSON](https://github.com/mbostock/topojson) from publicly available (but difficult to access) [swisstopo](http://www.swisstopo.admin.ch/internet/swisstopo/en/home.html) geodata.
+This repository provides a mechanism to generate [TopoJSON](https://github.com/mbostock/topojson) from publicly available (but difficult to access) [swisstopo](https://www.swisstopo.admin.ch/) geodata.
 
 ## Getting Started
 
