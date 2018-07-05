@@ -81,132 +81,132 @@ build/ch/municipalities-without-lakes.shp: src/V200/$(YEAR)/VEC200_Commune.shp
 build/zh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 1" $@ $<
+	ogr2ogr -where "KANTONSNR = 1 AND SEENR = 0" $@ $<
 
 build/be/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 2" $@ $<
+	ogr2ogr -where "KANTONSNR = 2 AND SEENR = 0" $@ $<
 
 build/lu/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 3" $@ $<
+	ogr2ogr -where "KANTONSNR = 3 AND SEENR = 0" $@ $<
 
 build/ur/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 4" $@ $<
+	ogr2ogr -where "KANTONSNR = 4 AND SEENR = 0" $@ $<
 
 build/sz/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 5" $@ $<
+	ogr2ogr -where "KANTONSNR = 5 AND SEENR = 0" $@ $<
 
 build/ow/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 6" $@ $<
+	ogr2ogr -where "KANTONSNR = 6 AND SEENR = 0" $@ $<
 
 build/nw/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 7" $@ $<
+	ogr2ogr -where "KANTONSNR = 7 AND SEENR = 0" $@ $<
 
 build/gl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 8" $@ $<
+	ogr2ogr -where "KANTONSNR = 8 AND SEENR = 0" $@ $<
 
 build/zg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 9" $@ $<
+	ogr2ogr -where "KANTONSNR = 9 AND SEENR = 0" $@ $<
 
 build/fr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 10" $@ $<
+	ogr2ogr -where "KANTONSNR = 10 AND SEENR = 0" $@ $<
 
 build/so/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 11" $@ $<
+	ogr2ogr -where "KANTONSNR = 11 AND SEENR = 0" $@ $<
 
 build/bs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 12" $@ $<
+	ogr2ogr -where "KANTONSNR = 12 AND SEENR = 0" $@ $<
 
 build/bl/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 13" $@ $<
+	ogr2ogr -where "KANTONSNR = 13 AND SEENR = 0" $@ $<
 
 build/sh/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 14" $@ $<
+	ogr2ogr -where "KANTONSNR = 14 AND SEENR = 0" $@ $<
 
 build/ar/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 15" $@ $<
+	ogr2ogr -where "KANTONSNR = 15 AND SEENR = 0" $@ $<
 
 build/ai/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 16" $@ $<
+	ogr2ogr -where "KANTONSNR = 16 AND SEENR = 0" $@ $<
 
 build/sg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 17" $@ $<
+	ogr2ogr -where "KANTONSNR = 17 AND SEENR = 0" $@ $<
 
 build/gr/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 18" $@ $<
+	ogr2ogr -where "KANTONSNR = 18 AND SEENR = 0" $@ $<
 
 build/ag/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 19" $@ $<
+	ogr2ogr -where "KANTONSNR = 19 AND SEENR = 0" $@ $<
 
 build/tg/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 20" $@ $<
+	ogr2ogr -where "KANTONSNR = 20 AND SEENR = 0" $@ $<
 
 build/ti/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 21" $@ $<
+	ogr2ogr -where "KANTONSNR = 21 AND SEENR = 0" $@ $<
 
 build/vd/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 22" $@ $<
+	ogr2ogr -where "KANTONSNR = 22 AND SEENR = 0" $@ $<
 
 build/vs/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 23" $@ $<
+	ogr2ogr -where "KANTONSNR = 23 AND SEENR = 0" $@ $<
 
 build/ne/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 24" $@ $<
+	ogr2ogr -where "KANTONSNR = 24 AND SEENR = 0" $@ $<
 
 build/ge/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 25" $@ $<
+	ogr2ogr -where "KANTONSNR = 25 AND SEENR = 0" $@ $<
 
 build/ju/municipalities.shp: build/ch/municipalities.shp
 	mkdir -p $(dir $@)
 	rm -f $@
-	ogr2ogr -where "KANTONSNR = 26" $@ $<
+	ogr2ogr -where "KANTONSNR = 26 AND SEENR = 0" $@ $<
 
 build/ch/lakes.shp: src/V200/2014/VEC200_Commune.shp
 	mkdir -p $(dir $@)
