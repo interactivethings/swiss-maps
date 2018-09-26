@@ -12,7 +12,7 @@ WIDTH = 960
 HEIGHT = 500
 MARGIN = 10
 
-YEAR = 2015
+YEAR = 2018
 
 PROPERTIES =
 
@@ -24,7 +24,47 @@ ifndef SIMPLIFY
 	SIMPLIFY = $(if $(REPROJECT),1e-9,.5)
 endif
 
+TEMP_FOLDER = /tmp/swissBOUNDARIES3D
+TARGET_BOUNDARIES = ./src/swissBOUNDARIES3D/2018
+TARGET_HEIGHTMODEL = ./src/DHM200
+
+OPEN_BOUNDARIES_SRC = "https://opendata.swiss/en/dataset/swissboundaries3d-landesgrenzen"
+# Update the following URL if the resource on the page above changes:
+OPEN_BOUNDARIES_URL = "https://opendata.swiss/en/dataset/swissboundaries3d-landesgrenzen/resource/b0d643e0-cf14-400e-ae13-33cfe9e9b21a/download"
+
+OPEN_HEIGHTMODEL_SRC = "https://opendata.swiss/en/dataset/das-digitale-hohenmodell-der-schweiz-mit-einer-maschenweite-von-200-m"
+# Update the following URL if the resource on the page above changes:
+OPEN_HEIGHTMODEL_URL = "https://opendata.swiss/en/dataset/das-digitale-hohenmodell-der-schweiz-mit-einer-maschenweite-von-200-m/resource/cc45aa79-a9ff-46b8-89d4-eb3ca142ce84/download"
+
 all: topo
+
+fetch:
+	fetch_boundaries
+	fetch_heightmodel
+	fetch_vectormodel
+
+fetch_vectormodel:
+	# A hack until we figure out where this data is from
+	cp -rf src/V200/2015 src/V200/$(YEAR)
+
+fetch_boundaries:
+	@echo "Fetching open data from $(OPEN_BOUNDARIES_SRC) ............"
+	mkdir -p $(TEMP_FOLDER)
+	wget -O $(TEMP_FOLDER)/data.zip $(OPEN_BOUNDARIES_URL)
+	unzip $(TEMP_FOLDER)/data.zip -d $(TEMP_FOLDER)
+	unzip $(TEMP_FOLDER)/swissBOUNDARIES3D_LV95.zip -d $(TEMP_FOLDER)
+	mkdir -p $(TARGET_BOUNDARIES)
+	mv $(TEMP_FOLDER)/swissBOUNDARIES3D_LV95/SHAPEFILE_LV95_LN02/* $(TARGET_BOUNDARIES)
+	rm -rf $(TEMP_FOLDER)
+
+fetch_heightmodel:
+	@echo "Fetching open data from $(OPEN_HEIGHTMODEL_SRC) ............"
+	mkdir -p $(TEMP_FOLDER)
+	wget -O $(TEMP_FOLDER)/data.zip $(OPEN_HEIGHTMODEL_URL)
+	unzip $(TEMP_FOLDER)/data.zip -d $(TEMP_FOLDER)
+	mkdir -p $(TARGET_HEIGHTMODEL)
+	mv $(TEMP_FOLDER)/data/* $(TARGET_HEIGHTMODEL)
+	rm -rf $(TEMP_FOLDER)
 
 topo: node_modules \
 	topo/ch-country.json \
