@@ -38,10 +38,7 @@ OPEN_HEIGHTMODEL_URL = "https://opendata.swiss/en/dataset/das-digitale-hohenmode
 
 all: topo
 
-fetch:
-	fetch_boundaries
-	fetch_heightmodel
-	fetch_vectormodel
+fetch: fetch_boundaries	fetch_heightmodel fetch_vectormodel
 
 fetch_vectormodel:
 	# A hack until we figure out where this data is from
