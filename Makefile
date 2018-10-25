@@ -30,11 +30,11 @@ TARGET_HEIGHTMODEL = ./src/DHM200
 
 OPEN_BOUNDARIES_SRC = "https://opendata.swiss/en/dataset/swissboundaries3d-landesgrenzen"
 # Update the following URL if the resource on the page above changes:
-OPEN_BOUNDARIES_URL = "https://opendata.swiss/en/dataset/swissboundaries3d-landesgrenzen/resource/b0d643e0-cf14-400e-ae13-33cfe9e9b21a/download"
+OPEN_BOUNDARIES_URL = "http://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-land-flaeche.fill/data.zip"
 
 OPEN_HEIGHTMODEL_SRC = "https://opendata.swiss/en/dataset/das-digitale-hohenmodell-der-schweiz-mit-einer-maschenweite-von-200-m"
 # Update the following URL if the resource on the page above changes:
-OPEN_HEIGHTMODEL_URL = "https://opendata.swiss/en/dataset/das-digitale-hohenmodell-der-schweiz-mit-einer-maschenweite-von-200-m/resource/cc45aa79-a9ff-46b8-89d4-eb3ca142ce84/download"
+OPEN_HEIGHTMODEL_URL = "http://data.geo.admin.ch/ch.swisstopo.digitales-hoehenmodell_25/data.zip"
 
 all: topo
 
