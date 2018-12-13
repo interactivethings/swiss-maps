@@ -26,7 +26,7 @@ if final.exists():
 
 final.mkdir()
 
-check_call("make clean-generated", stdout=DEVNULL, stderr=DEVNULL, shell=True)
+check_call("make clean", stdout=DEVNULL, stderr=DEVNULL, shell=True)
 
 print("Generating maps for {}".format(year))
 check_call(
@@ -37,7 +37,6 @@ check_call(
 print("Organizing result")
 for canton in cantons:
     target = final / '{}.json'.format(canton)
-    # with_lakes = output / '{}-municipalities-lakes.json'.format(canton)
     without_lakes = output / '{}-municipalities.json'.format(canton)
     copyfile(str(without_lakes), str(target))
 
