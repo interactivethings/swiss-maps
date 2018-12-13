@@ -30,7 +30,7 @@ check_call("make clean", stdout=DEVNULL, stderr=DEVNULL, shell=True)
 
 print("Generating maps for {}".format(year))
 check_call(
-    "make all PROPERTIES=id,name YEAR={}".format(year),
+    "make all YEAR={}".format(year),
     stdout=DEVNULL, stderr=DEVNULL, shell=True
 )
 
