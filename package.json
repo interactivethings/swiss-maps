@@ -17,7 +17,8 @@
   },
   "scripts": {
     "preversion": "make shapefile",
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags",
+    "prepublishOnly": "make shapefile"
   },
   "files": [
     "README.md",
