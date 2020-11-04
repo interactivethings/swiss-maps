@@ -1,10 +1,15 @@
 import { geoPath, select } from "d3";
 import * as React from "react";
+import { Options } from "src/shared";
 import * as topojson from "topojson";
 
-interface Props {}
+interface Props {
+  options: Options;
+}
 
 function Preview(props: Props) {
+  const { options } = props;
+
   const svgRef = React.useRef<null | SVGSVGElement>(null);
 
   React.useEffect(() => {
@@ -65,6 +70,10 @@ function Preview(props: Props) {
   fill: none;
   stroke: #fff;
   stroke-width: .3;
+}
+
+.lakes {
+  fill: blue;
 }
 `}
       </style>
