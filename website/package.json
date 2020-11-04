@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "website",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "next": "^10.0.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "typescript": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.6",
+    "@types/react": "^16.9.55"
+  }
+}
