@@ -7,16 +7,22 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const paths = {
-    shp: path.resolve("./public/2020/g1l20.shp"),
-    dbf: path.resolve("./public/2020/g1l20.dbf"),
-    prj: path.resolve("./public/2020/g1l20.prj"),
-  };
+  async function get(url: string) {
+    return fetch(url)
+      .then((res) => res.arrayBuffer())
+      .then((ab) => Buffer.from(ab));
+  }
 
   const input = {
-    "input.shp": await fs.promises.readFile(paths.shp),
-    "input.dbf": await fs.promises.readFile(paths.dbf),
-    "input.prj": await fs.promises.readFile(paths.prj, { encoding: "utf8" }),
+    "input.shp": await get(
+      "https://storage.googleapis.com/swiss-maps/2020/g1l20.shp"
+    ),
+    "input.dbf": await get(
+      "https://storage.googleapis.com/swiss-maps/2020/g1l20.dbf"
+    ),
+    "input.prj": await get(
+      "https://storage.googleapis.com/swiss-maps/2020/g1l20.prj"
+    ),
   };
 
   mapshaper.applyCommands(
