@@ -1,7 +1,6 @@
 import { MapController, WebMercatorViewport } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
-import { geoAlbers, geoPath, select } from "d3";
 import * as React from "react";
 import { Options } from "src/shared";
 import * as topojson from "topojson";
@@ -28,63 +27,25 @@ function Preview(props: Props) {
     viewState: INITIAL_VIEW_STATE,
     geoData: {
       switzerland: undefined as any,
+      cantons: undefined as any,
+      lakes: undefined as any,
     },
   });
-
-  const svgRef = React.useRef<null | SVGSVGElement>(null);
 
   React.useEffect(() => {
     (async () => {
       const res = await fetch("/api/generate");
       const json = await res.json();
 
-      const width = 960;
-      const height = 500;
-
+      console.log(json);
       mutate((draft) => {
         draft.geoData.switzerland = topojson.feature(
           json,
           json.objects.switzerland
         );
+        draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+        draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
       });
-
-      if (svgRef.current) {
-        const projection = geoAlbers()
-          .rotate([0, 0])
-          .center([8.3, 46.8])
-          .scale(16000)
-          .translate([width / 2, height / 2])
-          .precision(0.1);
-
-        const path = geoPath().projection(projection);
-        const svg = select(svgRef.current);
-
-        svg
-          .append("path")
-          .datum(topojson.feature(json, json.objects.switzerland))
-          .attr("class", "country")
-          .attr("d", path);
-
-        // svg
-        //   .append("path")
-        //   .datum(
-        //     topojson.mesh(json, json.objects.municipalities, function (a, b) {
-        //       return a !== b;
-        //     })
-        //   )
-        //   .attr("class", "municipality-boundaries")
-        //   .attr("d", path);
-
-        // svg
-        //   .append("path")
-        //   .datum(
-        //     topojson.mesh(json, json.objects.cantons, function (a, b) {
-        //       return a !== b;
-        //     })
-        //   )
-        //   .attr("class", "canton-boundaries")
-        //   .attr("d", path);
-      }
     })();
   }, []);
 
@@ -123,6 +84,7 @@ function Preview(props: Props) {
           getRadius={100}
           getLineWidth={1}
         />
+
         {/* <GeoJsonLayer
           id="municipality-mesh"
           data={geoData.municipalityMesh}
@@ -135,10 +97,24 @@ function Preview(props: Props) {
           getLineWidth={100}
           lineMiterLimit={1}
           getLineColor={LINE_COLOR}
+        /> */}
+
+        <GeoJsonLayer
+          id="cantons"
+          data={state.geoData.cantons}
+          pickable={false}
+          stroked={true}
+          filled={false}
+          extruded={false}
+          lineWidthMinPixels={1.2}
+          lineWidthMaxPixels={3.6}
+          getLineWidth={200}
+          lineMiterLimit={1}
+          getLineColor={[120, 120, 120]}
         />
         <GeoJsonLayer
           id="lakes"
-          data={geoData.lakes}
+          data={state.geoData.lakes}
           pickable={false}
           stroked={true}
           filled={true}
@@ -149,19 +125,6 @@ function Preview(props: Props) {
           getFillColor={[102, 175, 233]}
           getLineColor={LINE_COLOR}
         />
-        <GeoJsonLayer
-          id="cantons"
-          data={geoData.cantonMesh}
-          pickable={false}
-          stroked={true}
-          filled={false}
-          extruded={false}
-          lineWidthMinPixels={1.2}
-          lineWidthMaxPixels={3.6}
-          getLineWidth={200}
-          lineMiterLimit={1}
-          getLineColor={[120, 120, 120]}
-        /> */}
       </DeckGL>
     </div>
   );
@@ -175,6 +138,8 @@ const CH_BBOX: BBox = [
   [5.956800664952974, 45.81912371940225],
   [10.493446773955753, 47.80741209797084],
 ];
+
+const LINE_COLOR = [100, 100, 100, 127] as const;
 
 const constrainZoom = (
   viewState: $FixMe,
