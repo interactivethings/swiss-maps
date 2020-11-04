@@ -9,7 +9,7 @@ function Preview(props: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const res = await fetch("/ch.json");
+      const res = await fetch("/api/generate");
       const json = await res.json();
 
       if (svgRef.current) {
