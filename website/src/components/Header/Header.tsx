@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as TUI from "theme-ui";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -12,12 +13,17 @@ function Header(props: Props, ref: any) {
 
   return (
     <Root ref={ref} {...rest}>
-      <div>Swiss Maps</div>
+      <TUI.Box sx={{ height: 100 }}>Swiss Maps</TUI.Box>
 
-      <div>
-        <h1>Generate TopoJSON from Swisstopo geodata </h1>
-        <div>A free tool to generate TopoJSON from Swisstopo geodata</div>
-      </div>
+      <TUI.Box sx={{ textAlign: "center" }}>
+        <TUI.Text as="h1" variant="display1">
+          Generate TopoJSON from Swisstopo geodata
+        </TUI.Text>
+
+        <TUI.Text variant="body1" sx={{ mt: 8 }}>
+          A free tool to generate TopoJSON from Swisstopo geodata
+        </TUI.Text>
+      </TUI.Box>
     </Root>
   );
 }
