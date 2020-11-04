@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import * as path from "path";
-import * as fs from "fs";
 import * as mapshaper from "mapshaper";
 
 export default async function handler(
