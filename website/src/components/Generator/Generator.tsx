@@ -1,13 +1,14 @@
 import { Preview } from "@/components/Preview";
 import * as React from "react";
 import { Options, Shape } from "src/shared";
+import * as TUI from "theme-ui";
 import { useImmer } from "use-immer";
 import Panel from "./internal/Panel";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = "div";
+const Root = TUI.Box;
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
@@ -28,7 +29,11 @@ function Generator(props: Props, ref: any) {
   });
 
   return (
-    <Root ref={ref} {...rest}>
+    <Root
+      ref={ref}
+      sx={{ bg: "#F9F9F9", height: 1200, position: "relative" }}
+      {...rest}
+    >
       <Panel />
       <Preview options={state.options} />
     </Root>

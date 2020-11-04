@@ -17,7 +17,7 @@ export default {
     palette,
 
     text: palette.blue["900"],
-    background: "#F9F9F9",
+    background: "#FFFFFF",
   },
 
   fonts: {
