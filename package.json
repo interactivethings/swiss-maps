@@ -15,6 +15,10 @@
     "type": "git",
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
+  "scripts": {
+    "preversion": "make shapefile",
+    "postversion": "git push --follow-tags"
+  },
   "files": [
     "README.md",
     "LICENSE",
