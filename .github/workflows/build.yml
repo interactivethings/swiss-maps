@@ -13,4 +13,10 @@ jobs:
           node-version: "14.x"
           registry-url: https://registry.npmjs.com
       - run: yarn --frozen-lockfile
+
+      - name: Cache downloads
+        uses: actions/cache@v2
+        path: downloads
+        key: downloads
+
       - run: make
