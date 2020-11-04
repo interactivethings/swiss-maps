@@ -20,7 +20,7 @@ export default async function handler(
   };
 
   mapshaper.applyCommands(
-    "-i input.shp string-fields=* encoding=utf8 -clean -proj wgs84 -simplify 50% -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
+    "-i input.shp string-fields=* encoding=utf8 -clean -rename-layers switzerland -proj wgs84 -simplify 50% -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
     input,
     (err, output) => {
       res.statusCode = 200;

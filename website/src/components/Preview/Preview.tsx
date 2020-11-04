@@ -34,7 +34,7 @@ function Preview(props: Props) {
 
         svg
           .append("path")
-          .datum(topojson.feature(json, json.objects.input))
+          .datum(topojson.feature(json, json.objects.switzerland))
           .attr("class", "country")
           .attr("d", path);
 
