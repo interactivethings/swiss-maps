@@ -49,6 +49,19 @@ function Preview(props: Props) {
     })();
   }, []);
 
+  const onViewStateChange = React.useCallback(
+    ({ viewState, interactionState }) => {
+      mutate((draft) => {
+        if (interactionState.inTransition) {
+          draft.viewState = viewState;
+        } else {
+          draft.viewState = constrainZoom(viewState, CH_BBOX);
+        }
+      });
+    },
+    []
+  );
+
   const onResize = React.useCallback(
     ({ width, height }) => {
       mutate((draft) => {
@@ -68,7 +81,7 @@ function Preview(props: Props) {
       <DeckGL
         controller={{ type: MapController }}
         viewState={state.viewState}
-        // onViewStateChange={onViewStateChange}
+        onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
         {options.shapes?.has("switzerland") && (
