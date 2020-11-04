@@ -62,28 +62,32 @@ function Preview(props: Props) {
   );
 
   return (
-    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+    <div
+      style={{ position: "absolute", top: 0, left: 440, right: 0, bottom: 0 }}
+    >
       <DeckGL
         controller={{ type: MapController }}
         viewState={state.viewState}
         // onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
-        <GeoJsonLayer
-          id="switzerland"
-          data={state.geoData?.switzerland}
-          pickable={true}
-          stroked={false}
-          filled={true}
-          extruded={false}
-          autoHighlight={true}
-          getFillColor={(d: $FixMe) => {
-            return [0, 0, 0, 20];
-          }}
-          highlightColor={[0, 0, 0, 50]}
-          getRadius={100}
-          getLineWidth={1}
-        />
+        {options.shapes?.has("switzerland") && (
+          <GeoJsonLayer
+            id="switzerland"
+            data={state.geoData?.switzerland}
+            pickable={true}
+            stroked={false}
+            filled={true}
+            extruded={false}
+            autoHighlight={true}
+            getFillColor={(d: $FixMe) => {
+              return [0, 0, 0, 20];
+            }}
+            highlightColor={[0, 0, 0, 50]}
+            getRadius={100}
+            getLineWidth={1}
+          />
+        )}
 
         {/* <GeoJsonLayer
           id="municipality-mesh"
@@ -99,32 +103,37 @@ function Preview(props: Props) {
           getLineColor={LINE_COLOR}
         /> */}
 
-        <GeoJsonLayer
-          id="cantons"
-          data={state.geoData.cantons}
-          pickable={false}
-          stroked={true}
-          filled={false}
-          extruded={false}
-          lineWidthMinPixels={1.2}
-          lineWidthMaxPixels={3.6}
-          getLineWidth={200}
-          lineMiterLimit={1}
-          getLineColor={[120, 120, 120]}
-        />
-        <GeoJsonLayer
-          id="lakes"
-          data={state.geoData.lakes}
-          pickable={false}
-          stroked={true}
-          filled={true}
-          extruded={false}
-          lineWidthMinPixels={0.5}
-          lineWidthMaxPixels={1}
-          getLineWidth={100}
-          getFillColor={[102, 175, 233]}
-          getLineColor={LINE_COLOR}
-        />
+        {options.shapes?.has("cantons") && (
+          <GeoJsonLayer
+            id="cantons"
+            data={state.geoData.cantons}
+            pickable={false}
+            stroked={true}
+            filled={false}
+            extruded={false}
+            lineWidthMinPixels={1.2}
+            lineWidthMaxPixels={3.6}
+            getLineWidth={200}
+            lineMiterLimit={1}
+            getLineColor={[120, 120, 120]}
+          />
+        )}
+
+        {options.shapes?.has("lakes") && (
+          <GeoJsonLayer
+            id="lakes"
+            data={state.geoData.lakes}
+            pickable={false}
+            stroked={true}
+            filled={true}
+            extruded={false}
+            lineWidthMinPixels={0.5}
+            lineWidthMaxPixels={1}
+            getLineWidth={100}
+            getFillColor={[102, 175, 233]}
+            getLineColor={LINE_COLOR}
+          />
+        )}
       </DeckGL>
     </div>
   );

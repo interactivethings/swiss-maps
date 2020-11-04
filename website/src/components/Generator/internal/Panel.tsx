@@ -1,5 +1,7 @@
 import * as React from "react";
+import { Shape } from "src/shared";
 import * as TUI from "theme-ui";
+import { useContext } from "../context";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -10,6 +12,8 @@ interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Panel(props: Props) {
   const { ...rest } = props;
+
+  const { state, mutate } = useContext();
 
   return (
     <Root
@@ -39,19 +43,89 @@ function Panel(props: Props) {
           <TUI.Text variant="heading2">Shapes</TUI.Text>
 
           <TUI.Label>
-            <TUI.Checkbox /> Switzerland
+            <TUI.Checkbox
+              checked={state.options.shapes?.has("switzerland")}
+              onChange={(event) => {
+                mutate((draft) => {
+                  const shapes = draft.options?.shapes ?? new Set<Shape>();
+                  if (event.currentTarget.checked) {
+                    shapes.add("switzerland");
+                  } else {
+                    shapes.delete("switzerland");
+                  }
+                  draft.options.shapes = shapes;
+                });
+              }}
+            />{" "}
+            Switzerland
           </TUI.Label>
           <TUI.Label>
-            <TUI.Checkbox /> Cantons
+            <TUI.Checkbox
+              checked={state.options.shapes?.has("cantons")}
+              onChange={(event) => {
+                mutate((draft) => {
+                  const shapes = draft.options?.shapes ?? new Set<Shape>();
+                  if (event.currentTarget.checked) {
+                    shapes.add("cantons");
+                  } else {
+                    shapes.delete("cantons");
+                  }
+                  draft.options.shapes = shapes;
+                });
+              }}
+            />{" "}
+            Cantons
           </TUI.Label>
           <TUI.Label>
-            <TUI.Checkbox /> Districts
+            <TUI.Checkbox
+              checked={state.options.shapes?.has("districts")}
+              onChange={(event) => {
+                mutate((draft) => {
+                  const shapes = draft.options?.shapes ?? new Set<Shape>();
+                  if (event.currentTarget.checked) {
+                    shapes.add("districts");
+                  } else {
+                    shapes.delete("districts");
+                  }
+                  draft.options.shapes = shapes;
+                });
+              }}
+            />{" "}
+            Districts
           </TUI.Label>
           <TUI.Label>
-            <TUI.Checkbox /> Municipalities
+            <TUI.Checkbox
+              checked={state.options.shapes?.has("municipalities")}
+              onChange={(event) => {
+                mutate((draft) => {
+                  const shapes = draft.options?.shapes ?? new Set<Shape>();
+                  if (event.currentTarget.checked) {
+                    shapes.add("municipalities");
+                  } else {
+                    shapes.delete("municipalities");
+                  }
+                  draft.options.shapes = shapes;
+                });
+              }}
+            />{" "}
+            Municipalities
           </TUI.Label>
           <TUI.Label>
-            <TUI.Checkbox /> Lakes
+            <TUI.Checkbox
+              checked={state.options.shapes?.has("lakes")}
+              onChange={(event) => {
+                mutate((draft) => {
+                  const shapes = draft.options?.shapes ?? new Set<Shape>();
+                  if (event.currentTarget.checked) {
+                    shapes.add("lakes");
+                  } else {
+                    shapes.delete("lakes");
+                  }
+                  draft.options.shapes = shapes;
+                });
+              }}
+            />{" "}
+            Lakes
           </TUI.Label>
         </TUI.Box>
 

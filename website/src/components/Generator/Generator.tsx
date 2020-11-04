@@ -1,8 +1,9 @@
 import { Preview } from "@/components/Preview";
 import * as React from "react";
-import { Options, Shape } from "src/shared";
+import { Shape } from "src/shared";
 import * as TUI from "theme-ui";
 import { useImmer } from "use-immer";
+import { Provider, State } from "./context";
 import Panel from "./internal/Panel";
 
 /**
@@ -12,10 +13,6 @@ const Root = TUI.Box;
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
-interface State {
-  options: Options;
-}
-
 function Generator(props: Props, ref: any) {
   const { ...rest } = props;
 
@@ -24,19 +21,23 @@ function Generator(props: Props, ref: any) {
       format: "topojson",
       projection: "wgs84",
       year: 2020,
-      shapes: new Set(["switzerland"] as Array<Shape>),
+      shapes: new Set(["switzerland", "cantons", "lakes"] as Array<Shape>),
     },
   });
 
+  console.log(state);
+
   return (
-    <Root
-      ref={ref}
-      sx={{ bg: "#F9F9F9", height: 1200, position: "relative" }}
-      {...rest}
-    >
-      <Panel />
-      <Preview options={state.options} />
-    </Root>
+    <Provider value={{ state, mutate }}>
+      <Root
+        ref={ref}
+        sx={{ bg: "#F9F9F9", height: 1200, position: "relative" }}
+        {...rest}
+      >
+        <Panel />
+        <Preview options={state.options} />
+      </Root>
+    </Provider>
   );
 }
 
