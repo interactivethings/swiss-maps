@@ -5,9 +5,14 @@
 
 YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020
 
-.PHONY: topojson
+.PHONY: all topojson shapefile
+
+all: shapefile topojson
 
 shapefile: $(foreach year,$(YEARS),shapefile-$(year))
+
+topojson:
+	@echo "topojson: TODO"
 
 # topojson: \
 # 	public/topojson/ch-2020.json \

@@ -16,9 +16,9 @@
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
   "scripts": {
-    "preversion": "make shapefile",
+    "preversion": "make",
     "postversion": "git push --follow-tags",
-    "prepublishOnly": "make shapefile"
+    "prepublishOnly": "make"
   },
   "files": [
     "README.md",

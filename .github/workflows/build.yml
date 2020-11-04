@@ -1,10 +1,10 @@
-name: Publish to NPM
+name: Build Files
 on:
   push:
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+
+    ignore-tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
 jobs:
-  publish-npm:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,6 +13,4 @@ jobs:
           node-version: "14.x"
           registry-url: https://registry.npmjs.com
       - run: yarn --frozen-lockfile
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - run: make

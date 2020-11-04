@@ -4,7 +4,7 @@ on:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+-canary.[0-9]+
 jobs:
-  build:
+  publish-npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
