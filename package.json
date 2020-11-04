@@ -19,7 +19,8 @@
     "README.md",
     "LICENSE",
     "LICENSE-GEODATA",
-    "topo"
+    "topojson",
+    "shapefile"
   ],
   "dependencies": {},
   "devDependencies": {
