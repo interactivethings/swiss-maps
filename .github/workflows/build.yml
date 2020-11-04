@@ -16,7 +16,8 @@ jobs:
 
       - name: Cache downloads
         uses: actions/cache@v2
-        path: downloads
-        key: downloads
+        with:
+          path: downloads
+          key: downloads
 
       - run: make
