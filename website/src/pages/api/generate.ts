@@ -8,9 +8,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const paths = {
-    shp: path.resolve("public/2020/g1l20.shp"),
-    dbf: path.resolve("public/2020/g1l20.dbf"),
-    prj: path.resolve("public/2020/g1l20.prj"),
+    shp: path.resolve("./public/2020/g1l20.shp"),
+    dbf: path.resolve("./public/2020/g1l20.dbf"),
+    prj: path.resolve("./public/2020/g1l20.prj"),
   };
 
   const input = {
