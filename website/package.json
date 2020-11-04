@@ -5,6 +5,9 @@
     "dev": "next dev"
   },
   "dependencies": {
+    "@deck.gl/core": "^8.3.5",
+    "@deck.gl/layers": "^8.3.5",
+    "@deck.gl/react": "^8.3.5",
     "@types/d3": "^6.0.0",
     "@types/theme-ui": "^0.3.7",
     "@types/topojson": "^3.2.2",

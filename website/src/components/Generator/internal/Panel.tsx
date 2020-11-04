@@ -21,6 +21,8 @@ function Panel(props: Props) {
         background: "white",
         boxShadow: "0px 4px 30px rgba(0, 0, 0, 0.05)",
         padding: "45px",
+        height: 1000,
+        zIndex: 1,
       }}
       {...rest}
     >
