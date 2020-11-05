@@ -109,7 +109,7 @@ function Preview({}: Props) {
         // onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
-        {options.shapes?.has("switzerland") && (
+        {options.shapes.has("switzerland") && (
           <GeoJsonLayer
             id="switzerland"
             data={state.geoData?.switzerland}
@@ -126,7 +126,7 @@ function Preview({}: Props) {
           />
         )}
 
-        {options.shapes?.has("cantons") && (
+        {options.shapes.has("cantons") && (
           <GeoJsonLayer
             id="cantons"
             data={state.geoData.cantons}
@@ -144,7 +144,7 @@ function Preview({}: Props) {
         )}
 
         {state.geoData.municipalities &&
-          options.shapes?.has("municipalities") && (
+          options.shapes.has("municipalities") && (
             <GeoJsonLayer
               id="municipalities"
               data={state.geoData.municipalities}
@@ -161,7 +161,7 @@ function Preview({}: Props) {
             />
           )}
 
-        {options.shapes?.has("lakes") && (
+        {options.shapes.has("lakes") && (
           <GeoJsonLayer
             id="lakes"
             data={state.geoData.lakes}
@@ -178,7 +178,7 @@ function Preview({}: Props) {
         )}
 
         {ctx.state.highlightedShape &&
-          options.shapes?.has(ctx.state.highlightedShape) &&
+          options.shapes.has(ctx.state.highlightedShape) &&
           (() => {
             const data = state.geoData[
               ctx.state.highlightedShape as keyof typeof state.geoData

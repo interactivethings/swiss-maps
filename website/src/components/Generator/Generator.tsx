@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import * as React from "react";
-import { Shape } from "src/shared";
+import { defaultOptions } from "src/shared";
 import { useImmer } from "use-immer";
 import { Provider, State } from "./context";
 import Export from "./internal/Export";
@@ -21,13 +21,7 @@ function Generator(props: Props, ref: any) {
   const { ...rest } = props;
 
   const [state, mutate] = useImmer<State>({
-    options: {
-      format: "topojson",
-      projection: "wgs84",
-      dimensions: { width: 900, height: 600 },
-      year: "2020",
-      shapes: new Set(["switzerland", "cantons", "lakes"] as Array<Shape>),
-    },
+    options: defaultOptions
   });
 
   return (

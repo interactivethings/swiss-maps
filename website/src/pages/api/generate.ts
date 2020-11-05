@@ -1,10 +1,10 @@
+import Cors from "cors";
 import { either } from "fp-ts";
 import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Options, Shape } from "src/shared";
-import Cors from "cors";
+import { defaultOptions, Shape } from "src/shared";
 
 enableMapSet();
 
@@ -37,12 +37,6 @@ const Query = t.type({
   shapes: t.union([t.undefined, t.string]),
   download: t.union([t.undefined, t.string]),
 });
-
-const defaultOptions: Options = {
-  year: "2020",
-  dimensions: { width: 900, height: 600 },
-  shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
-};
 
 const VERSION = "4.0.0-canary.3";
 
@@ -101,7 +95,7 @@ export default async function handler(
     })();
 
     await new Promise((resolve, reject) => {
-      const shp = [...options.shapes!.values()];
+      const shp = [...options.shapes.values()];
 
       mapshaper.applyCommands(
         [

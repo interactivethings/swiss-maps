@@ -79,7 +79,7 @@ function Panel(props: Props) {
                     <MUI.InputAdornment position="start">W</MUI.InputAdornment>
                   ),
                 }}
-                value={state.options.dimensions?.width}
+                value={state.options.dimensions.width}
                 onChange={(ev) => {
                   mutate((draft) => {
                     draft.options.dimensions.width = +ev.currentTarget.value;
@@ -94,7 +94,7 @@ function Panel(props: Props) {
                     <MUI.InputAdornment position="start">H</MUI.InputAdornment>
                   ),
                 }}
-                value={state.options.dimensions?.height}
+                value={state.options.dimensions.height}
                 onChange={(ev) => {
                   mutate((draft) => {
                     draft.options.dimensions.height = +ev.currentTarget.value;
@@ -207,16 +207,14 @@ function ShapeOption({
         control={
           <MUI.Checkbox
             color="primary"
-            checked={state.options.shapes?.has(shape)}
+            checked={state.options.shapes.has(shape)}
             onChange={(event) => {
               mutate((draft) => {
-                const shapes = draft.options?.shapes ?? new Set<Shape>();
                 if (event.currentTarget.checked) {
-                  shapes.add(shape);
+                  draft.options.shapes.add(shape);
                 } else {
-                  shapes.delete(shape);
+                  draft.options.shapes.delete(shape);
                 }
-                draft.options.shapes = shapes;
               });
             }}
           />
