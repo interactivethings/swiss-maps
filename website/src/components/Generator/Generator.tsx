@@ -19,7 +19,7 @@ function Generator(props: Props, ref: any) {
     options: {
       format: "topojson",
       projection: "wgs84",
-      year: 2020,
+      year: "2020",
       shapes: new Set(["switzerland", "cantons", "lakes"] as Array<Shape>),
     },
   });
@@ -28,7 +28,11 @@ function Generator(props: Props, ref: any) {
     <Provider value={{ state, mutate }}>
       <Root
         ref={ref}
-        style={{ backgroundColor: "#F9F9F9", height: 1200, position: "relative" }}
+        style={{
+          backgroundColor: "#F9F9F9",
+          height: 1200,
+          position: "relative",
+        }}
         {...rest}
       >
         <Panel />

@@ -44,7 +44,7 @@ export default async function handler(
 
     const options = produce(defaultOptions, (draft) => {
       draft.shapes = new Set([
-        ...draft.shapes.values(),
+        ...(draft.shapes?.values() ?? []),
         ...(query.shapes?.split(",") ?? ([] as $FixMe)),
       ]);
     });
@@ -60,7 +60,7 @@ export default async function handler(
         lakes: "s",
       };
 
-      const props = [...shapes.values()].flatMap((shape) => {
+      const props = [...(shapes?.values() ?? [])].flatMap((shape) => {
         const key = shapeToKey[shape];
 
         return ["shp", "dbf", "prj"].map(
@@ -91,7 +91,7 @@ export default async function handler(
           "-o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
         ].join(" "),
         input,
-        (err, output) => {
+        (err: unknown, output: $FixMe) => {
           if (err) {
             reject(err);
           } else {

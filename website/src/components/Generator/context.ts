@@ -16,7 +16,7 @@ const Context = React.createContext<Value>({
     options: {
       format: "topojson",
       projection: "wgs84",
-      year: 2020,
+      year: "2020",
       shapes: new Set(["switzerland"] as Array<Shape>),
     },
   },
