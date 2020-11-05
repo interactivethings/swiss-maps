@@ -111,6 +111,7 @@ function Panel(props: Props) {
 
         <div>
           <MUI.FormControlLabel
+          disabled
             control={<MUI.Checkbox color="primary" />}
             label="Include names"
           />
