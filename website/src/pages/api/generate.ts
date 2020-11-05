@@ -88,7 +88,7 @@ export default async function handler(
           async (ext) =>
             [
               `${shape}.${ext}`,
-              await get(
+              await get( // fs.readFile(path.resolve("swiss-maps/shapefile/…"))
                 `https://unpkg.com/swiss-maps@${VERSION}/shapefile/${year}/${key}.${ext}`
               ),
             ] as const

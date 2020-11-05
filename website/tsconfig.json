@@ -20,6 +20,7 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["src/components/*"],
+      "@/icons": ["src/icons"],
       "@/theme": ["src/theme"]
     }
   },
