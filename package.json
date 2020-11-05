@@ -1,6 +1,6 @@
 {
   "name": "swiss-maps",
-  "version": "4.0.0-canary.1",
+  "version": "4.0.0-canary.5",
   "description": "Swiss geodata as TopoJSON.",
   "keywords": [
     "topojson",
@@ -15,11 +15,17 @@
     "type": "git",
     "url": "https://github.com/interactivethings/swiss-maps.git"
   },
+  "scripts": {
+    "preversion": "make",
+    "postversion": "git push --follow-tags",
+    "prepublishOnly": "make"
+  },
   "files": [
     "README.md",
     "LICENSE",
     "LICENSE-GEODATA",
-    "topo"
+    "topojson",
+    "shapefile"
   ],
   "dependencies": {},
   "devDependencies": {

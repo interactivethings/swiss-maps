@@ -1,10 +1,10 @@
-name: Publish Canary to NPM
+name: Build Files
 on:
   push:
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+-canary.[0-9]+
+    ignore-tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
 jobs:
-  publish-npm:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,6 +22,4 @@ jobs:
           restore-keys: |
             downloads-
 
-      - run: yarn publish --access public --tag canary
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - run: make

@@ -4,7 +4,7 @@ on:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 jobs:
-  build:
+  publish-npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,6 +13,15 @@ jobs:
           node-version: "14.x"
           registry-url: https://registry.npmjs.com
       - run: yarn --frozen-lockfile
-      - run: npm publish --access public
+
+      - name: Cache downloads
+        uses: actions/cache@v2
+        with:
+          path: downloads
+          key: downloads-${{ hashFiles('Makefile') }}
+          restore-keys: |
+            downloads-
+
+      - run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
