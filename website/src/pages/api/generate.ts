@@ -4,6 +4,7 @@ import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Options, Shape } from "src/shared";
+import Cors from "cors";
 
 enableMapSet();
 
@@ -12,6 +13,24 @@ async function get(url: string) {
     .then((res) => res.arrayBuffer())
     .then((ab) => Buffer.from(ab));
 }
+
+function initMiddleware(middleware: $FixMe) {
+  return (req: NextApiRequest, res: NextApiResponse) =>
+    new Promise((resolve, reject) => {
+      middleware(req, res, (result: unknown) => {
+        if (result instanceof Error) {
+          return reject(result);
+        }
+        return resolve(result);
+      });
+    });
+}
+
+const cors = initMiddleware(
+  Cors({
+    methods: ["GET", "POST", "OPTIONS"],
+  })
+);
 
 const Query = t.type({
   year: t.union([t.undefined, t.string]),
@@ -31,6 +50,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    await cors(req, res);
+
     const query = either.getOrElseW<unknown, undefined>(() => undefined)(
       Query.decode(req.query)
     );
