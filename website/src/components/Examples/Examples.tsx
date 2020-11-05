@@ -36,12 +36,6 @@ function Examples(props: Props, ref: any) {
             />
           </MUI.CardMedia>
         </MUI.Card>
-        <MUI.Card className={classes.card} elevation={4}>
-          Electricity Price Website
-        </MUI.Card>
-        <MUI.Card className={classes.card} elevation={4}>
-          Covid-19 Dashboard
-        </MUI.Card>
       </div>
     </Root>
   );
@@ -50,7 +44,7 @@ function Examples(props: Props, ref: any) {
 const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
-      padding: theme.spacing(20, 3),
+      padding: theme.spacing(15, 3),
     },
 
     cards: {

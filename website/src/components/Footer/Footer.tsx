@@ -69,7 +69,7 @@ function Footer(props: Props, ref: any) {
 const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
-      padding: theme.spacing(20, 7.5, 7.5),
+      padding: theme.spacing(5, 7.5, 7.5),
     },
 
     bar: {
