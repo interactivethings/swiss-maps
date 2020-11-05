@@ -20,13 +20,10 @@ function Panel(props: Props) {
     <Root
       elevation={4}
       style={{
-        position: "absolute",
-        top: 40,
-        left: 40,
+        margin: "40px auto 40px 40px",
         width: 400,
         display: "flex",
         flexDirection: "column",
-        height: 1000,
         zIndex: 1,
         borderRadius: 8,
       }}

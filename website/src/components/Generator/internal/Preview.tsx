@@ -6,10 +6,9 @@ import { Options } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
 import * as qs from "querystring";
+import { useContext } from "../context";
 
-interface Props {
-  options: Options;
-}
+interface Props {}
 
 const INITIAL_VIEW_STATE = {
   latitude: 46.8182,
@@ -21,8 +20,9 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-function Preview(props: Props) {
-  const { options } = props;
+function Preview({}: Props) {
+  const ctx = useContext();
+  const { options } = ctx.state;
 
   const [state, mutate] = useImmer({
     viewState: INITIAL_VIEW_STATE,

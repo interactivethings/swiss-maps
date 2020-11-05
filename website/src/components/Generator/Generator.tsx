@@ -12,10 +12,9 @@ const Root = "div";
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
-const Preview: $FixMe = dynamic(
-  () => import("@/components/Preview").then((m) => m.Preview) as $FixMe,
-  { ssr: false }
-);
+const Preview = dynamic(() => import("./internal/Preview"), {
+  ssr: false,
+});
 
 function Generator(props: Props, ref: any) {
   const { ...rest } = props;
@@ -36,13 +35,13 @@ function Generator(props: Props, ref: any) {
         id="generator"
         style={{
           backgroundColor: "#F9F9F9",
-          height: 1200,
           position: "relative",
+          contain: "content",
         }}
         {...rest}
       >
         <Panel />
-        <Preview options={state.options} />
+        <Preview />
       </Root>
     </Provider>
   );
