@@ -1,4 +1,4 @@
-import { Preview } from "@/components/Preview";
+import dynamic from "next/dynamic";
 import * as React from "react";
 import { Shape } from "src/shared";
 import { useImmer } from "use-immer";
@@ -11,6 +11,11 @@ import Panel from "./internal/Panel";
 const Root = "div";
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
+
+const Preview: $FixMe = dynamic(
+  () => import("@/components/Preview").then((m) => m.Preview) as $FixMe,
+  { ssr: false }
+);
 
 function Generator(props: Props, ref: any) {
   const { ...rest } = props;
