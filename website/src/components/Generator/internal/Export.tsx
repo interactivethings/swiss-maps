@@ -27,7 +27,7 @@ function Export(props: Props) {
         variant="contained"
         color="primary"
         href={(() => {
-          const { shapes, projection, ...q } = state.options;
+          const { shapes, projection, dimensions, ...q } = state.options;
           return `/api/generate?${qs.encode({
             ...q,
             shapes: [...(shapes?.values() ?? [])].join(","),

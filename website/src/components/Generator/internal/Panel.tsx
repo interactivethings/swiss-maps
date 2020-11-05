@@ -44,19 +44,66 @@ function Panel(props: Props) {
       <div className={classes.section}>
         <MUI.Typography variant="h3">Projection</MUI.Typography>
 
-        <div>
-          <MUI.FormControlLabel
-            control={<MUI.Radio color="primary" />}
-            label="WGS 84"
-          />
-        </div>
+        <MUI.RadioGroup
+          name="projection"
+          value={state.options.projection}
+          onChange={(ev) => {
+            mutate((draft) => {
+              draft.options.projection = ev.target.value as $FixMe;
+            });
+          }}
+        >
+          <div>
+            <MUI.FormControlLabel
+              style={{ display: "flex" }}
+              value="wgs84"
+              control={<MUI.Radio color="primary" />}
+              label="WGS 84"
+            />
+          </div>
 
-        <div>
-          <MUI.FormControlLabel
-            control={<MUI.Radio color="primary" />}
-            label="Cartesian"
-          />
-        </div>
+          <div>
+            <MUI.FormControlLabel
+              style={{ display: "flex" }}
+              value="cartesian"
+              control={<MUI.Radio color="primary" />}
+              label="Cartesian"
+            />
+
+            <div style={{ display: "flex", gap: "16px", marginLeft: 32 }}>
+              <MUI.TextField
+                size="small"
+                disabled={state.options.projection !== "cartesian"}
+                InputProps={{
+                  startAdornment: (
+                    <MUI.InputAdornment position="start">W</MUI.InputAdornment>
+                  ),
+                }}
+                value={state.options.dimensions?.width}
+                onChange={(ev) => {
+                  mutate((draft) => {
+                    draft.options.dimensions.width = +ev.currentTarget.value;
+                  });
+                }}
+              />
+              <MUI.TextField
+                size="small"
+                disabled={state.options.projection !== "cartesian"}
+                InputProps={{
+                  startAdornment: (
+                    <MUI.InputAdornment position="start">H</MUI.InputAdornment>
+                  ),
+                }}
+                value={state.options.dimensions?.height}
+                onChange={(ev) => {
+                  mutate((draft) => {
+                    draft.options.dimensions.height = +ev.currentTarget.value;
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </MUI.RadioGroup>
       </div>
 
       <div className={classes.section}>

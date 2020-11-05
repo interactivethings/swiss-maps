@@ -8,7 +8,7 @@ import * as colors from "./colors";
 
 const t = createMuiTheme({});
 
-const fontFamily = "CircularXX,  sans-serif";
+const fontFamily = "CircularXX, sans-serif";
 
 const palette = createPalette({
   primary: {
@@ -90,8 +90,8 @@ const typography = createTypography(palette, {
   },
 
   subtitle1: {
-    fontSize: "16px",
-    lineHeight: 1.5, // 24px
+    fontSize: "24px",
+    lineHeight: 1.5, // 36px
     fontWeight: fontStyleOptions.fontWeightMedium,
     fontFeatureSettings: '"ss02"',
   },
@@ -103,14 +103,14 @@ const typography = createTypography(palette, {
   },
 
   body1: {
-    fontSize: "24px",
-    lineHeight: 1.5, // 36px
-    fontWeight: fontStyleOptions.fontWeightRegular,
-  },
-  body2: {
     fontSize: "16px",
     lineHeight: 1.5, // 24px
-    fontWeight: fontStyleOptions.fontWeightRegular,
+    fontWeight: fontStyleOptions.fontWeightMedium,
+  },
+  body2: {
+    fontSize: "14px",
+    lineHeight: 1.42, // 20px
+    fontWeight: fontStyleOptions.fontWeightMedium,
   },
 
   button: {
@@ -142,7 +142,12 @@ export default {
   overrides: {
     MuiFormControlLabel: {
       label: {
-        ...typography.subtitle1,
+        color: palette.text.secondary,
+      },
+    },
+    MuiOutlinedInput: {
+      inputMarginDense: {
+        paddingTop: 10,
       },
     },
   },

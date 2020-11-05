@@ -1,6 +1,5 @@
 import * as MUI from "@material-ui/core";
 import * as React from "react";
-import { palette } from "src/theme/colors";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -34,7 +33,7 @@ function Header(props: Props, ref: any) {
             Swiss Maps Generator
           </MUI.Typography>
           <MUI.Typography
-            variant="body2"
+            variant="body1"
             color="primary"
             style={{ marginTop: 4 }}
           >

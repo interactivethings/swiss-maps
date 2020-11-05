@@ -24,6 +24,7 @@ function Generator(props: Props, ref: any) {
     options: {
       format: "topojson",
       projection: "wgs84",
+      dimensions: { width: 900, height: 600 },
       year: "2020",
       shapes: new Set(["switzerland", "cantons", "lakes"] as Array<Shape>),
     },

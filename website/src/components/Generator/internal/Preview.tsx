@@ -38,7 +38,7 @@ function Preview({}: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const { shapes, projection, ...q } = options;
+      const { shapes, projection, dimensions, ...q } = options;
       const res = await fetch(
         `/api/generate?${qs.encode({
           ...q,

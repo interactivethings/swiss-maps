@@ -7,7 +7,8 @@ export type Shape =
 
 export interface Options {
   format?: "topojson" | "svg";
-  projection?: "wgs84" | { type: "cartesian"; width: number; height: number };
+  projection?: "wgs84" | "cartesian";
+  dimensions: { width: number; height: number };
   year?: string;
   shapes?: Set<Shape>;
 }

@@ -16,7 +16,7 @@ function Examples(props: Props, ref: any) {
   return (
     <Root ref={ref} id="examples" className={classes.root} {...rest}>
       <div style={{ textAlign: "center" }}>
-        <MUI.Typography variant="body1" color="primary">
+        <MUI.Typography variant="subtitle1" color="primary">
           Examples
         </MUI.Typography>
         <MUI.Typography variant="h1" component="h2">

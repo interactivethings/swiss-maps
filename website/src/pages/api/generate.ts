@@ -40,6 +40,7 @@ const Query = t.type({
 
 const defaultOptions: Options = {
   year: "2020",
+  dimensions: { width: 900, height: 600 },
   shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
 };
 
@@ -88,7 +89,8 @@ export default async function handler(
           async (ext) =>
             [
               `${shape}.${ext}`,
-              await get( // fs.readFile(path.resolve("swiss-maps/shapefile/…"))
+              await get(
+                // fs.readFile(path.resolve("swiss-maps/shapefile/…"))
                 `https://unpkg.com/swiss-maps@${VERSION}/shapefile/${year}/${key}.${ext}`
               ),
             ] as const
