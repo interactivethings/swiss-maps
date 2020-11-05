@@ -19,7 +19,7 @@ clean-generated:
 
 # ---
 
-SHAPEFILE_TARGETS := $(foreach ext,shp dbf prj,$(foreach type,municipalities cantons countries lakes districts,20%/$(type).$(ext)))
+SHAPEFILE_TARGETS := $(foreach ext,shp dbf prj shx,$(foreach type,municipalities cantons countries lakes districts,20%/$(type).$(ext)))
 .PRECIOUS: $(SHAPEFILE_TARGETS)
 
 shapefile-20%: $(SHAPEFILE_TARGETS)
@@ -73,7 +73,7 @@ define extract_from_archive
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_20$$*-LV95/shp/g1$$(call rename,$(1))$$*.$(2) > $$@
 endef
-$(foreach type,municipalities cantons countries lakes districts,$(foreach ext,shp dbf prj,$(eval $(call extract_from_archive,$(type),$(ext)))))
+$(foreach type,municipalities cantons countries lakes districts,$(foreach ext,shp dbf prj shx,$(eval $(call extract_from_archive,$(type),$(ext)))))
 
 rename = $(if $(findstring districts,$(1)),b,$(if $(findstring lakes,$(1)),s,$(if $(findstring municipalities,$(1)),g,$(if $(findstring cantons,$(1)),k,$(if $(findstring countries,$(1)),l,$(if $(findstring b,$(1)),districts,$(if $(findstring s,$(1)),lakes,$(if $(findstring g,$(1)),municipalities,$(if $(findstring k,$(1)),cantons,$(if $(findstring l,$(1)),countries,$(1)))))))))))
 
