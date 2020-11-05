@@ -15,6 +15,10 @@ const palette = createPalette({
     main: colors.palette.purple[500],
   },
 
+  text: {
+    primary: colors.palette.blue[900],
+  },
+
   background: {
     default: "#fff",
   },
@@ -99,8 +103,8 @@ const typography = createTypography(palette, {
   },
 
   body1: {
-    fontSize: "16px",
-    lineHeight: 1.5, // 24px
+    fontSize: "24px",
+    lineHeight: 1.5, // 36px
     fontWeight: fontStyleOptions.fontWeightRegular,
   },
   body2: {
