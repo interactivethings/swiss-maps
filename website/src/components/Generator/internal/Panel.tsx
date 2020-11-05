@@ -1,7 +1,7 @@
 import * as MUI from "@material-ui/core";
-import * as qs from "querystring";
 import * as React from "react";
 import { Shape } from "src/shared";
+import * as colors from "src/theme/colors";
 import { useContext } from "../context";
 
 /**
@@ -12,25 +12,15 @@ const Root = MUI.Paper;
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Panel(props: Props) {
+  const classes = useStyles();
+
   const { ...rest } = props;
 
   const { state, mutate } = useContext();
 
   return (
-    <Root
-      elevation={4}
-      style={{
-        margin: "40px auto 40px 40px",
-        width: 400,
-        display: "flex",
-        flexDirection: "column",
-        zIndex: 1,
-        borderRadius: 8,
-      }}
-      {...rest}
-    >
-      <div style={{ padding: "50px 40px 40px" }}>
-        <div style={{ marginBottom: 32 }}>
+    <Root elevation={4} className={classes.root} {...rest}>
+      {/* <div style={{ marginBottom: 32 }}>
           <MUI.Typography variant="h3">Region</MUI.Typography>
           <MUI.TextField
             fullWidth
@@ -40,226 +30,152 @@ function Panel(props: Props) {
           >
             <MUI.MenuItem value={"switzerland"}>Switzerland</MUI.MenuItem>
           </MUI.TextField>
+        </div> */}
+
+      <div className={classes.section}>
+        <MUI.Typography variant="h3">Shapes</MUI.Typography>
+
+        <ShapeOption shape="switzerland" label="Switzerland" />
+        <ShapeOption shape="cantons" label="Cantons" />
+        <ShapeOption shape="municipalities" label="Municipalities" />
+        <ShapeOption shape="lakes" label="Lakes" />
+      </div>
+
+      <div className={classes.section}>
+        <MUI.Typography variant="h3">Projection</MUI.Typography>
+
+        <div>
+          <MUI.FormControlLabel
+            control={<MUI.Radio color="primary" />}
+            label="WGS 84"
+          />
         </div>
 
-        <div style={{ marginBottom: 32 }}>
-          <MUI.Typography variant="h3">Shapes</MUI.Typography>
-
-          <div
-            onMouseEnter={() => {
-              mutate((draft) => {
-                draft.highlightedShape = "switzerland";
-              });
-            }}
-            onMouseLeave={() => {
-              mutate((draft) => {
-                draft.highlightedShape = undefined;
-              });
-            }}
-          >
-            <MUI.FormControlLabel
-              control={
-                <MUI.Checkbox
-                  color="primary"
-                  checked={state.options.shapes?.has("switzerland")}
-                  onChange={(event) => {
-                    mutate((draft) => {
-                      const shapes = draft.options?.shapes ?? new Set<Shape>();
-                      if (event.currentTarget.checked) {
-                        shapes.add("switzerland");
-                      } else {
-                        shapes.delete("switzerland");
-                      }
-                      draft.options.shapes = shapes;
-                    });
-                  }}
-                />
-              }
-              label="Switzerland"
-            />
-          </div>
-
-          <div
-            onMouseEnter={() => {
-              mutate((draft) => {
-                draft.highlightedShape = "cantons";
-              });
-            }}
-            onMouseLeave={() => {
-              mutate((draft) => {
-                draft.highlightedShape = undefined;
-              });
-            }}
-          >
-            <MUI.FormControlLabel
-              control={
-                <MUI.Checkbox
-                  color="primary"
-                  checked={state.options.shapes?.has("cantons")}
-                  onChange={(event) => {
-                    mutate((draft) => {
-                      const shapes = draft.options?.shapes ?? new Set<Shape>();
-                      if (event.currentTarget.checked) {
-                        shapes.add("cantons");
-                      } else {
-                        shapes.delete("cantons");
-                      }
-                      draft.options.shapes = shapes;
-                    });
-                  }}
-                />
-              }
-              label="Cantons"
-            />
-          </div>
-
-          <div>
-            <MUI.FormControlLabel
-              disabled
-              control={
-                <MUI.Checkbox
-                  color="primary"
-                  checked={state.options.shapes?.has("districts")}
-                  onChange={(event) => {
-                    mutate((draft) => {
-                      const shapes = draft.options?.shapes ?? new Set<Shape>();
-                      if (event.currentTarget.checked) {
-                        shapes.add("districts");
-                      } else {
-                        shapes.delete("districts");
-                      }
-                      draft.options.shapes = shapes;
-                    });
-                  }}
-                />
-              }
-              label="Districts"
-            />
-          </div>
-
-          <div
-            onMouseEnter={() => {
-              mutate((draft) => {
-                draft.highlightedShape = "municipalities";
-              });
-            }}
-            onMouseLeave={() => {
-              mutate((draft) => {
-                draft.highlightedShape = undefined;
-              });
-            }}
-          >
-            <MUI.FormControlLabel
-              control={
-                <MUI.Checkbox
-                  color="primary"
-                  checked={state.options.shapes?.has("municipalities")}
-                  onChange={(event) => {
-                    mutate((draft) => {
-                      const shapes = draft.options?.shapes ?? new Set<Shape>();
-                      if (event.currentTarget.checked) {
-                        shapes.add("municipalities");
-                      } else {
-                        shapes.delete("municipalities");
-                      }
-                      draft.options.shapes = shapes;
-                    });
-                  }}
-                />
-              }
-              label="Municipalities"
-            />
-          </div>
-
-          <div
-            onMouseEnter={() => {
-              mutate((draft) => {
-                draft.highlightedShape = "lakes";
-              });
-            }}
-            onMouseLeave={() => {
-              mutate((draft) => {
-                draft.highlightedShape = undefined;
-              });
-            }}
-          >
-            <MUI.FormControlLabel
-              control={
-                <MUI.Checkbox
-                  color="primary"
-                  checked={state.options.shapes?.has("lakes")}
-                  onChange={(event) => {
-                    mutate((draft) => {
-                      const shapes = draft.options?.shapes ?? new Set<Shape>();
-                      if (event.currentTarget.checked) {
-                        shapes.add("lakes");
-                      } else {
-                        shapes.delete("lakes");
-                      }
-                      draft.options.shapes = shapes;
-                    });
-                  }}
-                />
-              }
-              label="Lakes"
-            />
-          </div>
+        <div>
+          <MUI.FormControlLabel
+            control={<MUI.Radio color="primary" />}
+            label="Cartesian"
+          />
         </div>
+      </div>
 
-        <div style={{ marginBottom: 32 }}>
-          <MUI.Typography variant="h3">Projection</MUI.Typography>
+      <div className={classes.section}>
+        <MUI.Typography variant="h3">Options</MUI.Typography>
 
-          <div>
-            <MUI.FormControlLabel
-              control={<MUI.Radio color="primary" />}
-              label="WGS 84"
-            />
-          </div>
-
-          <div>
-            <MUI.FormControlLabel
-              control={<MUI.Radio color="primary" />}
-              label="Cartesian"
-            />
-          </div>
+        <div>
+          <MUI.FormControlLabel
+            control={<MUI.Checkbox color="primary" />}
+            label="Include names"
+          />
         </div>
+      </div>
 
-        <div style={{ marginBottom: 32 }}>
-          <MUI.Typography variant="h3">Options</MUI.Typography>
-
-          <div>
-            <MUI.FormControlLabel
-              control={<MUI.Checkbox color="primary" />}
-              label="Include names"
-            />
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 32 }}>
-          <MUI.Typography variant="h3">Year</MUI.Typography>
-          <MUI.TextField
-            fullWidth
-            select
-            value={state.options.year}
-            onChange={(ev) => {
-              mutate((draft) => {
-                draft.options.year = ev.target.value;
-              });
-            }}
-            size="small"
-          >
-            {[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
-              .reverse()
-              .map((year) => (
-                <MUI.MenuItem key={year} value={`${year}`}>
-                  {year}
-                </MUI.MenuItem>
-              ))}
-          </MUI.TextField>
-        </div>
+      <div className={classes.section}>
+        <MUI.Typography variant="h3">Year</MUI.Typography>
+        <MUI.TextField
+          fullWidth
+          select
+          value={state.options.year}
+          onChange={(ev) => {
+            mutate((draft) => {
+              draft.options.year = ev.target.value;
+            });
+          }}
+          size="small"
+        >
+          {[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+            .reverse()
+            .map((year) => (
+              <MUI.MenuItem key={year} value={`${year}`}>
+                {year}
+              </MUI.MenuItem>
+            ))}
+        </MUI.TextField>
       </div>
     </Root>
   );
 }
 
+const useStyles = MUI.makeStyles(
+  (theme) => ({
+    root: {
+      margin: theme.spacing(5),
+      padding: theme.spacing(5),
+      width: 400,
+      display: "flex",
+      flexDirection: "column",
+      zIndex: 1,
+      borderRadius: 8,
+    },
+
+    section: {
+      marginBottom: theme.spacing(4),
+
+      "& > h3": {
+        marginBottom: theme.spacing(0.5),
+      },
+    },
+
+    shape: {
+      margin: theme.spacing(0, -1),
+      padding: theme.spacing(0, 1),
+      borderRadius: theme.shape.borderRadius,
+
+      "&:hover": {
+        backgroundColor: colors.palette.purple[50],
+      },
+    },
+  }),
+  { name: "XuiGenerator:Panel" }
+);
+
 export default Panel;
+
+function ShapeOption({
+  shape,
+  label,
+}: {
+  shape: Shape;
+  label: React.ReactNode;
+}) {
+  const classes = useStyles();
+  const { state, mutate } = useContext();
+
+  return (
+    <div
+      className={classes.shape}
+      onMouseEnter={() => {
+        mutate((draft) => {
+          draft.highlightedShape = shape;
+        });
+      }}
+      onMouseLeave={() => {
+        mutate((draft) => {
+          draft.highlightedShape = undefined;
+        });
+      }}
+    >
+      <MUI.FormControlLabel
+        style={{ display: "flex" }}
+        control={
+          <MUI.Checkbox
+            color="primary"
+            checked={state.options.shapes?.has(shape)}
+            onChange={(event) => {
+              mutate((draft) => {
+                const shapes = draft.options?.shapes ?? new Set<Shape>();
+                if (event.currentTarget.checked) {
+                  shapes.add(shape);
+                } else {
+                  shapes.delete(shape);
+                }
+                draft.options.shapes = shapes;
+              });
+            }}
+          />
+        }
+        label={label}
+      />
+    </div>
+  );
+}

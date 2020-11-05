@@ -1,7 +1,7 @@
 import * as MUI from "@material-ui/core";
 import * as qs from "querystring";
 import * as React from "react";
-import { Shape } from "src/shared";
+import { Download } from "react-feather";
 import { useContext } from "../context";
 
 /**
@@ -34,10 +34,17 @@ function Export(props: Props) {
             download: "",
           })}`;
         })()}
+        startIcon={<Download />}
       >
         TopoJSON
       </MUI.Button>
-      <MUI.Button disabled size="large" variant="contained" color="primary">
+      <MUI.Button
+        disabled
+        size="large"
+        variant="contained"
+        color="primary"
+        startIcon={<Download />}
+      >
         SVG
       </MUI.Button>
     </Root>

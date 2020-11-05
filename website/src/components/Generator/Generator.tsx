@@ -39,7 +39,7 @@ function Generator(props: Props, ref: any) {
           position: "relative",
           contain: "content",
           display: "flex",
-          justifyContent: "spece-between",
+          justifyContent: "space-between",
         }}
         {...rest}
       >

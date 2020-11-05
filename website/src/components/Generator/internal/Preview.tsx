@@ -7,6 +7,7 @@ import * as topojson from "topojson";
 import { useImmer } from "use-immer";
 import * as qs from "querystring";
 import { useContext } from "../context";
+import * as MUI from "@material-ui/core";
 
 interface Props {}
 
@@ -21,6 +22,7 @@ const INITIAL_VIEW_STATE = {
 };
 
 function Preview({}: Props) {
+  const classes = useStyles();
   const ctx = useContext();
   const { options } = ctx.state;
 
@@ -100,13 +102,11 @@ function Preview({}: Props) {
   // console.log(state.geoData);
 
   return (
-    <div
-      style={{ position: "absolute", top: 0, left: 440, right: 0, bottom: 0 }}
-    >
+    <div className={classes.root}>
       <DeckGL
         controller={{ type: MapController }}
         viewState={state.viewState}
-        onViewStateChange={onViewStateChange}
+        // onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
         {options.shapes?.has("switzerland") && (
@@ -116,13 +116,30 @@ function Preview({}: Props) {
             pickable={false}
             stroked={true}
             filled={true}
+            getFillColor={[230, 230, 230]}
             extruded={false}
-            getFillColor={[0, 0, 0, 20]}
             getLineColor={[0, 0, 0, 255]}
             getRadius={100}
             lineWidthUnits="pixels"
             getLineWidth={1}
             lineMiterLimit={1}
+          />
+        )}
+
+        {options.shapes?.has("cantons") && (
+          <GeoJsonLayer
+            id="cantons"
+            data={state.geoData.cantons}
+            pickable={false}
+            stroked={true}
+            filled={false}
+            getFillColor={[230, 230, 230]}
+            extruded={false}
+            lineWidthMinPixels={1.2}
+            lineWidthMaxPixels={3.6}
+            getLineWidth={200}
+            lineMiterLimit={1}
+            getLineColor={[120, 120, 120]}
           />
         )}
 
@@ -134,6 +151,7 @@ function Preview({}: Props) {
               pickable={false}
               stroked={true}
               filled={false}
+              getFillColor={[230, 230, 230]}
               extruded={false}
               lineWidthMinPixels={0.5}
               lineWidthMaxPixels={1}
@@ -142,22 +160,6 @@ function Preview({}: Props) {
               getLineColor={LINE_COLOR}
             />
           )}
-
-        {options.shapes?.has("cantons") && (
-          <GeoJsonLayer
-            id="cantons"
-            data={state.geoData.cantons}
-            pickable={false}
-            stroked={true}
-            filled={false}
-            extruded={false}
-            lineWidthMinPixels={1.2}
-            lineWidthMaxPixels={3.6}
-            getLineWidth={200}
-            lineMiterLimit={1}
-            getLineColor={[120, 120, 120]}
-          />
-        )}
 
         {options.shapes?.has("lakes") && (
           <GeoJsonLayer
@@ -215,6 +217,20 @@ function Preview({}: Props) {
   );
 }
 
+const useStyles = MUI.makeStyles(
+  (theme) => ({
+    root: {
+      position: "absolute",
+      top: 0,
+      left: theme.spacing(55),
+      right: 0,
+      bottom: 0,
+      pointerEvents: "none",
+    },
+  }),
+  { name: "XuiGenerator:Preview" }
+);
+
 export default Preview;
 
 type BBox = [[number, number], [number, number]];
@@ -229,7 +245,7 @@ const LINE_COLOR = [100, 100, 100, 127] as const;
 const constrainZoom = (
   viewState: $FixMe,
   bbox: BBox,
-  { padding = 24 }: { padding?: number } = {}
+  { padding = 60 }: { padding?: number } = {}
 ) => {
   const vp = new WebMercatorViewport(viewState);
 
