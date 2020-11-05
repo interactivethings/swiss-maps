@@ -108,8 +108,8 @@ const typography = createTypography(palette, {
     fontWeight: fontStyleOptions.fontWeightRegular,
   },
   body2: {
-    fontSize: "14px",
-    lineHeight: 1.43, // 20px
+    fontSize: "16px",
+    lineHeight: 1.5, // 24px
     fontWeight: fontStyleOptions.fontWeightRegular,
   },
 

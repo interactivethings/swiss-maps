@@ -26,22 +26,23 @@ function Header(props: Props, ref: any) {
           display: "flex",
           alignItems: "baseline",
           justifyContent: "space-between",
-          padding: "50px 70px",
+          padding: "50px 60px",
         }}
       >
-        <MUI.Typography variant="h1" color="primary">
-          Swiss Maps
-        </MUI.Typography>
+        <div>
+          <MUI.Typography variant="h1" color="primary">
+            Swiss Maps Generator
+          </MUI.Typography>
+          <MUI.Typography
+            variant="body2"
+            color="primary"
+            style={{ marginTop: 4 }}
+          >
+            A free tool to generate TopoJSON or SVG from Swisstopo geodata.
+          </MUI.Typography>
+        </div>
 
         <nav>
-          <MUI.Link
-            href="#generator"
-            variant="h4"
-            color="textPrimary"
-            style={{ padding: "10px 30px" }}
-          >
-            Generator
-          </MUI.Link>
           <MUI.Link
             href="#examples"
             variant="h4"
@@ -60,15 +61,6 @@ function Header(props: Props, ref: any) {
             GitHub
           </MUI.Link>
         </nav>
-      </div>
-
-      <div style={{ textAlign: "center", paddingTop: 40, paddingBottom: 80 }}>
-        <h1 className={classes.title}>
-          Generate TopoJSON from Swisstopo geodata
-        </h1>
-        <div className={classes.subtitle}>
-          A free tool to generate TopoJSON from Swisstopo geodata
-        </div>
       </div>
     </Root>
   );
