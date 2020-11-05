@@ -33,6 +33,7 @@ const cors = initMiddleware(
 );
 
 const Query = t.type({
+  format: t.union([t.undefined, t.literal("topojson"), t.literal("svg")]),
   year: t.union([t.undefined, t.string]),
   shapes: t.union([t.undefined, t.string]),
   download: t.union([t.undefined, t.string]),
@@ -59,12 +60,13 @@ export default async function handler(
     }
 
     const options = produce(defaultOptions, (draft) => {
-      draft.shapes = new Set([
-        ...(draft.shapes?.values() ?? []),
-        ...(query.shapes?.split(",") ?? ([] as $FixMe)),
-      ]);
+      if (query.shapes) {
+        draft.shapes = new Set<Shape>(
+          (query.shapes?.split(",") ?? []) as $FixMe
+        );
+      }
     });
-    const { year, shapes } = options;
+    const { format, year, shapes } = options;
     // console.log(year, shapes);
 
     const input = await (async () => {
@@ -97,15 +99,16 @@ export default async function handler(
     await new Promise((resolve, reject) => {
       const shp = [...options.shapes.values()];
 
+      const format = query.format ?? "topojson";
+
       mapshaper.applyCommands(
         [
           `-i ${shp.map(
             (x) => `${x}.shp`
           )} combine-files string-fields=* encoding=utf8`,
           "-clean",
-          // `-rename-layers ${shp.join(",")}`,
-          "-proj wgs84",
-          "-o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
+          `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
+          `-o format=${format} drop-table id-field=GMDNR,KTNR,GMDE,KT`,
         ].join(" "),
         input,
         (err: unknown, output: $FixMe) => {
@@ -113,16 +116,34 @@ export default async function handler(
             reject(err);
           } else {
             res.statusCode = 200;
-            res.setHeader("Content-Type", "application/json");
 
-            if (query.download !== undefined) {
-              res.setHeader(
-                "Content-Disposition",
-                `attachment; filename="topo.json"`
-              );
+            if (format === "topojson") {
+              res.setHeader("Content-Type", "application/json");
+
+              if (query.download !== undefined) {
+                res.setHeader(
+                  "Content-Disposition",
+                  `attachment; filename="swiss-maps.json"`
+                );
+              }
+
+              res.end(output["output.json"]);
+            } else if (format === "svg") {
+              res.setHeader("Content-Type", "image/svg+xml");
+
+              if (query.download !== undefined) {
+                res.setHeader(
+                  "Content-Disposition",
+                  `attachment; filename="swiss-maps.svg"`
+                );
+              }
+
+              res.end(output["output.svg"]);
+            } else {
+              res.statusCode = 500;
+              res.end("Error");
             }
 
-            res.end(output["output.json"]);
             resolve();
           }
         }
