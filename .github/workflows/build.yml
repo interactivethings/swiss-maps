@@ -19,8 +19,7 @@ jobs:
         with:
           path: downloads
           key: downloads-${{ hashFiles('Makefile') }}
-          restore-keys:
-            - downloads-${{ hashFiles('Makefile') }}
-            - downloads-
+          restore-keys: |
+            downloads-
 
       - run: make
