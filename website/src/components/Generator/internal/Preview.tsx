@@ -113,17 +113,16 @@ function Preview({}: Props) {
           <GeoJsonLayer
             id="switzerland"
             data={state.geoData?.switzerland}
-            pickable={true}
-            stroked={false}
+            pickable={false}
+            stroked={true}
             filled={true}
             extruded={false}
-            autoHighlight={true}
-            getFillColor={(d: $FixMe) => {
-              return [0, 0, 0, 20];
-            }}
-            highlightColor={[0, 0, 0, 50]}
+            getFillColor={[0, 0, 0, 20]}
+            getLineColor={[0, 0, 0, 255]}
             getRadius={100}
+            lineWidthUnits="pixels"
             getLineWidth={1}
+            lineMiterLimit={1}
           />
         )}
 
@@ -175,6 +174,42 @@ function Preview({}: Props) {
             getLineColor={LINE_COLOR}
           />
         )}
+
+        {ctx.state.highlightedShape &&
+          options.shapes?.has(ctx.state.highlightedShape) &&
+          (() => {
+            const data = state.geoData[
+              ctx.state.highlightedShape as keyof typeof state.geoData
+            ] as $FixMe;
+
+            if (ctx.state.highlightedShape === "lakes") {
+              return (
+                <GeoJsonLayer
+                  id="highlight"
+                  data={data}
+                  pickable={false}
+                  stroked={false}
+                  filled={true}
+                  extruded={false}
+                  getFillColor={[107, 61, 125]}
+                />
+              );
+            } else {
+              return (
+                <GeoJsonLayer
+                  id="highlight"
+                  data={data}
+                  pickable={false}
+                  stroked={true}
+                  filled={false}
+                  extruded={false}
+                  lineWidthUnits="pixels"
+                  getLineWidth={2}
+                  getLineColor={[107, 61, 125]}
+                />
+              );
+            }
+          })()}
       </DeckGL>
     </div>
   );

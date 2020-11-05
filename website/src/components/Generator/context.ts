@@ -4,6 +4,7 @@ import { Options, Shape } from "src/shared";
 
 export interface State {
   options: Options;
+  highlightedShape?: Shape;
 }
 
 export interface Value {

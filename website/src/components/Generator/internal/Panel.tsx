@@ -45,7 +45,18 @@ function Panel(props: Props) {
         <div style={{ marginBottom: 32 }}>
           <MUI.Typography variant="h3">Shapes</MUI.Typography>
 
-          <div>
+          <div
+            onMouseEnter={() => {
+              mutate((draft) => {
+                draft.highlightedShape = "switzerland";
+              });
+            }}
+            onMouseLeave={() => {
+              mutate((draft) => {
+                draft.highlightedShape = undefined;
+              });
+            }}
+          >
             <MUI.FormControlLabel
               control={
                 <MUI.Checkbox
@@ -68,7 +79,18 @@ function Panel(props: Props) {
             />
           </div>
 
-          <div>
+          <div
+            onMouseEnter={() => {
+              mutate((draft) => {
+                draft.highlightedShape = "cantons";
+              });
+            }}
+            onMouseLeave={() => {
+              mutate((draft) => {
+                draft.highlightedShape = undefined;
+              });
+            }}
+          >
             <MUI.FormControlLabel
               control={
                 <MUI.Checkbox
@@ -93,6 +115,7 @@ function Panel(props: Props) {
 
           <div>
             <MUI.FormControlLabel
+              disabled
               control={
                 <MUI.Checkbox
                   color="primary"
@@ -114,7 +137,18 @@ function Panel(props: Props) {
             />
           </div>
 
-          <div>
+          <div
+            onMouseEnter={() => {
+              mutate((draft) => {
+                draft.highlightedShape = "municipalities";
+              });
+            }}
+            onMouseLeave={() => {
+              mutate((draft) => {
+                draft.highlightedShape = undefined;
+              });
+            }}
+          >
             <MUI.FormControlLabel
               control={
                 <MUI.Checkbox
@@ -137,7 +171,18 @@ function Panel(props: Props) {
             />
           </div>
 
-          <div>
+          <div
+            onMouseEnter={() => {
+              mutate((draft) => {
+                draft.highlightedShape = "lakes";
+              });
+            }}
+            onMouseLeave={() => {
+              mutate((draft) => {
+                draft.highlightedShape = undefined;
+              });
+            }}
+          >
             <MUI.FormControlLabel
               control={
                 <MUI.Checkbox
