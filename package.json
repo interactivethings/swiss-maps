@@ -24,8 +24,7 @@
     "README.md",
     "LICENSE",
     "LICENSE-GEODATA",
-    "topojson",
-    "shapefile"
+    "20*/"
   ],
   "dependencies": {},
   "devDependencies": {
