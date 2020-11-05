@@ -1,5 +1,5 @@
+import * as MUI from "@material-ui/core";
 import * as React from "react";
-import * as TUI from "theme-ui";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -13,17 +13,17 @@ function Header(props: Props, ref: any) {
 
   return (
     <Root ref={ref} {...rest}>
-      <TUI.Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           alignItems: "baseline",
           justifyContent: "space-between",
           padding: "50px 70px",
         }}
       >
-        <TUI.Box sx={{ display: "flex", alignItems: "baseline" }}>
-          <TUI.Box
-            sx={{
+        <div style={{ display: "flex", alignItems: "baseline" }}>
+          <div
+            style={{
               width: 56,
               height: 56,
               borderRadius: "50%",
@@ -33,29 +33,47 @@ function Header(props: Props, ref: any) {
               marginRight: 20,
             }}
           />
-          <TUI.Text variant="heading1">Swiss Maps</TUI.Text>
-        </TUI.Box>
+          <MUI.Typography variant="h1">Swiss Maps</MUI.Typography>
+        </div>
 
-        <TUI.Box>
-          <TUI.Link sx={{ padding: "10px 30px" }}>Generator</TUI.Link>
-          <TUI.Link sx={{ padding: "10px 30px" }}>Gallery</TUI.Link>
-          <TUI.Link sx={{ padding: "10px 30px" }}>Credits</TUI.Link>
-        </TUI.Box>
-      </TUI.Box>
+        <div>
+          <MUI.Link
+            variant="h4"
+            color="textPrimary"
+            style={{ padding: "10px 30px" }}
+          >
+            Generator
+          </MUI.Link>
+          <MUI.Link
+            variant="h4"
+            color="textPrimary"
+            style={{ padding: "10px 30px" }}
+          >
+            Gallery
+          </MUI.Link>
+          <MUI.Link
+            variant="h4"
+            color="textPrimary"
+            style={{ padding: "10px 30px" }}
+          >
+            Credits
+          </MUI.Link>
+        </div>
+      </div>
 
-      <TUI.Box sx={{ textAlign: "center", mt: 40, mb: 80 }}>
-        <TUI.Text
-          as="h1"
-          variant="display1"
-          sx={{ maxWidth: 800, margin: "0 auto" }}
+      <div style={{ textAlign: "center", marginTop: 40, marginBottom: 80 }}>
+        <MUI.Typography
+          component="h1"
+          variant="h1"
+          style={{ maxWidth: 800, margin: "0 auto" }}
         >
           Generate TopoJSON from Swisstopo geodata
-        </TUI.Text>
+        </MUI.Typography>
 
-        <TUI.Text variant="body1" sx={{ mt: 20 }}>
+        <MUI.Typography variant="body1" style={{ marginTop: 20 }}>
           A free tool to generate TopoJSON from Swisstopo geodata
-        </TUI.Text>
-      </TUI.Box>
+        </MUI.Typography>
+      </div>
     </Root>
   );
 }

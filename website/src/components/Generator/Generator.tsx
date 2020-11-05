@@ -1,7 +1,6 @@
 import { Preview } from "@/components/Preview";
 import * as React from "react";
 import { Shape } from "src/shared";
-import * as TUI from "theme-ui";
 import { useImmer } from "use-immer";
 import { Provider, State } from "./context";
 import Panel from "./internal/Panel";
@@ -9,7 +8,7 @@ import Panel from "./internal/Panel";
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = TUI.Box;
+const Root = "div";
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
@@ -25,13 +24,11 @@ function Generator(props: Props, ref: any) {
     },
   });
 
-  console.log(state);
-
   return (
     <Provider value={{ state, mutate }}>
       <Root
         ref={ref}
-        sx={{ bg: "#F9F9F9", height: 1200, position: "relative" }}
+        style={{ backgroundColor: "#F9F9F9", height: 1200, position: "relative" }}
         {...rest}
       >
         <Panel />

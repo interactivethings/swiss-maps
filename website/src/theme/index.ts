@@ -1,4 +1,5 @@
 import { palette } from "./colors";
+export * from "./provider";
 
 const fluid = (
   prop: string,

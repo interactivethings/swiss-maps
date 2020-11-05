@@ -59,67 +59,16 @@ export const palette = {
     800: "#007028",
     900: "#006020",
   },
+  purple: {
+    50: "#000000",
+    100: "#000000",
+    200: "#000000",
+    300: "#000000",
+    400: "#000000",
+    500: "#9958B3",
+    600: "#000000",
+    700: "#000000",
+    800: "#000000",
+    900: "#000000",
+  },
 };
-
-export interface ColorSchemePalette {
-  label: string;
-  value: string;
-  colors: ReadonlyArray<string>;
-}
-
-export const colorSchemePalettes: Array<ColorSchemePalette> = [
-  {
-    label: "Yellow",
-    value: "yellow",
-    colors: Object.entries(palette.yellow)
-      .sort(([a], [b]) => +a - +b)
-      .filter((_, i) => i % 2)
-      .map(([, v]) => v)
-      .reverse(),
-  },
-  {
-    label: "Red",
-    value: "red",
-    colors: Object.entries(palette.red)
-      .sort(([a], [b]) => +a - +b)
-      .filter((_, i) => i % 2)
-      .map(([, v]) => v)
-      .reverse(),
-  },
-  {
-    label: "Blue",
-    value: "blue",
-    colors: Object.entries(palette.blue)
-      .sort(([a], [b]) => +a - +b)
-      .filter((_, i) => i % 2)
-      .map(([, v]) => v)
-      .reverse(),
-  },
-  {
-    label: "Green",
-    value: "green",
-    colors: Object.entries(palette.green)
-      .sort(([a], [b]) => +a - +b)
-      .filter((_, i) => i % 2)
-      .map(([, v]) => v)
-      .reverse(),
-  },
-];
-
-export function colorSchemePalette(colorScheme: string) {
-  for (const p of colorSchemePalettes) {
-    if (p.value === colorScheme) {
-      return p;
-    }
-  }
-}
-
-export function colorSchemePaletteColors(colorScheme: string) {
-  for (const p of colorSchemePalettes) {
-    if (p.value === colorScheme) {
-      return p.colors;
-    }
-  }
-
-  return [];
-}
