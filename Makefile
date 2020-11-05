@@ -51,10 +51,6 @@ shapefile-20%: $(SHAPEFILE_TARGETS)
 #
 # Examples: shapefile/2020/g.shp, shapefile/2019/l.dbf, etc.
 
-# 2015 is nested 1 level deeper
-downloads/GGG_15_V161025.zip: downloads/2015.zip
-	mkdir -p $(dir $@)
-	unzip -p $< GGG_15_V161025.zip > $@
 define extract_from_archive
 ## 2010 – 2017 contain unique folder structures
 shapefile/2010/$(1).$(2): downloads/2010.zip
