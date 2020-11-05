@@ -33,7 +33,7 @@ shapefile-20%: $(SHAPEFILE_TARGETS)
 	  -rename-layers countries,municipalities,cantons,lakes \
 	  -proj wgs84 \
 		-simplify 50% \
-	  -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT $@
+	  -o format=topojson drop-table id-field=GMDNR,GMDE,BZNR,BEZIRK,KTNR,KT,CODE_ISO,CH_ISO $@
 
 # Generate targets based on
 #   - types (g=Gemeinde, k=Kanton, l=Landesgrenze, s=See), and
