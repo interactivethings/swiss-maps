@@ -28,13 +28,14 @@ function Preview(props: Props) {
     geoData: {
       switzerland: undefined as any,
       cantons: undefined as any,
+      municipalities: undefined as any,
       lakes: undefined as any,
     },
   });
 
   React.useEffect(() => {
     (async () => {
-      const res = await fetch("/api/generate");
+      const res = await fetch("/api/generate?year=2020");
       const json = await res.json();
 
       console.log(json);
@@ -44,6 +45,10 @@ function Preview(props: Props) {
           json.objects.switzerland
         );
         draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+        draft.geoData.municipalities = topojson.feature(
+          json,
+          json.objects.municipalities
+        );
         draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
       });
     })();
@@ -102,19 +107,21 @@ function Preview(props: Props) {
           />
         )}
 
-        {/* <GeoJsonLayer
-          id="municipality-mesh"
-          data={geoData.municipalityMesh}
-          pickable={false}
-          stroked={true}
-          filled={false}
-          extruded={false}
-          lineWidthMinPixels={0.5}
-          lineWidthMaxPixels={1}
-          getLineWidth={100}
-          lineMiterLimit={1}
-          getLineColor={LINE_COLOR}
-        /> */}
+        {options.shapes?.has("municipalities") && (
+          <GeoJsonLayer
+            id="municipalities"
+            data={state.geoData.municipalities}
+            pickable={false}
+            stroked={true}
+            filled={false}
+            extruded={false}
+            lineWidthMinPixels={0.5}
+            lineWidthMaxPixels={1}
+            getLineWidth={200}
+            lineMiterLimit={1}
+            getLineColor={LINE_COLOR}
+          />
+        )}
 
         {options.shapes?.has("cantons") && (
           <GeoJsonLayer
