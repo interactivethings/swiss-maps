@@ -1,13 +1,12 @@
 import { MapController, WebMercatorViewport } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
+import * as MUI from "@material-ui/core";
 import * as React from "react";
-import { Options } from "src/shared";
+import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
-import * as qs from "querystring";
 import { useContext } from "../context";
-import * as MUI from "@material-ui/core";
 
 interface Props {}
 
@@ -38,13 +37,7 @@ function Preview({}: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const { shapes, projection, dimensions, ...q } = options;
-      const res = await fetch(
-        `/api/generate?${qs.encode({
-          ...q,
-          shapes: [...(shapes?.values() ?? [])].join(","),
-        })}`
-      );
+      const res = await fetch(previewSourceUrl(options));
       const json = await res.json();
 
       console.log(json);

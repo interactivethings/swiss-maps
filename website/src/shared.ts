@@ -1,3 +1,5 @@
+import * as qs from "querystring";
+
 export type Shape =
   | "switzerland"
   | "cantons"
@@ -5,6 +7,11 @@ export type Shape =
   | "municipalities"
   | "lakes";
 
+/**
+ * These options correspond to what the user can tweak in the Generator Panel.
+ * This acts as the input into the Preview, and is also used as input for the
+ * API that generates the TopoJSON or SVG.
+ */
 export interface Options {
   format: "topojson" | "svg";
   projection: "wgs84" | "cartesian";
@@ -20,3 +27,36 @@ export const defaultOptions: Options = {
   year: "2020",
   shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
 };
+
+/**
+ * Returns the URL to the TopoJSON file, used in the Preview component
+ * to render the map in the browser.
+ */
+export function previewSourceUrl(options: Options): string {
+  const { projection, year, shapes } = options;
+
+  return `/api/generate?${qs.encode({
+    format: "topojson",
+    projection,
+    year,
+    shapes: [...shapes.values()].join(","),
+  })}`;
+}
+
+/**
+ * Returns an URL where the user can download the map. These URLs are used by
+ * the Download TopoJSON / SVG buttons.
+ */
+export function downloadUrl(options: Options): string {
+  const { format, projection, dimensions, year, shapes } = options;
+
+  return `/api/generate?${qs.encode({
+    format,
+    projection,
+    width: dimensions.width,
+    height: dimensions.height,
+    year,
+    shapes: [...shapes.values()].join(","),
+    download: "",
+  })}`;
+}
