@@ -25,9 +25,9 @@ shapefile-20%: $(SHAPEFILE_TARGETS)
 topojson/20%/ch.json: $(SHAPEFILE_TARGETS)
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
-	  -i shapefile/20$*/g.shp shapefile/20$*/k.shp shapefile/20$*/s.shp combine-files string-fields=* encoding=utf8 \
+	  -i shapefile/20$*/l.shp shapefile/20$*/g.shp shapefile/20$*/k.shp shapefile/20$*/s.shp combine-files string-fields=* encoding=utf8 \
 		-clean \
-	  -rename-layers municipalities,cantons,lakes \
+	  -rename-layers switzerland,municipalities,cantons,lakes \
 	  -proj wgs84 \
 		-simplify 50% \
 	  -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT $@
