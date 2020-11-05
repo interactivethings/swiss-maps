@@ -16,6 +16,7 @@ async function get(url: string) {
 const Query = t.type({
   year: t.union([t.undefined, t.string]),
   shapes: t.union([t.undefined, t.string]),
+  download: t.union([t.undefined, t.string]),
 });
 
 const defaultOptions: Options = {
@@ -96,6 +97,14 @@ export default async function handler(
           } else {
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
+
+            if (query.download !== undefined) {
+              res.setHeader(
+                "Content-Disposition",
+                `attachment; filename="topo.json"`
+              );
+            }
+
             res.end(output["output.json"]);
             resolve();
           }

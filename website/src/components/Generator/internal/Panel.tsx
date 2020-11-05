@@ -1,4 +1,5 @@
 import * as MUI from "@material-ui/core";
+import * as qs from "querystring";
 import * as React from "react";
 import { Shape } from "src/shared";
 import { useContext } from "../context";
@@ -223,14 +224,25 @@ function Panel(props: Props) {
 
         <div style={{ display: "flex", gap: 20, marginTop: 20 }}>
           <MUI.Button
+            component="a"
+            download
             fullWidth
             size="large"
             variant="contained"
             color="primary"
+            href={(() => {
+              const { shapes, projection, ...q } = state.options;
+              return `/api/generate?${qs.encode({
+                ...q,
+                shapes: [...(shapes?.values() ?? [])].join(","),
+                download: "",
+              })}`;
+            })()}
           >
             TopoJSON
           </MUI.Button>
           <MUI.Button
+            disabled
             fullWidth
             size="large"
             variant="contained"
