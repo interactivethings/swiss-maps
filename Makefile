@@ -11,21 +11,8 @@ all: shapefile topojson
 
 shapefile: $(foreach year,$(YEARS),shapefile-$(year))
 
-topojson:
-	@echo "topojson: TODO"
-
-# topojson: \
-# 	public/topojson/ch-2020.json \
-# 	public/topojson/ch-2019.json \
-# 	public/topojson/ch-2018.json \
-# 	public/topojson/ch-2017.json \
-# 	public/topojson/ch-2016.json \
-# 	public/topojson/ch-2015.json \
-# 	public/topojson/ch-2014.json \
-# 	public/topojson/ch-2013.json \
-# 	public/topojson/ch-2012.json \
-# 	public/topojson/ch-2011.json \
-# 	public/topojson/ch-2010.json
+topojson: \
+	$(foreach year,$(YEARS),topojson/$(year)/ch.json)
 
 # ---
 
@@ -35,15 +22,15 @@ SHAPEFILE_TARGETS := $(foreach ext,shp dbf prj,$(foreach type,g k l s,shapefile/
 shapefile-20%: $(SHAPEFILE_TARGETS)
 	@echo Shapefiles 20$* extracted
 
-# public/topojson/ch-20%.json: shapefile/g1g%.shp shapefile/g1k%.shp shapefile/g1s%.shp shapefile/g1g%.prj shapefile/g1k%.prj shapefile/g1s%.prj shapefile/g1g%.dbf shapefile/g1k%.dbf shapefile/g1s%.dbf
-# 	mkdir -p $(dir $@)
-# 	yarn run mapshaper \
-# 	  -i shapefile/g1g$*.shp shapefile/g1k$*.shp shapefile/g1s$*.shp combine-files string-fields=* encoding=utf8 \
-# 		-clean \
-# 	  -rename-layers municipalities,cantons,lakes \
-# 	  -proj wgs84 \
-# 		-simplify 50% \
-# 	  -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT $@
+topojson/20%/ch.json: $(SHAPEFILE_TARGETS)
+	mkdir -p $(dir $@)
+	yarn run mapshaper \
+	  -i shapefile/20$*/g.shp shapefile/20$*/k.shp shapefile/20$*/s.shp combine-files string-fields=* encoding=utf8 \
+		-clean \
+	  -rename-layers municipalities,cantons,lakes \
+	  -proj wgs84 \
+		-simplify 50% \
+	  -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT $@
 
 # Generate targets based on
 #   - types (g=Gemeinde, k=Kanton, l=Landesgrenze, s=See), and
