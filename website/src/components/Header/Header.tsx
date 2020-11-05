@@ -35,6 +35,7 @@ function Header(props: Props, ref: any) {
 
         <nav>
           <MUI.Link
+            href="#generator"
             variant="h4"
             color="textPrimary"
             style={{ padding: "10px 30px" }}
@@ -42,18 +43,21 @@ function Header(props: Props, ref: any) {
             Generator
           </MUI.Link>
           <MUI.Link
+            href="#examples"
             variant="h4"
             color="textPrimary"
             style={{ padding: "10px 30px" }}
           >
-            Gallery
+            Examples
           </MUI.Link>
           <MUI.Link
+            href="https://github.com/interactivethings/swiss-maps"
+            target="_blank"
             variant="h4"
             color="textPrimary"
             style={{ padding: "10px 30px" }}
           >
-            Credits
+            GitHub
           </MUI.Link>
         </nav>
       </div>

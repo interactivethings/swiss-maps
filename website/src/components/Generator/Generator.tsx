@@ -33,6 +33,7 @@ function Generator(props: Props, ref: any) {
     <Provider value={{ state, mutate }}>
       <Root
         ref={ref}
+        id="generator"
         style={{
           backgroundColor: "#F9F9F9",
           height: 1200,

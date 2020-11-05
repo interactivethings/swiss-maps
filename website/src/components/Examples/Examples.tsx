@@ -14,7 +14,7 @@ function Examples(props: Props, ref: any) {
   const { ...rest } = props;
 
   return (
-    <Root ref={ref} className={classes.root} {...rest}>
+    <Root ref={ref} id="examples" className={classes.root} {...rest}>
       <div style={{ textAlign: "center" }}>
         <MUI.Typography variant="body1" color="primary">
           Examples
