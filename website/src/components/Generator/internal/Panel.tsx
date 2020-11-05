@@ -258,42 +258,6 @@ function Panel(props: Props) {
           </MUI.TextField>
         </div>
       </div>
-
-      <div style={{ marginTop: "auto", background: "#e8daee", padding: 40 }}>
-        <MUI.Typography variant="h5" color="primary">
-          Download map
-        </MUI.Typography>
-
-        <div style={{ display: "flex", gap: 20, marginTop: 20 }}>
-          <MUI.Button
-            component="a"
-            download
-            fullWidth
-            size="large"
-            variant="contained"
-            color="primary"
-            href={(() => {
-              const { shapes, projection, ...q } = state.options;
-              return `/api/generate?${qs.encode({
-                ...q,
-                shapes: [...(shapes?.values() ?? [])].join(","),
-                download: "",
-              })}`;
-            })()}
-          >
-            TopoJSON
-          </MUI.Button>
-          <MUI.Button
-            disabled
-            fullWidth
-            size="large"
-            variant="contained"
-            color="primary"
-          >
-            SVG
-          </MUI.Button>
-        </div>
-      </div>
     </Root>
   );
 }

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Shape } from "src/shared";
 import { useImmer } from "use-immer";
 import { Provider, State } from "./context";
+import Export from "./internal/Export";
 import Panel from "./internal/Panel";
 
 /**
@@ -37,11 +38,14 @@ function Generator(props: Props, ref: any) {
           backgroundColor: "#F9F9F9",
           position: "relative",
           contain: "content",
+          display: "flex",
+          justifyContent: "spece-between",
         }}
         {...rest}
       >
-        <Panel />
         <Preview />
+        <Panel />
+        <Export />
       </Root>
     </Provider>
   );
