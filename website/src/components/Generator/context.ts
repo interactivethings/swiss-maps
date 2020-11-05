@@ -19,6 +19,7 @@ const Context = React.createContext<Value>({
       projection: "wgs84",
       dimensions: { width: 900, height: 600 },
       year: "2020",
+      simplify: 0,
       shapes: new Set(["switzerland"] as Array<Shape>),
     },
   },

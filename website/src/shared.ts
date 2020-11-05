@@ -17,6 +17,7 @@ export interface Options {
   projection: "wgs84" | "cartesian";
   dimensions: { width: number; height: number };
   year: string;
+  simplify: number;
   shapes: Set<Shape>;
 }
 
@@ -25,6 +26,7 @@ export const defaultOptions: Options = {
   projection: "wgs84",
   dimensions: { width: 900, height: 600 },
   year: "2020",
+  simplify: 0,
   shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
 };
 
@@ -33,12 +35,13 @@ export const defaultOptions: Options = {
  * to render the map in the browser.
  */
 export function previewSourceUrl(options: Options): string {
-  const { projection, year, shapes } = options;
+  const { projection, year, shapes, simplify } = options;
 
   return `/api/generate?${qs.encode({
     format: "topojson",
     projection,
     year,
+    simplify: `${100 - simplify}%`,
     shapes: [...shapes.values()].join(","),
   })}`;
 }
@@ -48,7 +51,7 @@ export function previewSourceUrl(options: Options): string {
  * the Download TopoJSON / SVG buttons.
  */
 export function downloadUrl(options: Options): string {
-  const { format, projection, dimensions, year, shapes } = options;
+  const { format, projection, dimensions, year, shapes, simplify } = options;
 
   return `/api/generate?${qs.encode({
     format,
@@ -56,6 +59,7 @@ export function downloadUrl(options: Options): string {
     width: dimensions.width,
     height: dimensions.height,
     year,
+    simplify: `${100 - simplify}%`,
     shapes: [...shapes.values()].join(","),
     download: "",
   })}`;

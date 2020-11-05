@@ -36,6 +36,7 @@ const Query = t.type({
   format: t.union([t.undefined, t.literal("topojson"), t.literal("svg")]),
   year: t.union([t.undefined, t.string]),
   shapes: t.union([t.undefined, t.string]),
+  simplify: t.union([t.undefined, t.string]),
   download: t.union([t.undefined, t.string]),
 });
 
@@ -107,8 +108,9 @@ export default async function handler(
             (x) => `${x}.shp`
           )} combine-files string-fields=* encoding=utf8`,
           "-clean",
+          query.simplify ? `-simplify ${query.simplify} keep-shapes` : "",
           `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
-          `-o format=${format} drop-table id-field=GMDNR,KTNR,GMDE,KT`,
+          `-o output.${format} format=${format} drop-table id-field=GMDNR,KTNR,GMDE,KT`,
         ].join(" "),
         input,
         (err: unknown, output: $FixMe) => {
@@ -127,7 +129,7 @@ export default async function handler(
                 );
               }
 
-              res.end(output["output.json"]);
+              res.end(output["output.topojson"]);
             } else if (format === "svg") {
               res.setHeader("Content-Type", "image/svg+xml");
 

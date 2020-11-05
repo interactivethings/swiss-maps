@@ -5,6 +5,7 @@ import { useImmer } from "use-immer";
 import { Provider, State } from "./context";
 import Export from "./internal/Export";
 import Panel from "./internal/Panel";
+import Stats from "./internal/Stats";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -21,7 +22,7 @@ function Generator(props: Props, ref: any) {
   const { ...rest } = props;
 
   const [state, mutate] = useImmer<State>({
-    options: defaultOptions
+    options: defaultOptions,
   });
 
   return (
@@ -41,6 +42,7 @@ function Generator(props: Props, ref: any) {
         <Preview />
         <Panel />
         <Export />
+        <Stats />
       </Root>
     </Provider>
   );
