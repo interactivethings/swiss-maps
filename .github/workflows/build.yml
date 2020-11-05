@@ -18,6 +18,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: downloads
-          key: downloads
+          key: downloads-${{ hashFiles('Makefile') }}
+          restore-keys:
+            - downloads-${{ hashFiles('Makefile') }}
+            - downloads-
 
       - run: make
