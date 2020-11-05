@@ -1,7 +1,11 @@
 import { either } from "fp-ts";
+import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Options, Shape } from "src/shared";
+
+enableMapSet();
 
 async function get(url: string) {
   return fetch(url)
@@ -11,19 +15,15 @@ async function get(url: string) {
 
 const Query = t.type({
   year: t.union([t.undefined, t.string]),
-  shapes: t.union([
-    t.undefined,
-    t.array(
-      t.union([
-        t.literal("switzerland"),
-        t.literal("cantons"),
-        t.literal("districts"),
-        t.literal("municipalities"),
-        t.literal("lakes"),
-      ])
-    ),
-  ]),
+  shapes: t.union([t.undefined, t.string]),
 });
+
+const defaultOptions: Options = {
+  year: "2020",
+  shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
+};
+
+const VERSION = "4.0.0-canary.3";
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,59 +41,68 @@ export default async function handler(
       return;
     }
 
-    const input = {
-      // switzerland
-      "switzerland.shp": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1l20.shp"
-      ),
-      "switzerland.dbf": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1l20.dbf"
-      ),
-      "switzerland.prj": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1l20.prj"
-      ),
+    const options = produce(defaultOptions, (draft) => {
+      draft.shapes = new Set([
+        ...draft.shapes.values(),
+        ...(query.shapes?.split(",") ?? ([] as $FixMe)),
+      ]);
+    });
+    const { year, shapes } = options;
+    // console.log(year, shapes);
 
-      "cantons.shp": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1k20.shp"
-      ),
-      "cantons.dbf": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1k20.dbf"
-      ),
-      "cantons.prj": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1k20.prj"
-      ),
+    const input = await (async () => {
+      const shapeToKey: Record<Shape, string> = {
+        switzerland: "l",
+        cantons: "k",
+        districts: "k", // FIXME: districts not available as shapefiles in the swiss-maps package yet.
+        municipalities: "g",
+        lakes: "s",
+      };
 
-      "municipalities.shp": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1g20.shp"
-      ),
-      "municipalities.dbf": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1g20.dbf"
-      ),
-      "municipalities.prj": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1g20.prj"
-      ),
+      const props = [...shapes.values()].flatMap((shape) => {
+        const key = shapeToKey[shape];
 
-      "lakes.shp": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1s20.shp"
-      ),
-      "lakes.dbf": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1s20.dbf"
-      ),
-      "lakes.prj": await get(
-        "https://storage.googleapis.com/swiss-maps/2020/g1s20.prj"
-      ),
-    };
+        return ["shp", "dbf", "prj"].map(
+          async (ext) =>
+            [
+              `${shape}.${ext}`,
+              await get(
+                `https://unpkg.com/swiss-maps@${VERSION}/shapefile/${year}/${key}.${ext}`
+              ),
+            ] as const
+        );
+      });
 
-    mapshaper.applyCommands(
-      "-i switzerland.shp cantons.shp municipalities.shp lakes.shp combine-files string-fields=* encoding=utf8 -clean -rename-layers switzerland,cantons,municipalities,lakes -proj wgs84 -o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
-      input,
-      (err, output) => {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.end(output["output.json"]);
-      }
-    );
-  } catch {
-    // ???
+      return Object.fromEntries(await Promise.all(props));
+    })();
+
+    await new Promise((resolve, reject) => {
+      const shp = [...options.shapes!.values()];
+
+      mapshaper.applyCommands(
+        [
+          `-i ${shp.map(
+            (x) => `${x}.shp`
+          )} combine-files string-fields=* encoding=utf8`,
+          "-clean",
+          // `-rename-layers ${shp.join(",")}`,
+          "-proj wgs84",
+          "-o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
+        ].join(" "),
+        input,
+        (err, output) => {
+          if (err) {
+            reject(err);
+          } else {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(output["output.json"]);
+            resolve();
+          }
+        }
+      );
+    });
+  } catch (e) {
+    console.log(e);
   }
 }

@@ -5,6 +5,7 @@ import * as React from "react";
 import { Options } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
+import * as qs from "querystring";
 
 interface Props {
   options: Options;
@@ -35,24 +36,41 @@ function Preview(props: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const res = await fetch("/api/generate?year=2020");
+      const { shapes, projection, ...q } = options;
+      const res = await fetch(
+        `/api/generate?${qs.encode({
+          ...q,
+          shapes: [...(shapes?.values() ?? [])].join(","),
+        })}`
+      );
       const json = await res.json();
 
       console.log(json);
       mutate((draft) => {
-        draft.geoData.switzerland = topojson.feature(
-          json,
-          json.objects.switzerland
-        );
-        draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
-        draft.geoData.municipalities = topojson.feature(
-          json,
-          json.objects.municipalities
-        );
-        draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
+        if (json.objects.switzerland) {
+          draft.geoData.switzerland = topojson.feature(
+            json,
+            json.objects.switzerland
+          );
+        }
+
+        if (json.objects.cantons) {
+          draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+        }
+
+        if (json.objects.municipalities) {
+          draft.geoData.municipalities = topojson.feature(
+            json,
+            json.objects.municipalities
+          );
+        }
+
+        if (json.objects.lakes) {
+          draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
+        }
       });
     })();
-  }, []);
+  }, [options]);
 
   const onViewStateChange = React.useCallback(
     ({ viewState, interactionState }) => {
@@ -78,6 +96,8 @@ function Preview(props: Props) {
     },
     [mutate]
   );
+
+  // console.log(state.geoData);
 
   return (
     <div
@@ -107,21 +127,22 @@ function Preview(props: Props) {
           />
         )}
 
-        {options.shapes?.has("municipalities") && (
-          <GeoJsonLayer
-            id="municipalities"
-            data={state.geoData.municipalities}
-            pickable={false}
-            stroked={true}
-            filled={false}
-            extruded={false}
-            lineWidthMinPixels={0.5}
-            lineWidthMaxPixels={1}
-            getLineWidth={200}
-            lineMiterLimit={1}
-            getLineColor={LINE_COLOR}
-          />
-        )}
+        {state.geoData.municipalities &&
+          options.shapes?.has("municipalities") && (
+            <GeoJsonLayer
+              id="municipalities"
+              data={state.geoData.municipalities}
+              pickable={false}
+              stroked={true}
+              filled={false}
+              extruded={false}
+              lineWidthMinPixels={0.5}
+              lineWidthMaxPixels={1}
+              getLineWidth={200}
+              lineMiterLimit={1}
+              getLineColor={LINE_COLOR}
+            />
+          )}
 
         {options.shapes?.has("cantons") && (
           <GeoJsonLayer

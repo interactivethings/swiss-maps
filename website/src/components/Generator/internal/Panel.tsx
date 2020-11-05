@@ -37,10 +37,10 @@ function Panel(props: Props) {
           <MUI.TextField
             fullWidth
             select
-            defaultValue="Switzerland"
+            defaultValue="switzerland"
             size="small"
           >
-            <MUI.MenuItem>Switzerland</MUI.MenuItem>
+            <MUI.MenuItem value={"switzerland"}>Switzerland</MUI.MenuItem>
           </MUI.TextField>
         </div>
 
@@ -194,11 +194,24 @@ function Panel(props: Props) {
 
         <div style={{ marginBottom: 32 }}>
           <MUI.Typography variant="h3">Year</MUI.Typography>
-          <MUI.TextField fullWidth select defaultValue="2020" size="small">
-            <MUI.MenuItem>2020</MUI.MenuItem>
-            <MUI.MenuItem>2019</MUI.MenuItem>
-            <MUI.MenuItem>2018</MUI.MenuItem>
-            <MUI.MenuItem>2017</MUI.MenuItem>
+          <MUI.TextField
+            fullWidth
+            select
+            value={state.options.year}
+            onChange={(ev) => {
+              mutate((draft) => {
+                draft.options.year = ev.target.value;
+              });
+            }}
+            size="small"
+          >
+            {[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+              .reverse()
+              .map((year) => (
+                <MUI.MenuItem key={year} value={`${year}`}>
+                  {year}
+                </MUI.MenuItem>
+              ))}
           </MUI.TextField>
         </div>
       </div>
