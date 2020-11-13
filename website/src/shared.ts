@@ -1,5 +1,5 @@
 export type Shape =
-  | "switzerland"
+  | "country"
   | "cantons"
   | "districts"
   | "municipalities"
@@ -18,5 +18,5 @@ export const defaultOptions: Options = {
   projection: "wgs84",
   dimensions: { width: 900, height: 600 },
   year: "2020",
-  shapes: new Set<Shape>(["switzerland", "cantons", "lakes"]),
+  shapes: new Set<Shape>(["country", "cantons", "lakes"]),
 };

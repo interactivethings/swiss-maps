@@ -5,6 +5,8 @@ import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import { defaultOptions, Shape } from "src/shared";
+import { promises as fs } from "fs";
+import * as path from "path";
 
 enableMapSet();
 
@@ -38,7 +40,7 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
-const VERSION = "4.0.0-canary.3";
+const VERSION = "4.0.0-canary.9";
 
 export default async function handler(
   req: NextApiRequest,
@@ -65,28 +67,19 @@ export default async function handler(
       ]);
     });
     const { year, shapes } = options;
-    // console.log(year, shapes);
 
     const input = await (async () => {
-      const shapeToKey: Record<Shape, string> = {
-        switzerland: "l",
-        cantons: "k",
-        districts: "k", // FIXME: districts not available as shapefiles in the swiss-maps package yet.
-        municipalities: "g",
-        lakes: "s",
-      };
-
       const props = [...(shapes?.values() ?? [])].flatMap((shape) => {
-        const key = shapeToKey[shape];
-
         return ["shp", "dbf", "prj"].map(
           async (ext) =>
             [
               `${shape}.${ext}`,
-              await get(
-                // fs.readFile(path.resolve("swiss-maps/shapefile/…"))
-                `https://unpkg.com/swiss-maps@${VERSION}/shapefile/${year}/${key}.${ext}`
+              await fs.readFile(
+                path.join(process.env.SWISS_MAPS_DIR!, year, `${shape}.${ext}`)
               ),
+              // await get(
+              //   `https://unpkg.com/swiss-maps@${VERSION}/${year}/${shape}.${ext}`
+              // ),
             ] as const
         );
       });
@@ -129,6 +122,8 @@ export default async function handler(
       );
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    res.statusCode = 500;
+    res.send("Internal error");
   }
 }

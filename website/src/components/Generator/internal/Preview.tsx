@@ -29,7 +29,7 @@ function Preview({}: Props) {
   const [state, mutate] = useImmer({
     viewState: INITIAL_VIEW_STATE,
     geoData: {
-      switzerland: undefined as any,
+      country: undefined as any,
       cantons: undefined as any,
       municipalities: undefined as any,
       lakes: undefined as any,
@@ -49,11 +49,8 @@ function Preview({}: Props) {
 
       console.log(json);
       mutate((draft) => {
-        if (json.objects.switzerland) {
-          draft.geoData.switzerland = topojson.feature(
-            json,
-            json.objects.switzerland
-          );
+        if (json.objects.country) {
+          draft.geoData.country = topojson.feature(json, json.objects.country);
         }
 
         if (json.objects.cantons) {
@@ -109,10 +106,10 @@ function Preview({}: Props) {
         // onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
-        {options.shapes.has("switzerland") && (
+        {options.shapes.has("country") && (
           <GeoJsonLayer
-            id="switzerland"
-            data={state.geoData?.switzerland}
+            id="country"
+            data={state.geoData?.country}
             pickable={false}
             stroked={true}
             filled={true}

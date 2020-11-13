@@ -35,7 +35,7 @@ function Panel(props: Props) {
       <div className={classes.section}>
         <MUI.Typography variant="h3">Shapes</MUI.Typography>
 
-        <ShapeOption shape="switzerland" label="Switzerland" />
+        <ShapeOption shape="country" label="Switzerland" />
         <ShapeOption shape="cantons" label="Cantons" />
         <ShapeOption shape="municipalities" label="Municipalities" />
         <ShapeOption shape="lakes" label="Lakes" />
