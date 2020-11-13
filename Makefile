@@ -48,8 +48,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id="CH"' \
-		-filter-fields id \
+		-each 'id="CH"; name="Schweiz / Suisse / Svizzera"' \
+		-filter-fields id,name \
 	  -o format=shapefile encoding=utf8 $@
 
 # Clean up cantons
@@ -59,8 +59,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.KTNR || this.properties.KT' \
-		-filter-fields id \
+		-each 'id=this.properties.KTNR || this.properties.KT; name=this.properties.KTNAME || this.properties.NAME' \
+		-filter-fields id,name \
 	  -o format=shapefile encoding=utf8 $@
 
 # Clean up cantons
@@ -70,8 +70,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.BZNR || this.properties.BEZIRK' \
-		-filter-fields id \
+		-each 'id=this.properties.BZNR || this.properties.BEZIRK; name=this.properties.BZNAME || this.properties.NAME' \
+		-filter-fields id,name \
 	  -o format=shapefile encoding=utf8 $@
 
 # Clean up municipalities
@@ -82,8 +82,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE' \
-		-filter-fields id \
+		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME' \
+		-filter-fields id,name \
 		-filter '+id < 7000' \
 	  -o format=shapefile encoding=utf8 $@
 
@@ -95,8 +95,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE' \
-		-filter-fields id \
+		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME' \
+		-filter-fields id,name \
 		-filter '+id !== 9780' \
 	  -o format=shapefile encoding=utf8 $@
 
