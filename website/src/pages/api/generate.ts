@@ -4,9 +4,8 @@ import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
-import { defaultOptions, Shape } from "src/shared";
-import { promises as fs } from "fs";
 import * as path from "path";
+import { defaultOptions } from "src/shared";
 
 enableMapSet();
 
@@ -40,8 +39,6 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
-const VERSION = "4.0.0-canary.9";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -65,71 +62,47 @@ export default async function handler(
         ...(draft.shapes?.values() ?? []),
         ...(query.shapes?.split(",") ?? ([] as $FixMe)),
       ]);
+
+      if (query.year) {
+        draft.year = query.year;
+      }
     });
     const { year, shapes } = options;
 
-    const input = await (async () => {
-      const props = [...(shapes?.values() ?? [])].flatMap((shape) => {
-        return ["shp", "dbf", "prj"].map(
-          async (ext) =>
-            [
-              `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "node_modules",
-                  "swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-              // await get(
-              //   `https://unpkg.com/swiss-maps@${VERSION}/${year}/${shape}.${ext}`
-              // ),
-            ] as const
-        );
-      });
+    const inputFiles = [...shapes]
+      .map((shape) =>
+        path.join(
+          process.cwd(),
+          "node_modules",
+          "swiss-maps",
+          year,
+          `${shape}.shp`
+        )
+      )
+      .join(" ");
 
-      return Object.fromEntries(await Promise.all(props));
-    })();
+    const commands = [
+      `-i ${inputFiles} combine-files string-fields=*`,
+      "-clean",
+      // `-rename-layers ${shp.join(",")}`,
+      "-proj wgs84",
+      "-o format=topojson drop-table id-field=id",
+    ].join("\n");
 
-    await new Promise((resolve, reject) => {
-      const shp = [...options.shapes.values()];
+    console.log("### Mapshaper commands ###");
+    console.log(commands);
 
-      mapshaper.applyCommands(
-        [
-          `-i ${shp.map(
-            (x) => `${x}.shp`
-          )} combine-files string-fields=* encoding=utf8`,
-          "-clean",
-          // `-rename-layers ${shp.join(",")}`,
-          "-proj wgs84",
-          "-o format=topojson drop-table id-field=GMDNR,KTNR,GMDE,KT",
-        ].join(" "),
-        input,
-        (err: unknown, output: $FixMe) => {
-          if (err) {
-            reject(err);
-          } else {
-            res.statusCode = 200;
-            res.setHeader("Content-Type", "application/json");
+    const output = await mapshaper.applyCommands(commands);
 
-            if (query.download !== undefined) {
-              res.setHeader(
-                "Content-Disposition",
-                `attachment; filename="topo.json"`
-              );
-            }
+    if (query.download !== undefined) {
+      res.setHeader("Content-Disposition", `attachment; filename="topo.json"`);
+    }
 
-            res.end(output["output.json"]);
-            resolve();
-          }
-        }
-      );
-    });
+    res.statusCode = 200;
+    res.json(output["output.json"]);
   } catch (e) {
     console.error(e);
     res.statusCode = 500;
-    res.send("Internal error");
+    res.json({ message: "Internal error" });
   }
 }
