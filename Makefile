@@ -17,29 +17,29 @@ shapefile: \
 	$(foreach year,$(YEARS),$(year)/lakes.shp)
 
 topojson: \
-	$(foreach year,$(YEARS),$(year)/ch.json)
+	$(foreach year,$(YEARS),$(year)/ch-combined.json)
 
 clean-generated:
 	rm -rf 20*/ shapefile/
 
 # ---
 
-# SHAPEFILE_TARGETS := $(foreach ext,shp dbf prj shx,$(foreach type,municipalities cantons country lakes districts,20%/$(type).$(ext)))
 # # SHAPEFILE_TARGETS := $(foreach ext,shp dbf prj shx,$(foreach type,countries,20%/$(type).$(ext)))
 # .PRECIOUS: $(SHAPEFILE_TARGETS)
 
 # shapefile-20%: $(SHAPEFILE_TARGETS)
 # 	@echo Shapefiles 20$* extracted
 
-20%/ch.json: $(SHAPEFILE_TARGETS)
+SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lakes,20%/$(type).shp)
+
+20%/ch-combined.json: $(SHAPEFILE_TARGETS)
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
-	  -i 20$*/country.shp 20$*/municipalities.shp 20$*/cantons.shp 20$*/lakes.shp combine-files string-fields=* encoding=utf8 \
-		-clean \
-	  -rename-layers country,municipalities,cantons,lakes \
+	  -i $^ combine-files string-fields=* \
 	  -proj wgs84 \
+		-clean \
 		-simplify 50% \
-	  -o format=topojson drop-table id-field=GMDNR,GMDE,BZNR,BEZIRK,KTNR,KT,CODE_ISO,CH_ISO $@
+	  -o format=topojson drop-table id-field=id $@
 
 # Clean up country
 # - Unify ID ("CH")
@@ -50,7 +50,7 @@ clean-generated:
 		-clean \
 		-each 'id="CH"' \
 		-filter-fields id \
-	  -o format=shapefile $@
+	  -o format=shapefile encoding=utf8 $@
 
 # Clean up cantons
 # - Unify IDs
@@ -61,7 +61,7 @@ clean-generated:
 		-clean \
 		-each 'id=this.properties.KTNR || this.properties.KT' \
 		-filter-fields id \
-	  -o format=shapefile $@
+	  -o format=shapefile encoding=utf8 $@
 
 # Clean up cantons
 # - Unify IDs
@@ -72,7 +72,7 @@ clean-generated:
 		-clean \
 		-each 'id=this.properties.BZNR || this.properties.BEZIRK' \
 		-filter-fields id \
-	  -o format=shapefile $@
+	  -o format=shapefile encoding=utf8 $@
 
 # Clean up municipalities
 # - Unify IDs
@@ -85,7 +85,7 @@ clean-generated:
 		-each 'id=this.properties.GMDNR || this.properties.GMDE' \
 		-filter-fields id \
 		-filter '+id < 7000' \
-	  -o format=shapefile $@
+	  -o format=shapefile encoding=utf8 $@
 
 # Clean up lakes
 # - Unify IDs
@@ -98,7 +98,7 @@ clean-generated:
 		-each 'id=this.properties.GMDNR || this.properties.GMDE' \
 		-filter-fields id \
 		-filter '+id !== 9780' \
-	  -o format=shapefile $@
+	  -o format=shapefile encoding=utf8 $@
 
 # Generate targets based on
 #   - types (g=Gemeinde, k=Kanton, l=Landesgrenze, s=See), and
