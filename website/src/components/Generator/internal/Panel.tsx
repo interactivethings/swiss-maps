@@ -25,10 +25,10 @@ function Panel(props: Props) {
           <MUI.TextField
             fullWidth
             select
-            defaultValue="switzerland"
+            defaultValue="country"
             size="small"
           >
-            <MUI.MenuItem value={"switzerland"}>Switzerland</MUI.MenuItem>
+            <MUI.MenuItem value={"country"}>Switzerland</MUI.MenuItem>
           </MUI.TextField>
         </div> */}
 
