@@ -75,7 +75,13 @@ export default async function handler(
             [
               `${shape}.${ext}`,
               await fs.readFile(
-                path.join(process.env.SWISS_MAPS_DIR!, year, `${shape}.${ext}`)
+                path.join(
+                  process.cwd(),
+                  "node_modules",
+                  "swiss-maps",
+                  year,
+                  `${shape}.${ext}`
+                )
               ),
               // await get(
               //   `https://unpkg.com/swiss-maps@${VERSION}/${year}/${shape}.${ext}`
