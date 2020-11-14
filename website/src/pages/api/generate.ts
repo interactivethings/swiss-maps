@@ -79,7 +79,7 @@ export default async function handler(
           `${shape}.shp`
         )
       )
-      .join(" ");
+      .join(",");
 
     const commands = [
       `-i ${inputFiles} combine-files string-fields=*`,
