@@ -6,6 +6,7 @@ import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
 import { defaultOptions } from "src/shared";
+import { promises as fs } from "fs";
 
 enableMapSet();
 
@@ -69,17 +70,28 @@ export default async function handler(
     });
     const { year, shapes } = options;
 
-    const inputFiles = [...shapes]
-      .map((shape) =>
-        path.join(
-          process.cwd(),
-          "node_modules",
-          "swiss-maps",
-          year,
-          `${shape}.shp`
-        )
-      )
-      .join(",");
+    const input = await (async () => {
+      const props = [...(shapes?.values() ?? [])].flatMap((shape) => {
+        return ["shp", "dbf", "prj"].map(
+          async (ext) =>
+            [
+              `${shape}.${ext}`,
+              await fs.readFile(
+                path.join(
+                  process.cwd(),
+                  "node_modules",
+                  "swiss-maps",
+                  year,
+                  `${shape}.${ext}`
+                )
+              ),
+            ] as const
+        );
+      });
+      return Object.fromEntries(await Promise.all(props));
+    })();
+
+    const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
 
     const commands = [
       `-i ${inputFiles} combine-files string-fields=*`,
@@ -92,7 +104,7 @@ export default async function handler(
     console.log("### Mapshaper commands ###");
     console.log(commands);
 
-    const output = await mapshaper.applyCommands(commands);
+    const output = await mapshaper.applyCommands(commands, input);
 
     if (query.download !== undefined) {
       res.setHeader("Content-Disposition", `attachment; filename="topo.json"`);
