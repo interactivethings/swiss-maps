@@ -52,7 +52,7 @@ const typography = createTypography(palette, {
   },
 
   h1: {
-    fontSize: "48px",
+    fontSize: "40px",
     lineHeight: 1,
     fontWeight: fontStyleOptions.fontWeightBold,
     letterSpacing: 0.3,

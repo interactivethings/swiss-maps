@@ -1,7 +1,7 @@
 import * as MUI from "@material-ui/core";
-import * as qs from "querystring";
 import * as React from "react";
 import { Download } from "react-feather";
+import { downloadUrl } from "src/shared";
 import { useContext } from "../context";
 
 /**
@@ -26,23 +26,17 @@ function Export(props: Props) {
         size="large"
         variant="contained"
         color="primary"
-        href={(() => {
-          const { shapes, projection, dimensions, ...q } = state.options;
-          return `/api/generate?${qs.encode({
-            ...q,
-            shapes: [...(shapes?.values() ?? [])].join(","),
-            download: "",
-          })}`;
-        })()}
+        href={downloadUrl({ ...state.options, format: "topojson" })}
         startIcon={<Download />}
       >
         TopoJSON
       </MUI.Button>
       <MUI.Button
-        disabled
+        disabled={state.options.projection !== "cartesian"}
         size="large"
         variant="contained"
         color="primary"
+        href={downloadUrl({ ...state.options, format: "svg" })}
         startIcon={<Download />}
       >
         SVG

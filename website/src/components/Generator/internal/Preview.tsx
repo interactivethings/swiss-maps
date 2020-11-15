@@ -1,13 +1,13 @@
 import { MapController, WebMercatorViewport } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
+import * as MUI from "@material-ui/core";
+import clsx from "clsx";
 import * as React from "react";
-import { Options } from "src/shared";
+import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
-import * as qs from "querystring";
 import { useContext } from "../context";
-import * as MUI from "@material-ui/core";
 
 interface Props {}
 
@@ -27,6 +27,7 @@ function Preview({}: Props) {
   const { options } = ctx.state;
 
   const [state, mutate] = useImmer({
+    fetching: false,
     viewState: INITIAL_VIEW_STATE,
     geoData: {
       country: undefined as any,
@@ -38,39 +39,49 @@ function Preview({}: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const { shapes, projection, dimensions, ...q } = options;
-      const res = await fetch(
-        `/api/generate?${qs.encode({
-          ...q,
-          shapes: [...(shapes?.values() ?? [])].join(","),
-        })}`
-      );
-      const json = await res.json();
+      try {
+        mutate((draft) => {
+          draft.fetching = true;
+        });
 
-      console.log(json);
-      mutate((draft) => {
-        if (json.objects.country) {
-          draft.geoData.country = topojson.feature(json, json.objects.country);
-        }
+        const res = await fetch(previewSourceUrl(options));
+        const json = await res.json();
 
-        if (json.objects.cantons) {
-          draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
-        }
+        mutate((draft) => {
+          if (json.objects.country) {
+            draft.geoData.country = topojson.feature(
+              json,
+              json.objects.country
+            );
+          }
 
-        if (json.objects.municipalities) {
-          draft.geoData.municipalities = topojson.feature(
-            json,
-            json.objects.municipalities
-          );
-        }
+          if (json.objects.cantons) {
+            draft.geoData.cantons = topojson.feature(
+              json,
+              json.objects.cantons
+            );
+          }
 
-        if (json.objects.lakes) {
-          draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
-        }
-      });
+          if (json.objects.municipalities) {
+            draft.geoData.municipalities = topojson.feature(
+              json,
+              json.objects.municipalities
+            );
+          }
+
+          if (json.objects.lakes) {
+            draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
+          }
+        });
+      } finally {
+        mutate((draft) => {
+          draft.fetching = false;
+        });
+      }
     })();
   }, [options]);
 
+  /*
   const onViewStateChange = React.useCallback(
     ({ viewState, interactionState }) => {
       mutate((draft) => {
@@ -83,6 +94,7 @@ function Preview({}: Props) {
     },
     []
   );
+  */
 
   const onResize = React.useCallback(
     ({ width, height }) => {
@@ -96,10 +108,14 @@ function Preview({}: Props) {
     [mutate]
   );
 
-  // console.log(state.geoData);
-
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, { [classes.fetching]: state.fetching })}>
+      <div className={classes.loader}>
+        <MUI.Fade in style={{ transitionDelay: "800ms" }}>
+          <MUI.CircularProgress variant="indeterminate" size={300} />
+        </MUI.Fade>
+      </div>
+
       <DeckGL
         controller={{ type: MapController }}
         viewState={state.viewState}
@@ -218,11 +234,38 @@ const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
       position: "absolute",
+      zIndex: 1,
       top: 0,
       left: theme.spacing(55),
       right: 0,
       bottom: 0,
       pointerEvents: "none",
+    },
+
+    fetching: {},
+
+    loader: {
+      position: "absolute",
+      zIndex: 2,
+      top: 0,
+      left: -theme.spacing(55),
+      paddingLeft: theme.spacing(55),
+      right: 0,
+      bottom: 0,
+      pointerEvents: "none",
+      opacity: 0,
+
+      display: "grid",
+      placeItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.05)",
+
+      transition: theme.transitions.create("all", {
+        duration: theme.transitions.duration.short,
+      }),
+
+      "$fetching &": {
+        opacity: 1,
+      },
     },
   }),
   { name: "XuiGenerator:Preview" }

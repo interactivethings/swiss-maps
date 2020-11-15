@@ -1,12 +1,12 @@
 import Cors from "cors";
 import { either } from "fp-ts";
+import { promises as fs } from "fs";
 import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
-import { defaultOptions } from "src/shared";
-import { promises as fs } from "fs";
+import { defaultOptions, Shape } from "src/shared";
 
 enableMapSet();
 
@@ -35,8 +35,10 @@ const cors = initMiddleware(
 );
 
 const Query = t.type({
+  format: t.union([t.undefined, t.literal("topojson"), t.literal("svg")]),
   year: t.union([t.undefined, t.string]),
   shapes: t.union([t.undefined, t.string]),
+  simplify: t.union([t.undefined, t.string]),
   download: t.union([t.undefined, t.string]),
 });
 
@@ -59,19 +61,22 @@ export default async function handler(
     }
 
     const options = produce(defaultOptions, (draft) => {
-      draft.shapes = new Set([
-        ...(draft.shapes?.values() ?? []),
-        ...(query.shapes?.split(",") ?? ([] as $FixMe)),
-      ]);
-
       if (query.year) {
         draft.year = query.year;
       }
+      if (query.format) {
+        draft.format = query.format;
+      }
+
+      if (query.shapes) {
+        draft.shapes = new Set<Shape>(query.shapes.split(",") as $FixMe);
+      }
     });
-    const { year, shapes } = options;
+    const { format, year, shapes } = options;
+    // console.log(year, shapes);
 
     const input = await (async () => {
-      const props = [...(shapes?.values() ?? [])].flatMap((shape) => {
+      const props = [...shapes].flatMap((shape) => {
         return ["shp", "dbf", "prj"].map(
           async (ext) =>
             [
@@ -95,10 +100,11 @@ export default async function handler(
 
     const commands = [
       `-i ${inputFiles} combine-files string-fields=*`,
-      "-clean",
       // `-rename-layers ${shp.join(",")}`,
-      "-proj wgs84",
-      "-o format=topojson drop-table id-field=id",
+      query.simplify ? `-simplify ${query.simplify} keep-shapes` : "",
+      "-clean",
+      `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
+      `-o output.${format} format=${format} drop-table id-field=id`,
     ].join("\n");
 
     console.log("### Mapshaper commands ###");
@@ -106,15 +112,28 @@ export default async function handler(
 
     const output = await mapshaper.applyCommands(commands, input);
 
-    if (query.download !== undefined) {
-      res.setHeader("Content-Disposition", `attachment; filename="topo.json"`);
-    }
+    if (format === "topojson") {
+      if (query.download !== undefined) {
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="swiss-maps.json"`
+        );
+      }
 
-    res.statusCode = 200;
-    res.json(output["output.json"]);
+      res.status(200).json(output["output.topojson"]);
+    } else if (format === "svg") {
+      res.setHeader("Content-Type", "image/svg+xml");
+
+      if (query.download !== undefined) {
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="swiss-maps.svg"`
+        );
+      }
+      res.status(200).send(output["output.svg"]);
+    }
   } catch (e) {
     console.error(e);
-    res.statusCode = 500;
-    res.json({ message: "Internal error" });
+    res.status(500).json({ message: "Internal error" });
   }
 }

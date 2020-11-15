@@ -18,6 +18,8 @@ function Panel(props: Props) {
 
   const { state, mutate } = useContext();
 
+  const [simplify, setSimplify] = React.useState(state.options.simplify);
+
   return (
     <Root elevation={4} className={classes.root} {...rest}>
       {/* <div style={{ marginBottom: 32 }}>
@@ -107,10 +109,48 @@ function Panel(props: Props) {
       </div>
 
       <div className={classes.section}>
+        <MUI.Typography variant="h3">Simplification</MUI.Typography>
+
+        <MUI.Typography variant="body2" color="textSecondary">
+          Move the slider to the right to simplify the shapes. This will remove
+          detail but also decrease the file size.
+        </MUI.Typography>
+
+        <div style={{ marginTop: 8 }}>
+          <MUI.Slider
+            step={1}
+            min={0}
+            max={100}
+            marks={[
+              { value: 0, label: "0" },
+              { value: 100, label: "100" },
+            ]}
+            value={simplify}
+            onChange={(_, value) => {
+              if (typeof value === "number") {
+                mutate((draft) => {
+                  setSimplify(value);
+                });
+              }
+            }}
+            onChangeCommitted={(_, value) => {
+              if (typeof value === "number") {
+                mutate((draft) => {
+                  setSimplify(value);
+                  draft.options.simplify = value;
+                });
+              }
+            }}
+          />
+        </div>
+      </div>
+
+      <div className={classes.section}>
         <MUI.Typography variant="h3">Options</MUI.Typography>
 
         <div>
           <MUI.FormControlLabel
+            disabled
             control={<MUI.Checkbox color="primary" />}
             label="Include names"
           />
