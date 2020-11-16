@@ -20,7 +20,7 @@ const Context = React.createContext<Value>({
       dimensions: { width: 900, height: 600 },
       year: "2020",
       simplify: 0,
-      shapes: new Set(["switzerland"] as Array<Shape>),
+      shapes: new Set(["country"] as Array<Shape>),
     },
   },
   mutate: () => {

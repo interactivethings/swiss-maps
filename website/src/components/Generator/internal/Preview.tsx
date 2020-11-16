@@ -30,7 +30,7 @@ function Preview({}: Props) {
     fetching: false,
     viewState: INITIAL_VIEW_STATE,
     geoData: {
-      switzerland: undefined as any,
+      country: undefined as any,
       cantons: undefined as any,
       municipalities: undefined as any,
       lakes: undefined as any,
@@ -48,10 +48,10 @@ function Preview({}: Props) {
         const json = await res.json();
 
         mutate((draft) => {
-          if (json.objects.switzerland) {
-            draft.geoData.switzerland = topojson.feature(
+          if (json.objects.country) {
+            draft.geoData.country = topojson.feature(
               json,
-              json.objects.switzerland
+              json.objects.country
             );
           }
 
@@ -122,10 +122,10 @@ function Preview({}: Props) {
         // onViewStateChange={onViewStateChange}
         onResize={onResize}
       >
-        {options.shapes.has("switzerland") && (
+        {options.shapes.has("country") && (
           <GeoJsonLayer
-            id="switzerland"
-            data={state.geoData?.switzerland}
+            id="country"
+            data={state.geoData?.country}
             pickable={false}
             stroked={true}
             filled={true}

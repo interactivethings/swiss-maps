@@ -27,17 +27,17 @@ function Panel(props: Props) {
           <MUI.TextField
             fullWidth
             select
-            defaultValue="switzerland"
+            defaultValue="country"
             size="small"
           >
-            <MUI.MenuItem value={"switzerland"}>Switzerland</MUI.MenuItem>
+            <MUI.MenuItem value={"country"}>Switzerland</MUI.MenuItem>
           </MUI.TextField>
         </div> */}
 
       <div className={classes.section}>
         <MUI.Typography variant="h3">Shapes</MUI.Typography>
 
-        <ShapeOption shape="switzerland" label="Switzerland" />
+        <ShapeOption shape="country" label="Switzerland" />
         <ShapeOption shape="cantons" label="Cantons" />
         <ShapeOption shape="municipalities" label="Municipalities" />
         <ShapeOption shape="lakes" label="Lakes" />
