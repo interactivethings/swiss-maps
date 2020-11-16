@@ -95,7 +95,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME' \
+		-each 'id=this.properties.SEENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.SEENAME || this.properties.GMDNAME || this.properties.NAME' \
 		-filter-fields id,name \
 		-filter '+id !== 9780' \
 	  -o format=shapefile encoding=utf8 $@
