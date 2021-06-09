@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021
 
 .PHONY: all topojson shapefile clean-generated
 
@@ -133,6 +133,11 @@ shapefile/2017/$(1).$(2): downloads/2017.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_2017/shp/LV95/g1$(1)17.$(2) > $$@
 
+# Municipalities from 2021 are versioned by date in the file name
+shapefile/2021/g.$(2): downloads/2021.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ggg_2021-LV95/shp/g1g21_18042021.$(2) > $$@
+
 # Files from 2018 on seem to be consistently structured
 shapefile/20%/$(1).$(2): downloads/20%.zip
 	@mkdir -p $$(dir $$@)
@@ -153,6 +158,10 @@ $(foreach type,g k l s b,$(foreach ext,shp dbf prj shx,$(eval $(call extract_fro
 # 	@echo 'municipalities -> $(call rename,municipalities)'
 # 	@echo 'cantons -> $(call rename,cantons)'
 # 	@echo 'districts -> $(call rename,districts)'
+
+downloads/2021.zip:
+	mkdir -p $(dir $@)
+	curl -o $@ "https://www.bfs.admin.ch/bfsstatic/dam/assets/16804410/master"
 
 downloads/2020.zip:
 	mkdir -p $(dir $@)
