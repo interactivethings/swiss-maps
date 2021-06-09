@@ -2,13 +2,14 @@
   "name": "swiss-maps",
   "version": "4.0.0-canary.10",
   "description": "Swiss geodata as TopoJSON.",
+  "license": "bsd-3-clause",
   "keywords": [
     "topojson",
     "geojson",
     "shapefile"
   ],
   "author": {
-    "name": "Jeremy Stucki",
+    "name": "Interactive Things",
     "url": "http://interactivethings.com/"
   },
   "repository": {
@@ -23,7 +24,6 @@
   "files": [
     "README.md",
     "LICENSE",
-    "LICENSE-GEODATA",
     "20*/"
   ],
   "dependencies": {},
