@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-01-01 2021-04-18
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07
 
 .PHONY: all topojson shapefile clean-generated
 
@@ -134,28 +134,32 @@ shapefile/2017/$(1).$(2): downloads/2017.zip
 	unzip -p $$< ggg_2017/shp/LV95/g1$(1)17.$(2) > $$@
 
 # Municipalities from 2021 are versioned by date in the file name
-shapefile/2021/g.$(2): downloads/2021.zip
+shapefile/2021-07/g.$(2): downloads/2021.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_2021-LV95/shp/g1g21_01072021.$(2) > $$@
 
-# There is no 01072021 prj file, so we use the one from 180042021
-shapefile/2021/g.prj: downloads/2021.zip
-	@mkdir -p $$(dir $$@)
-	unzip -p $$< ggg_2021-LV95/shp/g1g21_18042021.prj > $$@
-
-shapefile/2021-04-18/g.$(2): downloads/2021.zip
-	@mkdir -p $$(dir $$@)
-	unzip -p $$< ggg_2021-LV95/shp/g1g21_18042021.$(2) > $$@
-
-shapefile/2021-04-18/$(1).$(2): downloads/2021.zip
+shapefile/2021-07/$(1).$(2): downloads/2021.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_2021-LV95/shp/g1$(1)21.$(2) > $$@
 
-shapefile/2021-01-01/g.$(2): downloads/2021.zip
+# There is no 01072021 prj file, so we use the one from 180042021
+shapefile/2021-07/g.prj: downloads/2021.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ggg_2021-LV95/shp/g1g21_18042021.prj > $$@
+
+shapefile/2021-04/g.$(2): downloads/2021.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ggg_2021-LV95/shp/g1g21_18042021.$(2) > $$@
+
+shapefile/2021-04/$(1).$(2): downloads/2021.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ggg_2021-LV95/shp/g1$(1)21.$(2) > $$@
+
+shapefile/2021/g.$(2): downloads/2021.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_2021-LV95/shp/g1g21_01012021.$(2) > $$@
 
-shapefile/2021-01-01/$(1).$(2): downloads/2021.zip
+shapefile/2021/$(1).$(2): downloads/2021.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_2021-LV95/shp/g1$(1)21.$(2) > $$@
 
