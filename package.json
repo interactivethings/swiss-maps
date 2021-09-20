@@ -1,6 +1,6 @@
 {
   "name": "swiss-maps",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Swiss geodata as TopoJSON.",
   "license": "bsd-3-clause",
   "keywords": [
