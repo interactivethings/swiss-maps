@@ -82,7 +82,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME' \
+		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME'; cantonId=this.properties.KTNR || this.properties.KT' \
 		-filter-fields id,name \
 		-filter '+id < 7000' \
 	  -o format=shapefile encoding=utf8 $@
