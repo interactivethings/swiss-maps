@@ -25,7 +25,7 @@ export const defaultOptions: Options = {
   format: "topojson",
   projection: "wgs84",
   dimensions: { width: 900, height: 600 },
-  year: "2020",
+  year: "2022",
   simplify: 0,
   shapes: new Set<Shape>(["country", "cantons", "lakes"]),
 };

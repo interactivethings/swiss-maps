@@ -6083,10 +6083,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-swiss-maps@^4.0.0-canary.10:
-  version "4.0.0-canary.10"
-  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.0.0-canary.10.tgz#d4f08167594fd96fe51fcfd9af481c46788feeca"
-  integrity sha512-Yr/IqgXbQ6UYAujM3YsAMUeO4CFjdarnItuKfzyMDvgtWDFqoGVX51Y0pbxyJuXyRQ2btCljmAuQ2M8s9/njYw==
+swiss-maps@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.2.0.tgz#63f1c1e462680218421c6ced9b78d3bb9b5ef04d"
+  integrity sha512-DbTHjGNNqO/NqcbR7a2bnNgETPHGP+xogxAm47HDnJ5zwyoIu1Wde6TX6i4Dhb4FnV6L8BHfbv3v1+mJKyQTvA==
 
 sync-request@5.0.0:
   version "5.0.0"
