@@ -1722,10 +1722,10 @@
   dependencies:
     "@types/geojson" "*"
 
-"@types/topojson@^3.2.2":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@types/topojson/-/topojson-3.2.2.tgz#96136313ba6a1df3df8931b722400828e027ee94"
-  integrity sha512-CwIJKe3YmNZ4oMcjJ//+8IXe6YA+znX6DXe0alCEoMoiWEM97QfjuP9BhPdvSU4pa0ZgghYJYtKcTprZhJm7Kw==
+"@types/topojson@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@types/topojson/-/topojson-3.2.3.tgz#32b67d2b0acd49081a5f1b9895c6e0a03bea55cd"
+  integrity sha512-j6D8AFYNa8Tcn0TjnWwzKxhWLpUFM4TnQxZU3p20ehOu11xiD9xiVqB6y2148IVI7js6oU8YCKAWi2JaEMktDA==
   dependencies:
     "@types/geojson" "*"
     "@types/topojson-client" "*"
