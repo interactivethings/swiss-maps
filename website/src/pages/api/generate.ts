@@ -84,7 +84,7 @@ export default async function handler(
               await fs.readFile(
                 path.join(
                   process.cwd(),
-                  "node_modules",
+                  "public",
                   "swiss-maps",
                   year,
                   `${shape}.${ext}`
@@ -120,7 +120,8 @@ export default async function handler(
         );
       }
 
-      res.status(200).json(output["output.topojson"]);
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).send(output["output.topojson"]);
     } else if (format === "svg") {
       res.setHeader("Content-Type", "image/svg+xml");
 
