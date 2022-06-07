@@ -16,10 +16,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@deck.gl/core@^8.7.10":
-  version "8.7.10"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-8.7.10.tgz#3588247611477ef6bec0236be7202d4081c25522"
-  integrity sha512-8BSDnPe/aH5Nit4hOffHAEfzQJHsgqYpqa9i4r9dnKgGs7MKH1aARTj2cq6knnRyI/KACU50R6TxEK01tnznpA==
+"@deck.gl/core@^8.7.11":
+  version "8.7.11"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-8.7.11.tgz#8cfdf212db5857e8ba3a5ef90e317a4a7c46aa10"
+  integrity sha512-zTAjbU2lJ5/LjxLLIA6vFquIqd16uY/Xe2Y3J84YmCxOeFWx7khX8n9s42bfi2mXK+ygx8sqRfhHjReFArg3bA==
   dependencies:
     "@loaders.gl/core" "^3.1.5"
     "@loaders.gl/images" "^3.1.5"
