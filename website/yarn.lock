@@ -44,10 +44,10 @@
     "@math.gl/polygon" "^3.5.7"
     earcut "^2.0.6"
 
-"@deck.gl/react@^8.7.10":
-  version "8.7.10"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.7.10.tgz#ba55557146543cfb04c296d7279ecf9de2bea7c2"
-  integrity sha512-PepgNXzzXlQ8BqfRlY4uttt0MDOfHaSdX/0LtueXJPN0RWP1bi/cP500vhTy6MAjsgtACIfDfoXLyU9mL/h6+w==
+"@deck.gl/react@^8.7.11":
+  version "8.7.11"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.7.11.tgz#129c4ff0bd88562761a5871808ad368378677387"
+  integrity sha512-vtsYAoI4lIvEDr7AcqEdXduflGxrD+xEwJOA/bBrlJuHZ1NFPaFY8pUkSokWNUmGuMdkwc5hjOquJIE/mfcmww==
   dependencies:
     prop-types "^15.6.0"
 
