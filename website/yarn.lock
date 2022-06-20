@@ -1285,10 +1285,10 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-mapshaper@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.4.tgz#a55d19e2fd9f9747f8390c91f8d636f8f1fa4266"
-  integrity sha512-hS+faedbPKk9V11/FCeSJbKtfhCZdDQm2hBoHcpz4T42OiGmWzZTvRsx9PBVS79hht7bh8JzOdSfZeV2png6Dw==
+mapshaper@^0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.5.tgz#08d01e76a269883f8875567b9ce674a7272b9214"
+  integrity sha512-VARJS3wwA4KfNSUjws/9dOAAxPThHpbN3kyvqa7WiVTJcyOedIjkyTaeBVtQlUZPht1cKqn0pb804ZEw1uBLAA==
   dependencies:
     "@tmcw/togeojson" "^4.7.0"
     "@xmldom/xmldom" "^0.8.2"
