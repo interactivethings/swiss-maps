@@ -34,10 +34,10 @@
     math.gl "^3.5.7"
     mjolnir.js "^2.5.0"
 
-"@deck.gl/layers@^8.7.10":
-  version "8.7.10"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-8.7.10.tgz#0b262c15c2e29deb3481e4d9ca04320250d76bc3"
-  integrity sha512-EvcmhhiZoeChFqxpKDQOlUMcQnZphptSrcBXPAoOv3igJKgsNKtBh7dVZsBwzNFDbMRYHPPnc89mh1wdnoyfxg==
+"@deck.gl/layers@^8.7.12":
+  version "8.7.12"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-8.7.12.tgz#4b07d51f3d684223106d651cafa01d8016b1db47"
+  integrity sha512-W3+5YZmQdYYcXUe5tm4xQfOB3tmZ05QV0MYaS9RzDBuSHrad5egrYz1UwsfRY/GvoU088+cPBg9tHLZmAQS8Jg==
   dependencies:
     "@loaders.gl/images" "^3.1.5"
     "@mapbox/tiny-sdf" "^1.1.0"
