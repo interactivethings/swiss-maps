@@ -1,8 +1,11 @@
 import * as MUI from "@material-ui/core";
 import * as React from "react";
-import { Shape } from "src/shared";
-import * as colors from "src/theme/colors";
+import {
+  SupportedColorSchema,
+  SUPPORTED_COLOR_LIST,
+} from "src/domain/color-schema";
 import { useContext } from "../context";
+import ShapeOption from "./ShapeOption";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -43,6 +46,7 @@ function Panel(props: Props) {
         <ShapeOption shape="lakes" label="Lakes" />
       </div>
 
+      {/* Projection */}
       <div className={classes.section}>
         <MUI.Typography variant="h3">Projection</MUI.Typography>
 
@@ -59,7 +63,7 @@ function Panel(props: Props) {
             <MUI.FormControlLabel
               style={{ display: "flex" }}
               value="wgs84"
-              control={<MUI.Radio color="primary" />}
+              control={<MUI.Radio id="wgs84" color="primary" />}
               label="WGS 84"
             />
           </div>
@@ -68,7 +72,7 @@ function Panel(props: Props) {
             <MUI.FormControlLabel
               style={{ display: "flex" }}
               value="cartesian"
-              control={<MUI.Radio color="primary" />}
+              control={<MUI.Radio id="wgs84" color="primary" />}
               label="Cartesian"
             />
 
@@ -108,6 +112,7 @@ function Panel(props: Props) {
         </MUI.RadioGroup>
       </div>
 
+      {/* Simplification */}
       <div className={classes.section}>
         <MUI.Typography variant="h3">Simplification</MUI.Typography>
 
@@ -150,13 +155,23 @@ function Panel(props: Props) {
 
         <div>
           <MUI.FormControlLabel
-            disabled
-            control={<MUI.Checkbox color="primary" />}
+            control={
+              <MUI.Checkbox
+                color="primary"
+                checked={state.options.withName}
+                onChange={(event) => {
+                  mutate((draft) => {
+                    draft.options.withName = event.currentTarget.checked;
+                  });
+                }}
+              />
+            }
             label="Include names"
           />
         </div>
       </div>
 
+      {/* Year */}
       <div className={classes.section}>
         <MUI.Typography variant="h3">Year</MUI.Typography>
         <MUI.TextField
@@ -170,7 +185,10 @@ function Panel(props: Props) {
           }}
           size="small"
         >
-          {[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+          {[
+            2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
+            2021, 2022,
+          ]
             .reverse()
             .map((year) => (
               <MUI.MenuItem key={year} value={`${year}`}>
@@ -186,13 +204,19 @@ function Panel(props: Props) {
 const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
-      margin: theme.spacing(5),
       padding: theme.spacing(5),
+      margin: theme.spacing(5, 0, 5, 5),
       width: 400,
       display: "flex",
       flexDirection: "column",
       zIndex: 1,
       borderRadius: 8,
+      overflowY: "scroll",
+      maxHeight: 700,
+      [theme.breakpoints.down("sm")]: {
+        width: "auto",
+        margin: theme.spacing(2),
+      },
     },
 
     section: {
@@ -202,65 +226,8 @@ const useStyles = MUI.makeStyles(
         marginBottom: theme.spacing(0.5),
       },
     },
-
-    shape: {
-      margin: theme.spacing(0, -1),
-      padding: theme.spacing(0, 1),
-      borderRadius: theme.shape.borderRadius,
-
-      "&:hover": {
-        backgroundColor: colors.palette.purple[50],
-      },
-    },
   }),
   { name: "XuiGenerator:Panel" }
 );
 
 export default Panel;
-
-function ShapeOption({
-  shape,
-  label,
-}: {
-  shape: Shape;
-  label: React.ReactNode;
-}) {
-  const classes = useStyles();
-  const { state, mutate } = useContext();
-
-  return (
-    <div
-      className={classes.shape}
-      onMouseEnter={() => {
-        mutate((draft) => {
-          draft.highlightedShape = shape;
-        });
-      }}
-      onMouseLeave={() => {
-        mutate((draft) => {
-          draft.highlightedShape = undefined;
-        });
-      }}
-    >
-      <MUI.FormControlLabel
-        style={{ display: "flex" }}
-        control={
-          <MUI.Checkbox
-            color="primary"
-            checked={state.options.shapes.has(shape)}
-            onChange={(event) => {
-              mutate((draft) => {
-                if (event.currentTarget.checked) {
-                  draft.options.shapes.add(shape);
-                } else {
-                  draft.options.shapes.delete(shape);
-                }
-              });
-            }}
-          />
-        }
-        label={label}
-      />
-    </div>
-  );
-}

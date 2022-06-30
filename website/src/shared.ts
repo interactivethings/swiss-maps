@@ -19,6 +19,7 @@ export interface Options {
   year: string;
   simplify: number;
   shapes: Set<Shape>;
+  withName: boolean;
 }
 
 export const defaultOptions: Options = {
@@ -28,6 +29,7 @@ export const defaultOptions: Options = {
   year: "2022",
   simplify: 0,
   shapes: new Set<Shape>(["country", "cantons", "lakes"]),
+  withName: true,
 };
 
 /**
@@ -50,7 +52,7 @@ export function previewSourceUrl(options: Options): string {
  * Returns an URL where the user can download the map. These URLs are used by
  * the Download TopoJSON / SVG buttons.
  */
-export function downloadUrl(options: Options): string {
+ export function downloadUrl(options: Options): string {
   const { format, projection, dimensions, year, shapes, simplify } = options;
 
   return `/api/generate?${qs.encode({

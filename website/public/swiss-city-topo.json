@@ -1,0 +1,319 @@
+{
+  "type": "Topology",
+  "arcs": [],
+  "objects": {
+    "swiss-city": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            7.3449995,
+            47.3699971
+          ],
+          "properties": {
+            "NAME": "Delémont",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            6.9229986,
+            46.9989991
+          ],
+          "properties": {
+            "NAME": "Neuchâtel",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.0340036,
+            47.3900041
+          ],
+          "properties": {
+            "NAME": "Aarau",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.3833025,
+            46.9500031
+          ],
+          "properties": {
+            "NAME": "Stans",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.3539995,
+            46.239003
+          ],
+          "properties": {
+            "NAME": "Sion",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.2833025,
+            47.383299
+          ],
+          "properties": {
+            "NAME": "Herisau",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.3619986,
+            47.4229981
+          ],
+          "properties": {
+            "NAME": "Saint Gallen",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.0199986,
+            46.1970001
+          ],
+          "properties": {
+            "NAME": "Bellinzona",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.0666996,
+            47.050002
+          ],
+          "properties": {
+            "NAME": "Glarus",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.6329985,
+            47.7060031
+          ],
+          "properties": {
+            "NAME": "Schaffhausen",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.6480016,
+            47.019996
+          ],
+          "properties": {
+            "NAME": "Schwyz",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.904888469310368,
+            47.55261942265613
+          ],
+          "properties": {
+            "NAME": "Frauenfeld",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.6380026,
+            46.8790021
+          ],
+          "properties": {
+            "NAME": "Altdorf",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.4870006,
+            47.178999
+          ],
+          "properties": {
+            "NAME": "Zug",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.1499965,
+            46.8000001
+          ],
+          "properties": {
+            "NAME": "Fribourg",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.7370035,
+            47.4830011
+          ],
+          "properties": {
+            "NAME": "Liestal",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.5369966,
+            47.2120021
+          ],
+          "properties": {
+            "NAME": "Solothurn",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.2430015,
+            46.899
+          ],
+          "properties": {
+            "NAME": "Sarnen",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.4167005,
+            47.3333041
+          ],
+          "properties": {
+            "NAME": "Appenzell",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            9.5000297,
+            46.8500202
+          ],
+          "properties": {
+            "NAME": "Chur",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.2500378,
+            47.16659
+          ],
+          "properties": {
+            "NAME": "Biel",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.2800008,
+            47.0504214
+          ],
+          "properties": {
+            "NAME": "Luzern",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.9666772,
+            46.0003821
+          ],
+          "properties": {
+            "NAME": "Lugano",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            6.6500227,
+            46.5304273
+          ],
+          "properties": {
+            "NAME": "Lausanne",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.590017,
+            47.580389
+          ],
+          "properties": {
+            "NAME": "Basel",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            7.4669755,
+            46.9166828
+          ],
+          "properties": {
+            "NAME": "Bern",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            8.5480643,
+            47.3819337
+          ],
+          "properties": {
+            "NAME": "Zürich",
+            "SOV0NAME": "Switzerland"
+          }
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            6.140028,
+            46.2100075
+          ],
+          "properties": {
+            "NAME": "Geneva",
+            "SOV0NAME": "Switzerland"
+          }
+        }
+      ]
+    }
+  }
+}

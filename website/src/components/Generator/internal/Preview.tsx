@@ -3,6 +3,7 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import * as MUI from "@material-ui/core";
 import clsx from "clsx";
+import cityData from "public/swiss-city-topo.json";
 import * as React from "react";
 import { useQuery } from "react-query";
 import { previewSourceUrl } from "src/shared";
@@ -37,6 +38,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
       cantons: undefined as any,
       municipalities: undefined as any,
       lakes: undefined as any,
+      city: undefined as any,
     },
   });
 
@@ -50,6 +52,13 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
       return;
     }
     mutate((draft) => {
+      if (cityData) {
+        draft.geoData.city = topojson.feature(
+          cityData as any,
+          cityData.objects["swiss-city"] as any
+        );
+      }
+
       if (json.objects?.country) {
         draft.geoData.country = topojson.feature(json, json.objects.country);
       }
@@ -122,8 +131,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               data={state.geoData?.country}
               pickable={false}
               stroked={true}
-              filled={true}
-              getFillColor={[230, 230, 230]}
+              filled={false}
               extruded={false}
               getLineColor={[0, 0, 0, 255]}
               getRadius={100}
@@ -139,7 +147,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               data={state.geoData.cantons}
               pickable={false}
               stroked={true}
-              filled={false}
+              filled={true}
               getFillColor={[230, 230, 230]}
               extruded={false}
               lineWidthMinPixels={1.2}
@@ -181,6 +189,30 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               getLineWidth={100}
               getFillColor={[102, 175, 233]}
               getLineColor={LINE_COLOR}
+            />
+          )}
+
+          {/* City labels */}
+          {options.withName && (
+            <GeoJsonLayer
+              id="city"
+              data={state.geoData?.city}
+              pickable={false}
+              stroked={true}
+              filled={false}
+              extruded={false}
+              getLineColor={[0, 0, 0, 255]}
+              getRadius={100}
+              lineWidthUnits="pixels"
+              getLineWidth={1}
+              lineMiterLimit={1}
+              pointType="circle+text"
+              getText={(f: any) => f.properties.NAME}
+              getTextSize={12}
+              getTextPixelOffset={[0, 8]}
+              textFontFamily="CircularXX"
+              textCharacterSet="auto"
+              pointRadiusScale={5}
             />
           )}
 
