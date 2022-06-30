@@ -3,7 +3,7 @@ import * as React from "react";
 import { Download } from "react-feather";
 import { downloadUrl } from "src/shared";
 import { useContext } from "../context";
-import { domDataUrlDownload } from "../domain/download";
+import { domDataUrlDownload } from "../domain/dom";
 
 /**
  * The underlying DOM element which is rendered by this component.

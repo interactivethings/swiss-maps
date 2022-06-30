@@ -8,7 +8,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
 import { defaultOptions, Shape } from "src/shared";
 
-
 /**
  * Difference from `generate` api
  * - suppport svg styling (the default is fill all with black)
@@ -60,6 +59,12 @@ export default async function handler(
       return;
     }
 
+    if (!query.shapes) {
+      res.setHeader("Content-Type", "text/plain");
+      res.status(204).send("0");
+      return;
+    }
+
     const options = produce(defaultOptions, (draft) => {
       if (query.year) {
         draft.year = query.year;
@@ -101,7 +106,9 @@ export default async function handler(
       "-clean",
       `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
       // svg coloring, otherwise is all bblack
-      shapes.has("cantons") ? `-style fill='#e6e6e6' stroke='#999' target='cantons'` : "",
+      shapes.has("cantons")
+        ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
+        : "",
       shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
       `-o output.${format} format=${format} target=*`,
     ].join("\n");

@@ -6,3 +6,7 @@ export function domDataUrlDownload(dataURL: string, name: string) {
   dl.click();
   dl.remove();
 }
+
+export function domCopyText(copyText: string) {
+  navigator.clipboard.writeText(copyText);
+}
