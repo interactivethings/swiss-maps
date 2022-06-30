@@ -26,10 +26,6 @@ const HeadMeta = withRouter(
       {/* DEFAULT */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      {/* FAVICON */}
-      {/* <link rel="icon" type="image/x-icon" href={favicon} />
-      <link rel="apple-touch-icon" href={favicon} />  */}
-
       {title != null && <title key="title">{title}</title>}
       {description != null && (
         <meta name="description" key="description" content={description} />
