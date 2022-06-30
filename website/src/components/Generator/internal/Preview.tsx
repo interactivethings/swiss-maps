@@ -3,9 +3,11 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import * as MUI from "@material-ui/core";
 import clsx from "clsx";
+import * as d3 from "d3";
 import cityData from "public/swiss-city-topo.json";
 import * as React from "react";
 import { useQuery } from "react-query";
+import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
 import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
@@ -36,6 +38,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     geoData: {
       country: undefined as any,
       cantons: undefined as any,
+      neighbors: undefined as Array<number[]> | undefined,
       municipalities: undefined as any,
       lakes: undefined as any,
       city: undefined as any,
@@ -65,6 +68,9 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
 
       if (json.objects?.cantons) {
         draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+        draft.geoData.neighbors = topojson.neighbors(
+          json.objects.cantons.geometries
+        );
       }
 
       if (json.objects?.municipalities) {
@@ -107,6 +113,35 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     [mutate]
   );
 
+  /** 
+   * Automatic map coloring
+   * See https://observablehq.com/@mbostock/map-coloring
+   * */
+  const colorIndex = (() => {
+    const { cantons, neighbors } = state.geoData;
+    if (!neighbors) {
+      return undefined;
+    }
+    const index = new Int32Array(cantons.features.length);
+    for (let i = 0; i < index.length; ++i) {
+      index[i] = ((d3.max(neighbors[i], (j) => index[j]) as number) + 1) | 0;
+    }
+    return index;
+  })();
+
+  const getColor = React.useMemo(() => {
+    const color = COLOR_SCHEMA_MAP[options.color];
+    if (!color) return () => "#eee";
+
+    return d3
+      .scaleOrdinal<string>()
+      // domain is decided by coloring item size
+      // currently only support cantons
+      // if not exist, a random number 30 is assigned
+      .domain(["1", state.geoData?.cantons?.length ?? "30"])
+      .range(color);
+  }, [options.color, state.geoData.cantons]);
+
   return (
     <div className={clsx(classes.root)}>
       {isFetching && (
@@ -148,13 +183,22 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               pickable={false}
               stroked={true}
               filled={true}
-              getFillColor={[230, 230, 230]}
+              getFillColor={(d: any, { index }: { index: number }) => {
+                if (!colorIndex) {
+                  return [230, 230, 230];
+                }
+                const c = getColor(String(colorIndex[index]));
+                const { r, g, b } = d3.color(c) as d3.RGBColor;
+                return [r, g, b];
+              }}
               extruded={false}
               lineWidthMinPixels={1.2}
               lineWidthMaxPixels={3.6}
               getLineWidth={200}
               lineMiterLimit={1}
               getLineColor={[120, 120, 120]}
+              // update layer when option.color change
+              updateTriggers={{ getFillColor: [options.color] }}
             />
           )}
 

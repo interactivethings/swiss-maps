@@ -2,7 +2,7 @@ import * as MUI from "@material-ui/core";
 import * as React from "react";
 import {
   SupportedColorSchema,
-  SUPPORTED_COLOR_LIST,
+  SUPPORTED_COLOR_LIST
 } from "src/domain/color-schema";
 import { useContext } from "../context";
 import ShapeOption from "./ShapeOption";
@@ -169,6 +169,28 @@ function Panel(props: Props) {
             label="Include names"
           />
         </div>
+      </div>
+
+      {/* Coloring */}
+      <div className={classes.section}>
+        <MUI.Typography variant="h3">Color</MUI.Typography>
+        <MUI.TextField
+          fullWidth
+          select
+          value={state.options.color}
+          onChange={(ev) => {
+            mutate((draft) => {
+              draft.options.color = ev.target.value as SupportedColorSchema;
+            });
+          }}
+          size="small"
+        >
+          {SUPPORTED_COLOR_LIST.map((x, i) => (
+            <MUI.MenuItem key={i} value={`${x}`}>
+              {x}
+            </MUI.MenuItem>
+          ))}
+        </MUI.TextField>
       </div>
 
       {/* Year */}

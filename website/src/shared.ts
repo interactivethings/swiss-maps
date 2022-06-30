@@ -1,4 +1,5 @@
 import * as qs from "querystring";
+import { SupportedColorSchema } from "./domain/color-schema";
 
 export type Shape =
   | "country"
@@ -19,6 +20,7 @@ export interface Options {
   year: string;
   simplify: number;
   shapes: Set<Shape>;
+  color: SupportedColorSchema;
   withName: boolean;
 }
 
@@ -29,6 +31,7 @@ export const defaultOptions: Options = {
   year: "2022",
   simplify: 0,
   shapes: new Set<Shape>(["country", "cantons", "lakes"]),
+  color: "zvv",
   withName: true,
 };
 
