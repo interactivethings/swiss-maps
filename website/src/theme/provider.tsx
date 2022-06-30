@@ -1,5 +1,5 @@
 import * as MUI from "@material-ui/core";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core";
 import * as React from "react";
 import createGenerateClassName from "./createGenerateClassName";
 import options from "./options";
@@ -15,7 +15,7 @@ declare module "@material-ui/core/styles/createTypography" {
   }
 }
 
-const theme = createMuiTheme(options as any);
+const theme = createTheme(options as any);
 export const generateClassName = createGenerateClassName();
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {

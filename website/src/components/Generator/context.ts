@@ -1,6 +1,6 @@
 import { Draft } from "immer/dist/internal";
 import * as React from "react";
-import { Options, Shape } from "src/shared";
+import { defaultOptions, Options, Shape } from "src/shared";
 
 export interface State {
   options: Options;
@@ -14,14 +14,7 @@ export interface Value {
 
 const Context = React.createContext<Value>({
   state: {
-    options: {
-      format: "topojson",
-      projection: "wgs84",
-      dimensions: { width: 900, height: 600 },
-      year: "2020",
-      simplify: 0,
-      shapes: new Set(["country"] as Array<Shape>),
-    },
+    options: defaultOptions,
   },
   mutate: () => {
     throw new Error("Not Implemented");
