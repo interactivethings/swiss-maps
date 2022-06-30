@@ -39,7 +39,7 @@ function Export(props: Props) {
         size="large"
         variant="contained"
         color="primary"
-        href={downloadUrl({ ...state.options, format: "topojson" })}
+        href={downloadUrl({ ...state.options, format: "topojson" }, "v0")}
         startIcon={<Download />}
       >
         TopoJSON
@@ -50,7 +50,7 @@ function Export(props: Props) {
         size="large"
         variant="contained"
         color="primary"
-        href={downloadUrl({ ...state.options, format: "svg" })}
+        href={downloadUrl({ ...state.options, format: "svg" }, "v0")}
         startIcon={<Download />}
       >
         SVG

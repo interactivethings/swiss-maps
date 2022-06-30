@@ -47,7 +47,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
 
   const { data: json, isFetching } = useQuery(
     ["preview", options.year, options.simplify, ...options.shapes],
-    () => fetch(previewSourceUrl(options)).then((res) => res.json())
+    () => fetch(previewSourceUrl(options, "v0")).then((res) => res.json())
   );
 
   React.useEffect(() => {
@@ -113,7 +113,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     [mutate]
   );
 
-  /** 
+  /**
    * Automatic map coloring
    * See https://observablehq.com/@mbostock/map-coloring
    * */
@@ -133,13 +133,15 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     const color = COLOR_SCHEMA_MAP[options.color];
     if (!color) return () => "#eee";
 
-    return d3
-      .scaleOrdinal<string>()
-      // domain is decided by coloring item size
-      // currently only support cantons
-      // if not exist, a random number 30 is assigned
-      .domain(["1", state.geoData?.cantons?.length ?? "30"])
-      .range(color);
+    return (
+      d3
+        .scaleOrdinal<string>()
+        // domain is decided by coloring item size
+        // currently only support cantons
+        // if not exist, a random number 30 is assigned
+        .domain(["1", state.geoData?.cantons?.length ?? "30"])
+        .range(color)
+    );
   }, [options.color, state.geoData.cantons]);
 
   return (

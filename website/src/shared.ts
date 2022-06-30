@@ -39,10 +39,10 @@ export const defaultOptions: Options = {
  * Returns the URL to the TopoJSON file, used in the Preview component
  * to render the map in the browser.
  */
-export function previewSourceUrl(options: Options): string {
+export function previewSourceUrl(options: Options, version = "generate"): string {
   const { projection, year, shapes, simplify } = options;
 
-  return `/api/generate?${qs.encode({
+  return `/api/${version}?${qs.encode({
     format: "topojson",
     projection,
     year,
@@ -55,10 +55,10 @@ export function previewSourceUrl(options: Options): string {
  * Returns an URL where the user can download the map. These URLs are used by
  * the Download TopoJSON / SVG buttons.
  */
- export function downloadUrl(options: Options): string {
+ export function downloadUrl(options: Options, version = "generate"): string {
   const { format, projection, dimensions, year, shapes, simplify } = options;
 
-  return `/api/generate?${qs.encode({
+  return `/api/${version}?${qs.encode({
     format,
     projection,
     width: dimensions.width,
