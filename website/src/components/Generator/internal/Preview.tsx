@@ -4,6 +4,7 @@ import DeckGL from "@deck.gl/react";
 import * as MUI from "@material-ui/core";
 import clsx from "clsx";
 import * as React from "react";
+import { useQuery } from "react-query";
 import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
@@ -37,49 +38,36 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     },
   });
 
+  const { data: json, isFetching } = useQuery(
+    ["todos", options.year, options.simplify, ...options.shapes],
+    () => fetch(previewSourceUrl(options)).then((res) => res.json())
+  );
+
   React.useEffect(() => {
-    (async () => {
-      try {
-        mutate((draft) => {
-          draft.fetching = true;
-        });
-
-        const res = await fetch(previewSourceUrl(options));
-        const json = await res.json();
-
-        mutate((draft) => {
-          if (json.objects.country) {
-            draft.geoData.country = topojson.feature(
-              json,
-              json.objects.country
-            );
-          }
-
-          if (json.objects.cantons) {
-            draft.geoData.cantons = topojson.feature(
-              json,
-              json.objects.cantons
-            );
-          }
-
-          if (json.objects.municipalities) {
-            draft.geoData.municipalities = topojson.feature(
-              json,
-              json.objects.municipalities
-            );
-          }
-
-          if (json.objects.lakes) {
-            draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
-          }
-        });
-      } finally {
-        mutate((draft) => {
-          draft.fetching = false;
-        });
+    if (!json) {
+      return;
+    }
+    mutate((draft) => {
+      if (json.objects?.country) {
+        draft.geoData.country = topojson.feature(json, json.objects.country);
       }
-    })();
-  }, [options]);
+
+      if (json.objects?.cantons) {
+        draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+      }
+
+      if (json.objects?.municipalities) {
+        draft.geoData.municipalities = topojson.feature(
+          json,
+          json.objects.municipalities
+        );
+      }
+
+      if (json.objects?.lakes) {
+        draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
+      }
+    });
+  }, [json]);
 
   /*
   const onViewStateChange = React.useCallback(
