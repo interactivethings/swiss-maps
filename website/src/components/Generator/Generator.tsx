@@ -14,12 +14,13 @@ const Root = "div";
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
-const Preview = dynamic(() => import("./internal/Preview"), {
+const Preview = dynamic(() => import("./internal/WrappedPreview"), {
   ssr: false,
 });
 
 function Generator(props: Props, ref: any) {
   const { ...rest } = props;
+  const deckRef = React.useRef<any>(null);
 
   const [state, mutate] = useImmer<State>({
     options: defaultOptions,
@@ -39,9 +40,9 @@ function Generator(props: Props, ref: any) {
         }}
         {...rest}
       >
-        <Preview />
+        <Preview deckRef={deckRef} />
         <Panel />
-        <Export />
+        <Export deckRef={deckRef} />
         <Stats />
       </Root>
     </Provider>

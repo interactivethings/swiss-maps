@@ -21,7 +21,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-function Preview({}: Props) {
+export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   const classes = useStyles();
   const ctx = useContext();
   const { options } = ctx.state;
@@ -117,6 +117,7 @@ function Preview({}: Props) {
       </div>
 
       <DeckGL
+        ref={deckRef}
         controller={{ type: MapController }}
         viewState={state.viewState}
         // onViewStateChange={onViewStateChange}
@@ -228,7 +229,7 @@ function Preview({}: Props) {
       </DeckGL>
     </div>
   );
-}
+});
 
 const useStyles = MUI.makeStyles(
   (theme) => ({
@@ -270,8 +271,6 @@ const useStyles = MUI.makeStyles(
   }),
   { name: "XuiGenerator:Preview" }
 );
-
-export default Preview;
 
 type BBox = [[number, number], [number, number]];
 
