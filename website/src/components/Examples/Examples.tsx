@@ -36,6 +36,28 @@ function Examples(props: Props, ref: any) {
             />
           </MUI.CardMedia>
         </MUI.Card>
+        <MUI.Card className={classes.card} elevation={4}>
+          <MUI.CardMedia>
+            <iframe
+              style={{ display: "block" }}
+              width="100%"
+              height="340"
+              frameBorder="0"
+              src="https://observablehq.com/embed/@werehamster/switzerland-cantons?cell=map"
+            />
+          </MUI.CardMedia>
+        </MUI.Card>
+        <MUI.Card className={classes.card} elevation={4}>
+          <MUI.CardMedia>
+            <iframe
+              style={{ display: "block" }}
+              width="100%"
+              height="340"
+              frameBorder="0"
+              src="https://observablehq.com/embed/@echoyangyang/swiss-electricity-tariff?cells=chart"
+            />
+          </MUI.CardMedia>
+        </MUI.Card>
       </div>
     </Root>
   );
