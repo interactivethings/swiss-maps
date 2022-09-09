@@ -30,7 +30,7 @@
     "react-feather": "^2.0.10",
     "swiss-maps": "^4.2.0",
     "topojson": "^3.0.2",
-    "typescript": "^4.7.4",
+    "typescript": "^4.8.3",
     "use-immer": "^0.7.0"
   }
 }
