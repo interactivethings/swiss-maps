@@ -1,8 +1,5 @@
 name: Build Files
-on:
-  push:
-    tags-ignore:
-      - v[0-9]+.[0-9]+.[0-9]+*
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
