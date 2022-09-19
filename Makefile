@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05
 
 .PHONY: all topojson shapefile clean-generated
 
@@ -165,7 +165,15 @@ shapefile/2021/$(1).$(2): downloads/2021.zip
 
 shapefile/2022/$(1).$(2): downloads/2022.zip
 	@mkdir -p $$(dir $$@)
-	unzip -p $$< ggg_2022_LV95/shp/g1$(1)22.$(2) > $$@
+	unzip -p $$< ag-b-00.03-875-gg22/ggg_2022_LV95/shp/g1$(1)22.$(2) > $$@
+
+shapefile/2022-05/g.$(2): downloads/2022.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ag-b-00.03-875-gg22/ggg_2022_LV95/shp/g1g22_20220501.$(2) > $$@
+
+shapefile/2022-05/$(1).$(2): downloads/2022.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ag-b-00.03-875-gg22/ggg_2022_LV95/shp/g1$(1)22.$(2) > $$@
 
 # Files from 2018 on seem to be consistently structured
 shapefile/20%/$(1).$(2): downloads/20%.zip
@@ -190,7 +198,7 @@ $(foreach type,g k l s b,$(foreach ext,shp dbf prj shx,$(eval $(call extract_fro
 
 downloads/2022.zip:
 	mkdir -p $(dir $@)
-	curl -o $@ "https://www.bfs.admin.ch/bfsstatic/dam/assets/21224783/master"
+	curl -o $@ "https://dam-api.bfs.admin.ch/hub/api/dam/assets/22484210/master"
 
 downloads/2021.zip:
 	mkdir -p $(dir $@)
