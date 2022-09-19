@@ -1549,10 +1549,10 @@ styled-jsx@5.0.2:
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-5.0.2.tgz#ff230fd593b737e9e68b630a694d460425478729"
   integrity sha512-LqPQrbBh3egD57NBcHET4qcgshPks+yblyhPlH2GY8oaDgKs8SK4C3dBh3oSJjgzJ3G5t1SYEZGHkP+QEpX9EQ==
 
-swiss-maps@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.2.0.tgz#63f1c1e462680218421c6ced9b78d3bb9b5ef04d"
-  integrity sha512-DbTHjGNNqO/NqcbR7a2bnNgETPHGP+xogxAm47HDnJ5zwyoIu1Wde6TX6i4Dhb4FnV6L8BHfbv3v1+mJKyQTvA==
+swiss-maps@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.3.0.tgz#ca023f61f4577d718dfb595ea69eb6a03f68091d"
+  integrity sha512-DZOqnqCicmKq8oJ2Y62UZp8mi2U+rEf6wCb9W2aOCGA7z2xzfxKfEW4ZsdyXEfJpimLAAQ2DbN6C9RjSePOcAg==
 
 sync-request@5.0.0:
   version "5.0.0"
