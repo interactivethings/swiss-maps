@@ -70,8 +70,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.BZNR || this.properties.BEZIRK; name=this.properties.BZNAME || this.properties.NAME' \
-		-filter-fields id,name \
+		-each 'id=this.properties.BZNR || this.properties.BEZIRK; name=this.properties.BZNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
+		-filter-fields id,name,KTNR \
 	  -o format=shapefile encoding=utf8 $@
 
 # Clean up municipalities
@@ -82,8 +82,8 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 	yarn run mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME' \
-		-filter-fields id,name \
+		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
+		-filter-fields id,name,KTNR \
 		-filter '+id < 7000' \
 	  -o format=shapefile encoding=utf8 $@
 
