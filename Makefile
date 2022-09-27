@@ -61,8 +61,8 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.KTNR || this.properties.KT; name=this.properties.KTNAME || this.properties.NAME;  shape="canton"' \
-		-filter-fields id,name,shape \
+		-each 'id=this.properties.KTNR || this.properties.KT; name=this.properties.KTNAME || this.properties.NAME' \
+		-filter-fields id,name \
 	  -o format=shapefile encoding=utf8 $@
 
 # Clean up cantons
@@ -97,8 +97,8 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 	yarn run mapshaper \
 		-i $< \
 		-clean \
-		-each 'id=this.properties.SEENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.SEENAME || this.properties.GMDNAME || this.properties.NAME; shape="lake"' \
-		-filter-fields id,name,shape \
+		-each 'id=this.properties.SEENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.SEENAME || this.properties.GMDNAME || this.properties.NAME' \
+		-filter-fields id,name \
 		-filter '+id !== 9780' \
 	  -o format=shapefile encoding=utf8 $@
 
