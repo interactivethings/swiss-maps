@@ -31,7 +31,7 @@ export const defaultOptions: Options = {
   year: "2022",
   simplify: 0,
   shapes: new Set<Shape>(["country", "cantons", "lakes"]),
-  color: "zvv",
+  color: "default",
   withName: true,
 };
 

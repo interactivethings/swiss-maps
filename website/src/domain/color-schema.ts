@@ -37,7 +37,7 @@ export const COLOR_SCHEMA_CHEYSSON = [
 
 export const COLOR_SCHEMA_MAP = {
   none: undefined,
-  zvv: COLOR_SCHEMA_ZVV,
+  default: COLOR_SCHEMA_ZVV,
   cheysson: COLOR_SCHEMA_CHEYSSON,
   chalk: COLOR_SCHEMA_TEST,
 } as const;
