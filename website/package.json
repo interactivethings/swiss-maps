@@ -6,7 +6,7 @@
     "build": "cp -r node_modules/swiss-maps public/ && next build"
   },
   "dependencies": {
-    "@deck.gl/core": "^8.7.10",
+    "@deck.gl/core": "^8.8.11",
     "@deck.gl/layers": "^8.7.10",
     "@deck.gl/react": "^8.7.10",
     "@material-ui/core": "^4.12.4",
