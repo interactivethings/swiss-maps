@@ -1,4 +1,5 @@
 import * as MUI from "@material-ui/core";
+import Link from "next/link";
 import * as React from "react";
 
 /**
@@ -20,18 +21,13 @@ function Header(props: Props, ref: any) {
         <div />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          padding: "50px 60px",
-        }}
-      >
+      <div className={classes.constainer}>
         <div>
-          <MUI.Typography variant="h1" color="primary">
-            Swiss Maps Generator
-          </MUI.Typography>
+          <Link href="/" passHref>
+            <MUI.Link variant="h1" color="primary" underline="none">
+              Swiss Maps Generator
+            </MUI.Link>
+          </Link>
           <MUI.Typography
             variant="body1"
             color="primary"
@@ -41,21 +37,29 @@ function Header(props: Props, ref: any) {
           </MUI.Typography>
         </div>
 
-        <nav>
+        <nav className={classes.nav}>
           <MUI.Link
-            href="#examples"
+            href="/#examples"
             variant="h4"
             color="textPrimary"
-            style={{ padding: "10px 30px" }}
+            className={classes.navItem}
           >
             Examples
+          </MUI.Link>
+          <MUI.Link
+            href="/docs"
+            variant="h4"
+            color="textPrimary"
+            className={classes.navItem}
+          >
+            Documentation
           </MUI.Link>
           <MUI.Link
             href="https://github.com/interactivethings/swiss-maps"
             target="_blank"
             variant="h4"
             color="textPrimary"
-            style={{ padding: "10px 30px" }}
+            className={classes.navItem}
           >
             GitHub
           </MUI.Link>
@@ -71,6 +75,27 @@ const useStyles = MUI.makeStyles(
       position: "relative",
     },
 
+    constainer: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "50px 60px",
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
+        padding: theme.spacing(4),
+        alignItems: "flex-start",
+      },
+    },
+
+    nav: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: theme.spacing(3),
+    },
+    navItem: {
+      padding: theme.spacing(2, 0),
+    },
+
     pattern: {
       zIndex: -1,
       position: "absolute",
@@ -79,6 +104,7 @@ const useStyles = MUI.makeStyles(
       right: 0,
       bottom: 0,
       opacity: 0.5,
+      overflow: "hidden",
 
       "& img": {
         display: "block",

@@ -1,16 +1,22 @@
-import { MapController, WebMercatorViewport } from "@deck.gl/core";
+import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import * as MUI from "@material-ui/core";
 import clsx from "clsx";
+import * as d3 from "d3";
+import cityData from "public/swiss-city-topo.json";
 import * as React from "react";
+import { useQuery } from "react-query";
+import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
 import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
+import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
 
 interface Props {}
 
+// Viewport settings
 const INITIAL_VIEW_STATE = {
   latitude: 46.8182,
   longitude: 8.2275,
@@ -21,7 +27,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-function Preview({}: Props) {
+export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   const classes = useStyles();
   const ctx = useContext();
   const { options } = ctx.state;
@@ -32,54 +38,53 @@ function Preview({}: Props) {
     geoData: {
       country: undefined as any,
       cantons: undefined as any,
+      neighbors: undefined as Array<number[]> | undefined,
       municipalities: undefined as any,
       lakes: undefined as any,
+      city: undefined as any,
     },
   });
 
+  const { data: json, isFetching } = useQuery(
+    ["preview", options.year, options.simplify, ...options.shapes],
+    () => fetch(previewSourceUrl(options, "v0")).then((res) => res.json())
+  );
+
   React.useEffect(() => {
-    (async () => {
-      try {
-        mutate((draft) => {
-          draft.fetching = true;
-        });
-
-        const res = await fetch(previewSourceUrl(options));
-        const json = await res.json();
-
-        mutate((draft) => {
-          if (json.objects.country) {
-            draft.geoData.country = topojson.feature(
-              json,
-              json.objects.country
-            );
-          }
-
-          if (json.objects.cantons) {
-            draft.geoData.cantons = topojson.feature(
-              json,
-              json.objects.cantons
-            );
-          }
-
-          if (json.objects.municipalities) {
-            draft.geoData.municipalities = topojson.feature(
-              json,
-              json.objects.municipalities
-            );
-          }
-
-          if (json.objects.lakes) {
-            draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
-          }
-        });
-      } finally {
-        mutate((draft) => {
-          draft.fetching = false;
-        });
+    if (!json) {
+      return;
+    }
+    mutate((draft) => {
+      if (cityData) {
+        draft.geoData.city = topojson.feature(
+          cityData as any,
+          cityData.objects["swiss-city"] as any
+        );
       }
-    })();
-  }, [options]);
+
+      if (json.objects?.country) {
+        draft.geoData.country = topojson.feature(json, json.objects.country);
+      }
+
+      if (json.objects?.cantons) {
+        draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
+        draft.geoData.neighbors = topojson.neighbors(
+          json.objects.cantons.geometries
+        );
+      }
+
+      if (json.objects?.municipalities) {
+        draft.geoData.municipalities = topojson.feature(
+          json,
+          json.objects.municipalities
+        );
+      }
+
+      if (json.objects?.lakes) {
+        draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
+      }
+    });
+  }, [json]);
 
   /*
   const onViewStateChange = React.useCallback(
@@ -108,142 +113,207 @@ function Preview({}: Props) {
     [mutate]
   );
 
+  /**
+   * Automatic map coloring
+   * See https://observablehq.com/@mbostock/map-coloring
+   * */
+  const colorIndex = (() => {
+    const { cantons, neighbors } = state.geoData;
+    if (!neighbors) {
+      return undefined;
+    }
+    const index = new Int32Array(cantons.features.length);
+    for (let i = 0; i < index.length; ++i) {
+      index[i] = ((d3.max(neighbors[i], (j) => index[j]) as number) + 1) | 0;
+    }
+    return index;
+  })();
+
+  const getColor = React.useMemo(() => {
+    const color = COLOR_SCHEMA_MAP[options.color];
+    if (!color) return () => "#eee";
+
+    return (
+      d3
+        .scaleOrdinal<string>()
+        // domain is decided by coloring item size
+        // currently only support cantons
+        // if not exist, a random number 30 is assigned
+        .domain(["1", state.geoData?.cantons?.length ?? "30"])
+        .range(color)
+    );
+  }, [options.color, state.geoData.cantons]);
+
   return (
-    <div className={clsx(classes.root, { [classes.fetching]: state.fetching })}>
-      <div className={classes.loader}>
-        <MUI.Fade in style={{ transitionDelay: "800ms" }}>
-          <MUI.CircularProgress variant="indeterminate" size={300} />
-        </MUI.Fade>
-      </div>
+    <div className={clsx(classes.root)}>
+      {isFetching && (
+        <div className={classes.loader}>
+          <MUI.Fade in style={{ transitionDelay: "800ms" }}>
+            <MUI.CircularProgress variant="indeterminate" size={300} />
+          </MUI.Fade>
+        </div>
+      )}
 
-      <DeckGL
-        controller={{ type: MapController }}
-        viewState={state.viewState}
-        // onViewStateChange={onViewStateChange}
-        onResize={onResize}
-      >
-        {options.shapes.has("country") && (
-          <GeoJsonLayer
-            id="country"
-            data={state.geoData?.country}
-            pickable={false}
-            stroked={true}
-            filled={true}
-            getFillColor={[230, 230, 230]}
-            extruded={false}
-            getLineColor={[0, 0, 0, 255]}
-            getRadius={100}
-            lineWidthUnits="pixels"
-            getLineWidth={1}
-            lineMiterLimit={1}
-          />
-        )}
-
-        {options.shapes.has("cantons") && (
-          <GeoJsonLayer
-            id="cantons"
-            data={state.geoData.cantons}
-            pickable={false}
-            stroked={true}
-            filled={false}
-            getFillColor={[230, 230, 230]}
-            extruded={false}
-            lineWidthMinPixels={1.2}
-            lineWidthMaxPixels={3.6}
-            getLineWidth={200}
-            lineMiterLimit={1}
-            getLineColor={[120, 120, 120]}
-          />
-        )}
-
-        {state.geoData.municipalities &&
-          options.shapes.has("municipalities") && (
+      <div className={classes.deck}>
+        <DeckGL
+          ref={deckRef}
+          controller={{ type: MapController }}
+          viewState={state.viewState}
+          // onViewStateChange={onViewStateChange}
+          onResize={onResize}
+        >
+          {options.shapes.has("country") && (
             <GeoJsonLayer
-              id="municipalities"
-              data={state.geoData.municipalities}
+              id="country"
+              data={state.geoData?.country}
               pickable={false}
               stroked={true}
               filled={false}
-              getFillColor={[230, 230, 230]}
+              extruded={false}
+              getLineColor={[0, 0, 0, 255]}
+              getRadius={100}
+              lineWidthUnits="pixels"
+              getLineWidth={1}
+              lineMiterLimit={1}
+            />
+          )}
+
+          {options.shapes.has("cantons") && (
+            <GeoJsonLayer
+              id="cantons"
+              data={state.geoData.cantons}
+              pickable={false}
+              stroked={true}
+              filled={true}
+              getFillColor={(d: any, { index }: { index: number }) => {
+                if (!colorIndex) {
+                  return [230, 230, 230];
+                }
+                const c = getColor(String(colorIndex[index]));
+                const { r, g, b } = d3.color(c) as d3.RGBColor;
+                return [r, g, b];
+              }}
+              extruded={false}
+              lineWidthMinPixels={1.2}
+              lineWidthMaxPixels={3.6}
+              getLineWidth={200}
+              lineMiterLimit={1}
+              getLineColor={[120, 120, 120]}
+              // update layer when option.color change
+              updateTriggers={{ getFillColor: [options.color] }}
+            />
+          )}
+
+          {state.geoData.municipalities &&
+            options.shapes.has("municipalities") && (
+              <GeoJsonLayer
+                id="municipalities"
+                data={state.geoData.municipalities}
+                pickable={false}
+                stroked={true}
+                filled={false}
+                getFillColor={[230, 230, 230]}
+                extruded={false}
+                lineWidthMinPixels={0.5}
+                lineWidthMaxPixels={1}
+                getLineWidth={200}
+                lineMiterLimit={1}
+                getLineColor={LINE_COLOR}
+              />
+            )}
+
+          {options.shapes.has("lakes") && (
+            <GeoJsonLayer
+              id="lakes"
+              data={state.geoData.lakes}
+              pickable={false}
+              stroked={true}
+              filled={true}
               extruded={false}
               lineWidthMinPixels={0.5}
               lineWidthMaxPixels={1}
-              getLineWidth={200}
-              lineMiterLimit={1}
+              getLineWidth={100}
+              getFillColor={[102, 175, 233]}
               getLineColor={LINE_COLOR}
             />
           )}
 
-        {options.shapes.has("lakes") && (
-          <GeoJsonLayer
-            id="lakes"
-            data={state.geoData.lakes}
-            pickable={false}
-            stroked={true}
-            filled={true}
-            extruded={false}
-            lineWidthMinPixels={0.5}
-            lineWidthMaxPixels={1}
-            getLineWidth={100}
-            getFillColor={[102, 175, 233]}
-            getLineColor={LINE_COLOR}
-          />
-        )}
+          {/* City labels */}
+          {options.withName && (
+            <GeoJsonLayer
+              id="city"
+              data={state.geoData?.city}
+              pickable={false}
+              stroked={true}
+              filled={false}
+              extruded={false}
+              getLineColor={[0, 0, 0, 255]}
+              getRadius={100}
+              lineWidthUnits="pixels"
+              getLineWidth={1}
+              lineMiterLimit={1}
+              pointType="circle+text"
+              getText={(f: any) => f.properties.NAME}
+              getTextSize={12}
+              getTextPixelOffset={[0, 8]}
+              textFontFamily="CircularXX"
+              textCharacterSet="auto"
+              pointRadiusScale={5}
+            />
+          )}
 
-        {ctx.state.highlightedShape &&
-          options.shapes.has(ctx.state.highlightedShape) &&
-          (() => {
-            const data = state.geoData[
-              ctx.state.highlightedShape as keyof typeof state.geoData
-            ] as $FixMe;
+          {ctx.state.highlightedShape &&
+            options.shapes.has(ctx.state.highlightedShape) &&
+            (() => {
+              const data = state.geoData[
+                ctx.state.highlightedShape as keyof typeof state.geoData
+              ] as $FixMe;
 
-            if (ctx.state.highlightedShape === "lakes") {
-              return (
-                <GeoJsonLayer
-                  id="highlight"
-                  data={data}
-                  pickable={false}
-                  stroked={false}
-                  filled={true}
-                  extruded={false}
-                  getFillColor={[107, 61, 125]}
-                />
-              );
-            } else {
-              return (
-                <GeoJsonLayer
-                  id="highlight"
-                  data={data}
-                  pickable={false}
-                  stroked={true}
-                  filled={false}
-                  extruded={false}
-                  lineWidthUnits="pixels"
-                  getLineWidth={2}
-                  getLineColor={[107, 61, 125]}
-                />
-              );
-            }
-          })()}
-      </DeckGL>
+              if (ctx.state.highlightedShape === "lakes") {
+                return (
+                  <GeoJsonLayer
+                    id="highlight"
+                    data={data}
+                    pickable={false}
+                    stroked={false}
+                    filled={true}
+                    extruded={false}
+                    getFillColor={[107, 61, 125]}
+                  />
+                );
+              } else {
+                return (
+                  <GeoJsonLayer
+                    id="highlight"
+                    data={data}
+                    pickable={false}
+                    stroked={true}
+                    filled={false}
+                    extruded={false}
+                    lineWidthUnits="pixels"
+                    getLineWidth={2}
+                    getLineColor={[107, 61, 125]}
+                  />
+                );
+              }
+            })()}
+        </DeckGL>
+      </div>
     </div>
   );
-}
+});
 
 const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
-      position: "absolute",
       zIndex: 1,
-      top: 0,
-      left: theme.spacing(55),
-      right: 0,
-      bottom: 0,
+      position: "relative",
+      height: "100%",
+      flex: 1,
+    },
+    deck: {
       pointerEvents: "none",
     },
-
-    fetching: {},
-
     loader: {
       position: "absolute",
       zIndex: 2,
@@ -253,7 +323,6 @@ const useStyles = MUI.makeStyles(
       right: 0,
       bottom: 0,
       pointerEvents: "none",
-      opacity: 0,
 
       display: "grid",
       placeItems: "center",
@@ -262,62 +331,7 @@ const useStyles = MUI.makeStyles(
       transition: theme.transitions.create("all", {
         duration: theme.transitions.duration.short,
       }),
-
-      "$fetching &": {
-        opacity: 1,
-      },
     },
   }),
   { name: "XuiGenerator:Preview" }
 );
-
-export default Preview;
-
-type BBox = [[number, number], [number, number]];
-
-const CH_BBOX: BBox = [
-  [5.956800664952974, 45.81912371940225],
-  [10.493446773955753, 47.80741209797084],
-];
-
-const LINE_COLOR = [100, 100, 100, 127] as const;
-
-const constrainZoom = (
-  viewState: $FixMe,
-  bbox: BBox,
-  { padding = 60 }: { padding?: number } = {}
-) => {
-  const vp = new WebMercatorViewport(viewState);
-
-  const { width, height, zoom, longitude, latitude } = viewState;
-
-  const [x, y] = vp.project([longitude, latitude]);
-  const [x0, y1] = vp.project(bbox[0]);
-  const [x1, y0] = vp.project(bbox[1]);
-
-  const fitted = vp.fitBounds(bbox, { padding });
-
-  const [cx, cy] = vp.project([fitted.longitude, fitted.latitude]);
-
-  const h = height - padding * 2;
-  const w = width - padding * 2;
-
-  const h2 = h / 2;
-  const w2 = w / 2;
-
-  const y2 =
-    y1 - y0 < h ? cy : y - h2 < y0 ? y0 + h2 : y + h2 > y1 ? y1 - h2 : y;
-  const x2 =
-    x1 - x0 < w ? cx : x - w2 < x0 ? x0 + w2 : x + w2 > x1 ? x1 - w2 : x;
-
-  const p = vp.unproject([x2, y2]);
-
-  return {
-    ...viewState,
-    transitionDuration: 0,
-    transitionInterpolator: null,
-    zoom: Math.max(zoom, fitted.zoom),
-    longitude: p[0],
-    latitude: p[1],
-  };
-};

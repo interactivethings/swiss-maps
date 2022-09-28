@@ -42,8 +42,6 @@ You can read the files from the installed package directory, which is structured
 
 The TopoJSON file combines all layers into one file. Separate TopoJSON files for single layers will be added in the future.
 
-##
-
 ## Use the TopoJson files in your web application
 
 ### Load from Unpkg.com

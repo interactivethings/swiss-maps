@@ -4,6 +4,8 @@
 #
 
 YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05
+SHAPES := country cantons districts municipalities lakes
+SHAPEFILE_EXT := shp dbf prj shx
 
 .PHONY: all topojson shapefile clean-generated
 
@@ -30,7 +32,7 @@ clean-generated:
 # shapefile-20%: $(SHAPEFILE_TARGETS)
 # 	@echo Shapefiles 20$* extracted
 
-SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lakes,20%/$(type).shp)
+SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 
 20%/ch-combined.json: $(SHAPEFILE_TARGETS)
 	mkdir -p $(dir $@)
@@ -43,7 +45,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 
 # Clean up country
 # - Unify ID ("CH")
-20%/country.shp: $(foreach ext,shp dbf prj shx,shapefile/20%/l.$(ext))
+20%/country.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/l.$(ext))
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
 		-i $< \
@@ -54,7 +56,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 
 # Clean up cantons
 # - Unify IDs
-20%/cantons.shp: $(foreach ext,shp dbf prj shx,shapefile/20%/k.$(ext))
+20%/cantons.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/k.$(ext))
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
 		-i $< \
@@ -65,7 +67,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 
 # Clean up cantons
 # - Unify IDs
-20%/districts.shp: $(foreach ext,shp dbf prj shx,shapefile/20%/b.$(ext))
+20%/districts.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/b.$(ext))
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
 		-i $< \
@@ -77,7 +79,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 # Clean up municipalities
 # - Unify IDs
 # - Remove lakes (ID 9000+) and Liechtenstein municipalities from older shapefiles (ID 7000+)
-20%/municipalities.shp: $(foreach ext,shp dbf prj shx,shapefile/20%/g.$(ext))
+20%/municipalities.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/g.$(ext))
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
@@ -90,7 +92,7 @@ SHAPEFILE_TARGETS := $(foreach type,country cantons districts municipalities lak
 # Clean up lakes
 # - Unify IDs
 # - Remove Lago di Como (9780)
-20%/lakes.shp: $(foreach ext,shp dbf prj shx,shapefile/20%/s.$(ext))
+20%/lakes.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/s.$(ext))
 	mkdir -p $(dir $@)
 	yarn run mapshaper \
 		-i $< \
@@ -180,7 +182,7 @@ shapefile/20%/$(1).$(2): downloads/20%.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ggg_20$$*-LV95/shp/g1$(1)$$*.$(2) > $$@
 endef
-$(foreach type,g k l s b,$(foreach ext,shp dbf prj shx,$(eval $(call extract_from_archive,$(type),$(ext)))))
+$(foreach type,g k l s b,$(foreach ext,$(SHAPEFILE_EXT),$(eval $(call extract_from_archive,$(type),$(ext)))))
 
 # rename = $(if $(findstring districts,$(1)),b,$(if $(findstring lakes,$(1)),s,$(if $(findstring municipalities,$(1)),g,$(if $(findstring cantons,$(1)),k,$(if $(findstring countries,$(1)),l,$(if $(findstring b,$(1)),districts,$(if $(findstring s,$(1)),lakes,$(if $(findstring g,$(1)),municipalities,$(if $(findstring k,$(1)),cantons,$(if $(findstring l,$(1)),countries,$(1)))))))))))
 

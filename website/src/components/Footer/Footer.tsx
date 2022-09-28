@@ -18,45 +18,49 @@ function Footer(props: Props, ref: any) {
   return (
     <Root ref={ref} className={classes.root} {...rest}>
       <div className={classes.bar}>
-        <Icons.InteractiveThingsBrandmark40 />
+        <div className={classes.left}>
+          <Icons.InteractiveThingsBrandmark40 />
 
-        <MUI.Typography
-          variant="body1"
-          style={{ marginLeft: 16, marginRight: "auto" }}
-        >
-          Swiss Maps is created by Interactive Things.
-        </MUI.Typography>
+          <MUI.Typography
+            variant="body1"
+            style={{ marginLeft: 16, marginRight: "auto" }}
+          >
+            Swiss Maps is created by Interactive Things.
+          </MUI.Typography>
+        </div>
 
-        <MUI.Link
-          className={classes.website}
-          href="https://www.interactivethings.com/"
-        >
-          Visit Website
-        </MUI.Link>
+        <div className={classes.right}>
+          <MUI.Link
+            className={classes.website}
+            href="https://www.interactivethings.com/"
+          >
+            Visit Website
+          </MUI.Link>
 
-        <MUI.Link
-          className={classes.social}
-          aria-label="Interactive Things on Facebook"
-          href="https://facebook.com/interactivethings/"
-        >
-          <Icons.Facebook24 />
-        </MUI.Link>
+          <MUI.Link
+            className={classes.social}
+            aria-label="Interactive Things on Facebook"
+            href="https://facebook.com/interactivethings/"
+          >
+            <Icons.Facebook24 />
+          </MUI.Link>
 
-        <MUI.Link
-          className={classes.social}
-          aria-label="Interactive Things on Twitter"
-          href="https://twitter.com/ixt"
-        >
-          <Icons.Twitter24 />
-        </MUI.Link>
+          <MUI.Link
+            className={classes.social}
+            aria-label="Interactive Things on Twitter"
+            href="https://twitter.com/ixt"
+          >
+            <Icons.Twitter24 />
+          </MUI.Link>
 
-        <MUI.Link
-          className={classes.social}
-          aria-label="Interactive Things on Instagram"
-          href="https://instagram.com/interactivethings/"
-        >
-          <Icons.Instagram24 />
-        </MUI.Link>
+          <MUI.Link
+            className={classes.social}
+            aria-label="Interactive Things on Instagram"
+            href="https://instagram.com/interactivethings/"
+          >
+            <Icons.Instagram24 />
+          </MUI.Link>
+        </div>
       </div>
 
       <div className={classes.copyright}>
@@ -69,7 +73,10 @@ function Footer(props: Props, ref: any) {
 const useStyles = MUI.makeStyles(
   (theme) => ({
     root: {
-      padding: theme.spacing(5, 7.5, 7.5),
+      padding: theme.spacing(5, 7.5),
+      [theme.breakpoints.down("sm")]: {
+        padding: theme.spacing(5, 2, 2),
+      },
     },
 
     bar: {
@@ -77,13 +84,27 @@ const useStyles = MUI.makeStyles(
       backgroundColor: colors.palette.blue[900],
       color: theme.palette.common.white,
 
-      height: theme.spacing(8),
+      minHeight: theme.spacing(8),
       padding: theme.spacing(0, 3),
 
       display: "flex",
       alignItems: "center",
-    },
+      justifyContent: "space-between",
+      gap: theme.spacing(2),
 
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
+        padding: theme.spacing(3),
+      },
+    },
+    left: {
+      display: "flex",
+      alignItems: "center",
+    },
+    right: {
+      display: "flex",
+      alignItems: "center",
+    },
     website: {
       borderRadius: "20px",
       height: "40px",
@@ -95,7 +116,7 @@ const useStyles = MUI.makeStyles(
       color: "white",
       backgroundColor: colors.palette.blue[600],
 
-      margin: theme.spacing(0, 1),
+      marginRight: theme.spacing(1),
 
       display: "flex",
       alignItems: "center",

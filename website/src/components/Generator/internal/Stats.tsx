@@ -1,9 +1,9 @@
 import * as MUI from "@material-ui/core";
 import * as React from "react";
-import { Download } from "react-feather";
 import { downloadUrl } from "src/shared";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
+import { useQuery } from "react-query";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -13,40 +13,40 @@ const Root = MUI.Paper;
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Stats(props: Props) {
-  const classes = useStyles();
-
   const { ...rest } = props;
 
+  const classes = useStyles();
+
   const ctx = useContext();
+  const { options } = ctx.state;
 
   const [state, mutate] = useImmer({
-    topojson: {
-      size: 0,
-    },
-    svg: {
-      size: 0,
-    },
+    topojson: { size: 0 },
+    svg: { size: 0 },
   });
 
-  React.useEffect(() => {
-    (async () => {
-      const url = downloadUrl({ ...ctx.state.options, format: "topojson" });
-      const res = await fetch(url);
-      const text = await res.text();
-      mutate((draft) => {
-        draft.topojson.size = text.length;
-      });
-    })();
+  const { data: topoData } = useQuery(
+    ["stat", "topojson", options.year, options.simplify, ...options.shapes],
+    () =>
+      fetch(downloadUrl({ ...options, format: "topojson" }, "v0")).then((res) =>
+        res.text()
+      )
+  );
 
-    (async () => {
-      const url = downloadUrl({ ...ctx.state.options, format: "svg" });
-      const res = await fetch(url);
-      const text = await res.text();
-      mutate((draft) => {
-        draft.svg.size = text.length;
-      });
-    })();
-  }, [ctx.state.options]);
+  const { data: svgData,error } = useQuery(
+    ["stat", "svg", options.year, options.simplify, ...options.shapes],
+    () =>
+      fetch(downloadUrl({ ...options, format: "svg" }, "v0")).then((res) =>
+        res.text()
+      )
+  );
+
+  React.useEffect(() => {
+    mutate((draft) => {
+      draft.topojson.size = topoData?.length || 0;
+      draft.svg.size = svgData?.length || 0;
+    });
+  }, [topoData, svgData]);
 
   return (
     <Root elevation={4} className={classes.root} {...rest}>

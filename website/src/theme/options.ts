@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core";
 import createPalette from "@material-ui/core/styles/createPalette";
 import createTypography, {
   FontStyleOptions,
@@ -6,7 +6,7 @@ import createTypography, {
 import shadows from "./shadows";
 import * as colors from "./colors";
 
-const t = createMuiTheme({});
+const t = createTheme({});
 
 const fontFamily = "CircularXX, sans-serif";
 
