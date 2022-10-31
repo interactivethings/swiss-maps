@@ -12,7 +12,7 @@
     "@material-ui/core": "^4.12.4",
     "@types/cors": "^2.8.12",
     "@types/d3": "^7.4.0",
-    "@types/node": "^18.7.18",
+    "@types/node": "^18.11.8",
     "@types/react": "^16.9.55",
     "@types/topojson": "^3.2.3",
     "bezier-easing": "^2.1.0",
