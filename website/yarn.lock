@@ -51,12 +51,10 @@
     "@math.gl/polygon" "^3.5.7"
     earcut "^2.0.6"
 
-"@deck.gl/react@^8.7.10":
-  version "8.7.10"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.7.10.tgz#ba55557146543cfb04c296d7279ecf9de2bea7c2"
-  integrity sha512-PepgNXzzXlQ8BqfRlY4uttt0MDOfHaSdX/0LtueXJPN0RWP1bi/cP500vhTy6MAjsgtACIfDfoXLyU9mL/h6+w==
-  dependencies:
-    prop-types "^15.6.0"
+"@deck.gl/react@^8.8.19":
+  version "8.8.19"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.8.19.tgz#f63c274ce996aeb01d1d00405f8f023c6db1db89"
+  integrity sha512-gZ83zk3Z6nbvy2wvjqOt+VL5iNUHG4qn1u4iTzV3qAj06GjX7maEKyqfQtuljtCyEtYk/ZZlHzhTK5vSs6XOvQ==
 
 "@emotion/hash@^0.8.0":
   version "0.8.0"
@@ -1551,7 +1549,7 @@ promise@^8.0.0:
   dependencies:
     asap "~2.0.6"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
