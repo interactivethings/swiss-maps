@@ -1807,10 +1807,10 @@ unload@2.2.0:
     "@babel/runtime" "^7.6.2"
     detect-node "^2.0.4"
 
-use-immer@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.7.0.tgz#e3bfbb806b5e3ff6e37441be74c306d91c1e0962"
-  integrity sha512-Re4hjrP3a/2ABZjAc0b7AK9s626bnO+H33RO2VUhiDZ2StBz5B663K6WNNlr4QtHWaGUmvLpwt3whFvvWuolQw==
+use-immer@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.8.0.tgz#01f05f8ef3549b6f3e384e1fd26038f18346ae6d"
+  integrity sha512-FPZm/wZoR++r85lS7HWM8yD6AZVVZ0jdBpshYnal+12h2VM9q4TZ9hTdSFNXw87QpqqGxV6K9TN8IGmOrvUDBA==
 
 util-deprecate@~1.0.1:
   version "1.0.2"
