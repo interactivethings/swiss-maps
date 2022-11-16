@@ -31,7 +31,7 @@
     "react-query": "^3.39.1",
     "swiss-maps": "^4.3.0",
     "topojson": "^3.0.2",
-    "typescript": "^4.7.4",
+    "typescript": "^4.9.3",
     "use-immer": "^0.7.0"
   },
   "devDependencies": {}
