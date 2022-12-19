@@ -672,6 +672,11 @@
   resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.2.tgz#b695ff674e8216efa632a3d36ad51ae9843380c0"
   integrity sha512-+R0juSseERyoPvnBQ/cZih6bpF7IpCXlWbHRoCRzYzqpz6gWHOgf8o4MOEf6KBVuOyqU+gCNLkCWVIJAro8XyQ==
 
+adm-zip@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.9.tgz#b33691028333821c0cf95c31374c5462f2905a83"
+  integrity sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg==
+
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -1364,13 +1369,14 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-mapshaper@^0.6.5:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.5.tgz#08d01e76a269883f8875567b9ce674a7272b9214"
-  integrity sha512-VARJS3wwA4KfNSUjws/9dOAAxPThHpbN3kyvqa7WiVTJcyOedIjkyTaeBVtQlUZPht1cKqn0pb804ZEw1uBLAA==
+mapshaper@^0.6.14:
+  version "0.6.14"
+  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.14.tgz#9e823d7b58b6c1e2d992e8282f41df89ff939f5e"
+  integrity sha512-977AjH+J8LZiLvrvWaQv7fZ2b2nYWc5HldfT2kTC36n7vJthobFwWc1aYa5QnEMQm5mQ+VMR5Rjr1aVSpZ22SQ==
   dependencies:
     "@tmcw/togeojson" "^4.7.0"
     "@xmldom/xmldom" "^0.8.2"
+    adm-zip "^0.5.9"
     commander "7.0.0"
     cookies "^0.8.0"
     d3-color "2.0.0"
