@@ -24,38 +24,34 @@ const cors = initMiddleware(
 
 const generateFromShapefiles = async ({
   format,
-  year,
-  shapes,
-  simplify
-} : {
-  format: 'topojson' | 'svg',
-  year: string,
-  shapes: string[]
-  simplify?: number, 
+  shpFilenames,
+  simplify,
+}: {
+  format: "topojson" | "svg";
+  year: string;
+  shpFilenames: string[];
+  simplify?: number;
 }) => {
-
-    const input = await (async () => {
-      const props = shapes.flatMap((shape) => {
-        return ["shp", "dbf", "prj"].map(
-          async (ext) =>
-            [
-              `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public",
-                  "swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-            ] as const
-        );
+  const input = await (async () => {
+    const props = shpFilenames.flatMap((shpFilename) => {
+      const shape = path.basename(shpFilename, ".shp");
+      const fullPathWithoutExt = shpFilename.substring(
+        0,
+        shpFilename.length - ".shp".length
+      );
+      return ["shp", "dbf", "prj"].map(async (ext) => {
+        return [
+          `${shape}.${ext}`,
+          await fs.readFile(`${fullPathWithoutExt}.${ext}`),
+        ] as const;
       });
-      return Object.fromEntries(await Promise.all(props));
-    })();
+    });
+    return Object.fromEntries(await Promise.all(props));
+  })();
 
-    const inputFiles = shapes.map((shape) => `${shape}.shp`).join(" ");
+  const inputFiles = shpFilenames
+    .map((shpFilename) => `${path.basename(shpFilename)}`)
+    .join(" ");
 
   const commands = [
     `-i ${inputFiles} combine-files string-fields=*`,
@@ -87,11 +83,14 @@ export default async function handler(
     const options = parseOptions(req, res)!;
 
     const { format, year } = options;
+    const cwd = process.cwd();
 
     const output = await generateFromShapefiles({
       ...options,
-      shapes: [...options.shapes]
-    })
+      shpFilenames: [...options.shapes].map((shapeName) => {
+        return path.join(cwd, "public", "swiss-maps", year, `${shapeName}.shp`);
+      }),
+    });
 
     if (query.download !== undefined) {
       res.setHeader(
