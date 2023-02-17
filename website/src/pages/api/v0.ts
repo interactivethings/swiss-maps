@@ -121,6 +121,7 @@ export default async function handler(
 
     const output = await generate({
       ...options,
+      simplify: query.simplify as string,
       year,
       shapes: [...shapes],
       mapshaperCommands: [
