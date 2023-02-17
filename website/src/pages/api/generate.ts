@@ -1,12 +1,10 @@
 import Cors from "cors";
-import { either } from "fp-ts";
 import { promises as fs } from "fs";
-import { enableMapSet, produce } from "immer";
+import { enableMapSet } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
-import { defaultOptions, Shape } from "src/shared";
 import {
   formatContentTypes,
   formatExtensions,
