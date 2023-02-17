@@ -6,7 +6,9 @@ import {
   formatContentTypes,
   formatExtensions,
   initMiddleware,
+  makeMapshaperStyleCommands,
   parseOptions,
+  shapeIndexComparator,
 } from "./_utils";
 import { generate } from "./_generate";
 
@@ -22,50 +24,6 @@ const cors = initMiddleware(
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
-
-const truthy = <T>(x: T): x is Exclude<T, undefined | null> => {
-  return Boolean(x);
-};
-
-const makeMapshaperStyleCommands = (
-  shapeStyles: Record<
-    string,
-    null | {
-      fill?: string;
-      stroke?: string;
-    }
-  >
-) => {
-  return Object.entries(shapeStyles)
-    .map(([shapeName, style]) => {
-      if (style === null) {
-        return style;
-      }
-      return `-style target='${shapeName}' ${Object.entries(style)
-        .map(([propName, propValue]) => {
-          return `${propName}='${propValue}'`;
-        })
-        .join(" ")}`;
-    })
-    .filter(truthy);
-};
-
-const getShapeZIndex = (shape: string) => {
-  if (shape.includes("country")) {
-    return 3;
-  } else if (shape.includes("cantons")) {
-    return 2;
-  } else if (shape.includes("lakes")) {
-    return 1;
-  }
-  return 0;
-};
-
-const shapeIndexComparator = (a: string, b: string) => {
-  const za = getShapeZIndex(a);
-  const zb = getShapeZIndex(b);
-  return za === zb ? 0 : za < zb ? -1 : 1;
-};
 
 export default async function handler(
   req: NextApiRequest,
