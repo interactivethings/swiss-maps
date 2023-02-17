@@ -1,8 +1,5 @@
 import Cors from "cors";
-import { either } from "fp-ts";
-import { promises as fs } from "fs";
 import { enableMapSet } from "immer";
-import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
 import {
@@ -11,6 +8,7 @@ import {
   initMiddleware,
   parseOptions,
 } from "./_utils";
+import { generate } from "./_generate";
 
 /**
  * Difference from `generate` api
@@ -25,60 +23,48 @@ const cors = initMiddleware(
   })
 );
 
-const generate = async ({
-  format,
-  shapes,
-  year,
-  simplify,
-}: {
-  format: "topojson" | "svg";
-  shapes: Set<string>;
-  year: string;
-  simplify: number;
-}) => {
-  const input = await (async () => {
-    const props = [...shapes].flatMap((shape) => {
-      return ["shp", "dbf", "prj"].map(
-        async (ext) =>
-          [
-            `${shape}.${ext}`,
-            await fs.readFile(
-              path.join(
-                process.cwd(),
-                "public/swiss-maps",
-                year,
-                `${shape}.${ext}`
-              )
-            ),
-          ] as const
-      );
-    });
-    return Object.fromEntries(await Promise.all(props));
-  })();
+const truthy = <T>(x: T): x is Exclude<T, undefined | null> => {
+  return Boolean(x);
+};
 
-  const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
+const makeMapshaperStyleCommands = (
+  shapeStyles: Record<
+    string,
+    null | {
+      fill?: string;
+      stroke?: string;
+    }
+  >
+) => {
+  return Object.entries(shapeStyles)
+    .map(([shapeName, style]) => {
+      if (style === null) {
+        return style;
+      }
+      return `-style target='${shapeName}' ${Object.entries(style)
+        .map(([propName, propValue]) => {
+          return `${propName}='${propValue}'`;
+        })
+        .join(" ")}`;
+    })
+    .filter(truthy);
+};
 
-  const commands = [
-    `-i ${inputFiles} combine-files string-fields=*`,
-    simplify ? `-simplify ${simplify} keep-shapes` : "",
-    "-clean",
-    `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
-    // svg coloring, otherwise is all bblack
-    shapes.has("cantons")
-      ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
-      : "",
-    shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
-    `-o output.${format} format=${format} target=*`,
-  ].join("\n");
+const getShapeZIndex = (shape: string) => {
+  if (shape.includes("country")) {
+    return 3;
+  } else if (shape.includes("cantons")) {
+    return 2;
+  } else if (shape.includes("lakes")) {
+    return 1;
+  }
+  return 0;
+};
 
-  console.log("### Mapshaper commands ###");
-  console.log(commands);
-
-  const output = await mapshaper.applyCommands(commands, input);
-
-  return format === "topojson"
-    ? output["output.topojson"]
-    : output["output.svg"];
+const shapeIndexComparator = (a: string, b: string) => {
+  const za = getShapeZIndex(a);
+  const zb = getShapeZIndex(b);
+  return za === zb ? 0 : za < zb ? -1 : 1;
 };
 
 export default async function handler(
@@ -90,13 +76,58 @@ export default async function handler(
 
     const { query } = req;
     const options = parseOptions(req, res)!;
-    const { format } = options;
+    const { format, shapes, year } = options;
 
     if (!formatExtensions[format]) {
       res.status(500).json({ message: `Unsupported format ${format}` });
     }
 
-    const output = await generate(options);
+    const cwd = process.cwd();
+    const shpFilenames = [...options.shapes]
+      .map((shapeName) => {
+        return path.join(cwd, "public", "swiss-maps", year, `${shapeName}.shp`);
+      })
+      .sort(shapeIndexComparator);
+
+    const hasCantons = shapes.has("cantons");
+    const hasMunicipalities = shapes.has("municipalities");
+    const hasLakes = shapes.has("lakes");
+
+    const shapeStyles = {
+      country: {
+        fill: hasCantons || hasMunicipalities ? "transparent" : "#eee",
+        stroke: "#111",
+      },
+      lakes: hasLakes
+        ? {
+            fill: "#a1d0f7",
+          }
+        : null,
+      cantons: hasCantons
+        ? {
+            fill: hasMunicipalities ? "transparent" : "#eee",
+            stroke: "#666",
+          }
+        : null,
+      municipalities: hasMunicipalities
+        ? {
+            fill: "#eee",
+            stroke: hasCantons ? "#bbb" : "#666",
+          }
+        : null,
+    };
+
+    const styleCommands = makeMapshaperStyleCommands(shapeStyles);
+
+    const output = await generate({
+      ...options,
+      year,
+      shapes: [...shapes],
+      mapshaperCommands: [
+        ...styleCommands,
+        `-o output.${format} format=${format} target=*`,
+      ],
+    });
 
     if (query.download !== undefined) {
       res.setHeader(
