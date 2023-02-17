@@ -40,13 +40,6 @@ export default async function handler(
       res.status(500).json({ message: `Unsupported format ${format}` });
     }
 
-    const cwd = process.cwd();
-    const shpFilenames = [...options.shapes]
-      .map((shapeName) => {
-        return path.join(cwd, "public", "swiss-maps", year, `${shapeName}.shp`);
-      })
-      .sort(shapeIndexComparator);
-
     const hasCantons = shapes.has("cantons");
     const hasMunicipalities = shapes.has("municipalities");
     const hasLakes = shapes.has("lakes");
@@ -81,7 +74,7 @@ export default async function handler(
       ...options,
       simplify: query.simplify as string,
       year,
-      shapes: [...shapes],
+      shapes: [...shapes].sort(shapeIndexComparator),
       mapshaperCommands: [
         ...styleCommands,
         `-o output.${format} format=${format} target=*`,

@@ -8,6 +8,7 @@ import {
   formatExtensions,
   initMiddleware,
   parseOptions,
+  shapeIndexComparator,
 } from "./_utils";
 
 enableMapSet();
@@ -29,13 +30,12 @@ export default async function handler(
     const options = parseOptions(req, res)!;
 
     const { format, year, shapes } = options;
-    const cwd = process.cwd();
 
     const output = await generate({
       ...options,
       year,
       simplify: query.simplify as string,
-      shapes: [...shapes],
+      shapes: [...shapes].sort(shapeIndexComparator),
       mapshaperCommands: [
         `-o output.${format} format=${format} drop-table id-field=id target=*`,
       ],
