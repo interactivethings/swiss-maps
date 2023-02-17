@@ -7,40 +7,20 @@ import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
 import { defaultOptions, Shape } from "src/shared";
+import {
+  formatContentTypes,
+  formatExtensions,
+  initMiddleware,
+  parseOptions,
+} from "./_utils";
 
 enableMapSet();
-
-async function get(url: string) {
-  return fetch(url)
-    .then((res) => res.arrayBuffer())
-    .then((ab) => Buffer.from(ab));
-}
-
-function initMiddleware(middleware: $FixMe) {
-  return (req: NextApiRequest, res: NextApiResponse) =>
-    new Promise((resolve, reject) => {
-      middleware(req, res, (result: unknown) => {
-        if (result instanceof Error) {
-          return reject(result);
-        }
-        return resolve(result);
-      });
-    });
-}
 
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
-
-const Query = t.type({
-  format: t.union([t.undefined, t.literal("topojson"), t.literal("svg")]),
-  year: t.union([t.undefined, t.string]),
-  shapes: t.union([t.undefined, t.string]),
-  simplify: t.union([t.undefined, t.string]),
-  download: t.union([t.undefined, t.string]),
-});
 
 const generateFromShapefiles = async ({
   format,
@@ -103,57 +83,25 @@ export default async function handler(
   try {
     await cors(req, res);
 
-    const query = either.getOrElseW<unknown, undefined>(() => undefined)(
-      Query.decode(req.query)
-    );
+    const { query } = req;
+    const options = parseOptions(req, res)!;
 
-    if (!query) {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "text/plain");
-      res.end("Failed to decode query");
-      return;
-    }
+    const { format, year } = options;
 
-    const options = produce(defaultOptions, (draft) => {
-      if (query.year) {
-        draft.year = query.year;
-      }
-      if (query.format) {
-        draft.format = query.format;
-      }
-
-      if (query.shapes) {
-        draft.shapes = new Set<Shape>(query.shapes.split(",") as $FixMe);
-      }
-    });
-
-    const { format } = options
     const output = await generateFromShapefiles({
       ...options,
       shapes: [...options.shapes]
     })
 
-    if (format === "topojson") {
-      if (query.download !== undefined) {
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="swiss-maps.json"`
-        );
-      }
-
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).send(output["output.topojson"]);
-    } else if (format === "svg") {
-      res.setHeader("Content-Type", "image/svg+xml");
-
-      if (query.download !== undefined) {
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="swiss-maps.svg"`
-        );
-      }
-      res.status(200).send(output["output.svg"]);
+    if (query.download !== undefined) {
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="swiss-maps.${formatExtensions[format]}"`
+      );
     }
+
+    res.setHeader("Content-Type", formatContentTypes[format]);
+    res.status(200).send(output);
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Internal error" });
