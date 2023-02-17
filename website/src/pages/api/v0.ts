@@ -27,17 +27,16 @@ const cors = initMiddleware(
   })
 );
 
-
 const generate = async ({
   format,
   shapes,
   year,
-  simplify
+  simplify,
 }: {
-  format: 'topojson' | 'svg'
-  shapes: Set<string>,
-  year: string,
-  simplify: number
+  format: "topojson" | "svg";
+  shapes: Set<string>;
+  year: string;
+  simplify: number;
 }) => {
   const input = await (async () => {
     const props = [...shapes].flatMap((shape) => {
@@ -79,10 +78,10 @@ const generate = async ({
 
   const output = await mapshaper.applyCommands(commands, input);
 
-  return format === 'topojson' ? output['output.topojson'] : output['output.svg']
-}
-
-
+  return format === "topojson"
+    ? output["output.topojson"]
+    : output["output.svg"];
+};
 
 export default async function handler(
   req: NextApiRequest,
