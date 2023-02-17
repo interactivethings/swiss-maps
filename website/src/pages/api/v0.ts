@@ -41,6 +41,60 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
+const generate = async ({
+  format,
+  shapes,
+  year,
+  simplify
+}: {
+  format: 'topojson' | 'svg'
+  shapes: Set<string>,
+  year: string,
+  simplify: number
+}) => {
+  const input = await (async () => {
+    const props = [...shapes].flatMap((shape) => {
+      return ["shp", "dbf", "prj"].map(
+        async (ext) =>
+          [
+            `${shape}.${ext}`,
+            await fs.readFile(
+              path.join(
+                process.cwd(),
+                "public/swiss-maps",
+                year,
+                `${shape}.${ext}`
+              )
+            ),
+          ] as const
+      );
+    });
+    return Object.fromEntries(await Promise.all(props));
+  })();
+
+  const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
+
+  const commands = [
+    `-i ${inputFiles} combine-files string-fields=*`,
+    simplify ? `-simplify ${simplify} keep-shapes` : "",
+    "-clean",
+    `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
+    // svg coloring, otherwise is all bblack
+    shapes.has("cantons")
+      ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
+      : "",
+    shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
+    `-o output.${format} format=${format} target=*`,
+  ].join("\n");
+
+  console.log("### Mapshaper commands ###");
+  console.log(commands);
+
+  const output = await mapshaper.applyCommands(commands, input);
+
+  return format === 'topojson' ? output['output.topojson'] : output['output.svg']
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -76,47 +130,8 @@ export default async function handler(
         draft.shapes = new Set<Shape>(query.shapes.split(",") as $FixMe);
       }
     });
-    const { format, year, shapes } = options;
-
-    const input = await (async () => {
-      const props = [...shapes].flatMap((shape) => {
-        return ["shp", "dbf", "prj"].map(
-          async (ext) =>
-            [
-              `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public/swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-            ] as const
-        );
-      });
-      return Object.fromEntries(await Promise.all(props));
-    })();
-
-    const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
-
-    const commands = [
-      `-i ${inputFiles} combine-files string-fields=*`,
-      query.simplify ? `-simplify ${query.simplify} keep-shapes` : "",
-      "-clean",
-      `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
-      // svg coloring, otherwise is all bblack
-      shapes.has("cantons")
-        ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
-        : "",
-      shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
-      `-o output.${format} format=${format} target=*`,
-    ].join("\n");
-
-    console.log("### Mapshaper commands ###");
-    console.log(commands);
-
-    const output = await mapshaper.applyCommands(commands, input);
+    const { format } = options;
+    const output = await generate(options)
 
     switch (format) {
       case "topojson": {
@@ -128,7 +143,7 @@ export default async function handler(
         }
 
         res.setHeader("Content-Type", "application/json");
-        res.status(200).send(output["output.topojson"]);
+        res.status(200).send(output);
         break;
       }
 
@@ -141,7 +156,7 @@ export default async function handler(
             `attachment; filename="swiss-maps.svg"`
           );
         }
-        res.status(200).send(output["output.svg"]);
+        res.status(200).send(output);
         break;
       }
       default:
