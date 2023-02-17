@@ -34,6 +34,7 @@ export default async function handler(
     const output = await generate({
       ...options,
       year,
+      simplify: query.simplify as string,
       shapes: [...shapes],
       mapshaperCommands: [
         `-o output.${format} format=${format} drop-table id-field=id target=*`,

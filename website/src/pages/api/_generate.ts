@@ -11,7 +11,7 @@ export const generate = async ({
 }: {
   format: "topojson" | "svg";
   shapes: string[];
-  simplify: number;
+  simplify: string;
   mapshaperCommands?: string[];
   year: string;
 }) => {
