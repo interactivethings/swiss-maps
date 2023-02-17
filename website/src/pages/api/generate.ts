@@ -42,6 +42,60 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
+const generateFromShapefiles = async ({
+  format,
+  year,
+  shapes,
+  simplify
+} : {
+  format: 'topojson' | 'svg',
+  year: string,
+  shapes: string[]
+  simplify?: number, 
+}) => {
+
+    const input = await (async () => {
+      const props = shapes.flatMap((shape) => {
+        return ["shp", "dbf", "prj"].map(
+          async (ext) =>
+            [
+              `${shape}.${ext}`,
+              await fs.readFile(
+                path.join(
+                  process.cwd(),
+                  "public",
+                  "swiss-maps",
+                  year,
+                  `${shape}.${ext}`
+                )
+              ),
+            ] as const
+        );
+      });
+      return Object.fromEntries(await Promise.all(props));
+    })();
+
+    const inputFiles = shapes.map((shape) => `${shape}.shp`).join(" ");
+
+  const commands = [
+    `-i ${inputFiles} combine-files string-fields=*`,
+    // `-rename-layers ${shp.join(",")}`,
+    simplify ? `-simplify ${simplify} keep-shapes` : "",
+    "-clean",
+    `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
+    `-o output.${format} format=${format} drop-table id-field=id`,
+  ].join("\n");
+
+  console.log("### Mapshaper commands ###");
+  console.log(commands);
+
+  const output = await mapshaper.applyCommands(commands, input);
+
+  return format === "topojson"
+    ? output["output.topojson"]
+    : output["output.svg"];
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -72,45 +126,12 @@ export default async function handler(
         draft.shapes = new Set<Shape>(query.shapes.split(",") as $FixMe);
       }
     });
-    const { format, year, shapes } = options;
-    // console.log(year, shapes);
 
-    const input = await (async () => {
-      const props = [...shapes].flatMap((shape) => {
-        return ["shp", "dbf", "prj"].map(
-          async (ext) =>
-            [
-              `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public",
-                  "swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-            ] as const
-        );
-      });
-      return Object.fromEntries(await Promise.all(props));
-    })();
-
-    const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
-
-    const commands = [
-      `-i ${inputFiles} combine-files string-fields=*`,
-      // `-rename-layers ${shp.join(",")}`,
-      query.simplify ? `-simplify ${query.simplify} keep-shapes` : "",
-      "-clean",
-      `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
-      `-o output.${format} format=${format} drop-table id-field=id`,
-    ].join("\n");
-
-    console.log("### Mapshaper commands ###");
-    console.log(commands);
-
-    const output = await mapshaper.applyCommands(commands, input);
+    const { format } = options
+    const output = await generateFromShapefiles({
+      ...options,
+      shapes: [...options.shapes]
+    })
 
     if (format === "topojson") {
       if (query.download !== undefined) {
