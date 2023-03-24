@@ -28,6 +28,6 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "mapshaper": "^0.5.68"
+    "mapshaper": "^0.6.25"
   }
 }
