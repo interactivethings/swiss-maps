@@ -3,6 +3,7 @@
   "extends": ["config:base"],
   "rangeStrategy": "bump",
   "prHourlyLimit": 0,
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "packageRules": [
     {
       "matchPackageNames": ["mapshaper"],
