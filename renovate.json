@@ -7,7 +7,7 @@
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
-      "addLabels": ["Dependencies"]
+      "addLabels": ["dependencies"]
     },
     {
       "matchPackageNames": ["mapshaper"],
