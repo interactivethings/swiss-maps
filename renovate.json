@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "rangeStrategy": "bump",
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "matchPackageNames": ["mapshaper"],
+      "groupName": "Mapshaper"
+    },
+    {
+      "extends": "monorepo:react",
+      "groupName": "React"
+    },
+    {
+      "extends": "monorepo:nextjs",
+      "groupName": "Next.js"
+    },
+    {
+      "matchPackageNames": ["immer", "use-immer"],
+      "groupName": "Immer"
+    },
+    {
+      "matchPackagePatterns": ["^@deck.gl/"],
+      "groupName": "deck.gl"
+    }
+  ]
+}
