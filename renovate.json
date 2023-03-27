@@ -6,6 +6,10 @@
   "postUpdateOptions": ["yarnDedupeHighest"],
   "packageRules": [
     {
+      "matchPackagePatterns": ["*"],
+      "addLabels": ["Dependencies"]
+    },
+    {
       "matchPackageNames": ["mapshaper"],
       "groupName": "Mapshaper"
     },
