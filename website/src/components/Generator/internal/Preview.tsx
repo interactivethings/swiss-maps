@@ -102,7 +102,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   */
 
   const onResize = React.useCallback(
-    ({ width, height }) => {
+    ({ width, height }: { width: number; height: number }) => {
       mutate((draft) => {
         draft.viewState = constrainZoom(
           { ...draft.viewState, width, height },
