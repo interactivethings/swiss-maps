@@ -23,7 +23,7 @@ function Header(props: Props, ref: any) {
 
       <div className={classes.constainer}>
         <div>
-          <Link href="/" passHref>
+          <Link href="/" passHref legacyBehavior>
             <MUI.Link variant="h1" color="primary" underline="none">
               Swiss Maps Generator
             </MUI.Link>
