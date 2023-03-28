@@ -36,8 +36,9 @@ export default function ShapeOption({
             color="primary"
             checked={state.options.shapes.has(shape)}
             onChange={(event) => {
+              const { checked } = event.currentTarget
               mutate((draft) => {
-                if (event.currentTarget.checked) {
+                if (checked) {
                   draft.options.shapes.add(shape);
                 } else {
                   draft.options.shapes.delete(shape);

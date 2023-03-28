@@ -54,8 +54,9 @@ function Panel(props: Props) {
           name="projection"
           value={state.options.projection}
           onChange={(ev) => {
+            const { value } = ev.target
             mutate((draft) => {
-              draft.options.projection = ev.target.value as $FixMe;
+              draft.options.projection = value as $FixMe;
             });
           }}
         >
@@ -87,8 +88,9 @@ function Panel(props: Props) {
                 }}
                 value={state.options.dimensions.width}
                 onChange={(ev) => {
+                  const { value } = ev.currentTarget
                   mutate((draft) => {
-                    draft.options.dimensions.width = +ev.currentTarget.value;
+                    draft.options.dimensions.width = +value;
                   });
                 }}
               />
@@ -102,8 +104,9 @@ function Panel(props: Props) {
                 }}
                 value={state.options.dimensions.height}
                 onChange={(ev) => {
+                  const { value } = ev.currentTarget
                   mutate((draft) => {
-                    draft.options.dimensions.height = +ev.currentTarget.value;
+                    draft.options.dimensions.height = +value;
                   });
                 }}
               />
@@ -160,8 +163,9 @@ function Panel(props: Props) {
                 color="primary"
                 checked={state.options.withName}
                 onChange={(event) => {
+                  const { checked } = event.currentTarget
                   mutate((draft) => {
-                    draft.options.withName = event.currentTarget.checked;
+                    draft.options.withName = checked;
                   });
                 }}
               />
@@ -179,8 +183,9 @@ function Panel(props: Props) {
           select
           value={state.options.color}
           onChange={(ev) => {
+            const { value } = ev.target
             mutate((draft) => {
-              draft.options.color = ev.target.value as SupportedColorSchema;
+              draft.options.color = value as SupportedColorSchema;
             });
           }}
           size="small"
@@ -201,8 +206,9 @@ function Panel(props: Props) {
           select
           value={state.options.year}
           onChange={(ev) => {
+            const { value } = ev.target
             mutate((draft) => {
-              draft.options.year = ev.target.value;
+              draft.options.year = value;
             });
           }}
           size="small"
