@@ -28,7 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
-    "react-query": "^3.39.1",
+    "@tanstack/react-query": "^4.0.5",
     "swiss-maps": "^4.3.0",
     "topojson": "^3.0.2",
     "typescript": "^5.0.2",
