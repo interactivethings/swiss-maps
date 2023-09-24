@@ -10,7 +10,7 @@
     "@deck.gl/layers": "^8.9.4",
     "@deck.gl/react": "^8.9.4",
     "@material-ui/core": "^4.12.4",
-    "@types/cors": "^2.8.13",
+    "@types/cors": "^2.8.14",
     "@types/d3": "^7.4.0",
     "@types/node": "^18.15.10",
     "@types/react": "^18.0.30",
