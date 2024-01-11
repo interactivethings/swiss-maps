@@ -30,7 +30,7 @@
       "groupName": "deck.gl"
     },
     {
-      "matchPackagePatterns": ["^@types/"],
+      "matchPackagePatterns": ["^@types/", "^typescript$"],
       "automerge": true
     }
   ]
