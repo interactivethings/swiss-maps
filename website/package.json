@@ -14,7 +14,7 @@
     "@types/d3": "^7.4.0",
     "@types/node": "^18.19.6",
     "@types/react": "^18.0.30",
-    "@types/topojson": "^3.2.3",
+    "@types/topojson": "^3.2.6",
     "bezier-easing": "^2.1.0",
     "clsx": "^2.0.0",
     "cors": "^2.8.5",
