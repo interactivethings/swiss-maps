@@ -28,6 +28,10 @@
     {
       "matchPackagePatterns": ["^@deck.gl/"],
       "groupName": "deck.gl"
+    },
+    {
+      "matchPackagePatterns": ["^@types/"],
+      "automerge": true
     }
   ]
 }
