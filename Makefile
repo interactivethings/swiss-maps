@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023 2024
 SHAPES := country cantons districts municipalities lakes
 SHAPEFILE_EXT := shp dbf prj shx
 
@@ -181,6 +181,10 @@ shapefile/2023/$(1).$(2): downloads/2023.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ag-b-00.03-875-gg23/ggg_2023_LV95/shp/g1$(1)23.$(2) > $$@
 
+shapefile/2024/$(1).$(2): downloads/2024.zip
+	@mkdir -p $$(dir $$@)
+	unzip -p $$< ag-b-00.03-875-gg24/ggg_2024_LV95/shp/g1$(1)24.$(2) > $$@
+
 # Files from 2018 on seem to be consistently structured
 shapefile/20%/$(1).$(2): downloads/20%.zip
 	@mkdir -p $$(dir $$@)
@@ -201,6 +205,10 @@ $(foreach type,g k l s b,$(foreach ext,$(SHAPEFILE_EXT),$(eval $(call extract_fr
 # 	@echo 'municipalities -> $(call rename,municipalities)'
 # 	@echo 'cantons -> $(call rename,cantons)'
 # 	@echo 'districts -> $(call rename,districts)'
+
+downloads/2024.zip:
+	mkdir -p $(dir $@)
+	curl -o $@ "https://dam-api.bfs.admin.ch/hub/api/dam/assets/30487000/master"
 
 downloads/2023.zip:
 	mkdir -p $(dir $@)
