@@ -1,12 +1,16 @@
 import Cors from "cors";
-import { either } from "fp-ts";
-import { promises as fs } from "fs";
-import { enableMapSet, produce } from "immer";
-import * as t from "io-ts";
-import * as mapshaper from "mapshaper";
+import { enableMapSet } from "immer";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
-import { defaultOptions, Shape } from "src/shared";
+import {
+  formatContentTypes,
+  formatExtensions,
+  initMiddleware,
+  makeMapshaperStyleCommands,
+  parseOptions,
+  shapeIndexComparator,
+} from "./_utils";
+import { generate } from "./_generate";
 
 /**
  * Difference from `generate` api
@@ -15,31 +19,11 @@ import { defaultOptions, Shape } from "src/shared";
 
 enableMapSet();
 
-function initMiddleware(middleware: $FixMe) {
-  return (req: NextApiRequest, res: NextApiResponse) =>
-    new Promise((resolve, reject) => {
-      middleware(req, res, (result: unknown) => {
-        if (result instanceof Error) {
-          return reject(result);
-        }
-        return resolve(result);
-      });
-    });
-}
-
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
-
-const Query = t.type({
-  format: t.union([t.undefined, t.literal("topojson"), t.literal("svg")]),
-  year: t.union([t.undefined, t.string]),
-  shapes: t.union([t.undefined, t.string]),
-  simplify: t.union([t.undefined, t.string]),
-  download: t.union([t.undefined, t.string]),
-});
 
 export default async function handler(
   req: NextApiRequest,
@@ -48,106 +32,63 @@ export default async function handler(
   try {
     await cors(req, res);
 
-    const query = either.getOrElseW<unknown, undefined>(() => undefined)(
-      Query.decode(req.query)
-    );
+    const { query } = req;
+    const options = parseOptions(req, res)!;
+    const { format, shapes, year } = options;
 
-    if (!query) {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "text/plain");
-      res.end("Failed to decode query");
-      return;
+    if (!formatExtensions[format]) {
+      res.status(500).json({ message: `Unsupported format ${format}` });
     }
 
-    if (!query.shapes) {
-      res.setHeader("Content-Type", "text/plain");
-      res.status(204).send("0");
-      return;
-    }
+    const hasCantons = shapes.has("cantons");
+    const hasMunicipalities = shapes.has("municipalities");
+    const hasLakes = shapes.has("lakes");
 
-    const options = produce(defaultOptions, (draft) => {
-      if (query.year) {
-        draft.year = query.year;
-      }
-      if (query.format) {
-        draft.format = query.format;
-      }
-      if (query.shapes) {
-        draft.shapes = new Set<Shape>(query.shapes.split(",") as $FixMe);
-      }
+    const shapeStyles = {
+      country: {
+        fill: hasCantons || hasMunicipalities ? "transparent" : "#eee",
+        stroke: "#111",
+      },
+      lakes: hasLakes
+        ? {
+            fill: "#a1d0f7",
+          }
+        : null,
+      cantons: hasCantons
+        ? {
+            fill: hasMunicipalities ? "transparent" : "#eee",
+            stroke: "#666",
+          }
+        : null,
+      municipalities: hasMunicipalities
+        ? {
+            fill: "#eee",
+            stroke: hasCantons ? "#bbb" : "#666",
+          }
+        : null,
+    };
+
+    const styleCommands = makeMapshaperStyleCommands(shapeStyles);
+
+    const output = await generate({
+      ...options,
+      simplify: query.simplify as string,
+      year,
+      shapes: [...shapes].sort(shapeIndexComparator),
+      mapshaperCommands: [
+        ...styleCommands,
+        `-o output.${format} format=${format} target=*`,
+      ],
     });
-    const { format, year, shapes } = options;
 
-    const input = await (async () => {
-      const props = [...shapes].flatMap((shape) => {
-        return ["shp", "dbf", "prj"].map(
-          async (ext) =>
-            [
-              `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public/swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-            ] as const
-        );
-      });
-      return Object.fromEntries(await Promise.all(props));
-    })();
-
-    const inputFiles = [...shapes].map((shape) => `${shape}.shp`).join(" ");
-
-    const commands = [
-      `-i ${inputFiles} combine-files string-fields=*`,
-      query.simplify ? `-simplify ${query.simplify} keep-shapes` : "",
-      "-clean",
-      `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
-      // svg coloring, otherwise is all bblack
-      shapes.has("cantons")
-        ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
-        : "",
-      shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
-      `-o output.${format} format=${format} target=*`,
-    ].join("\n");
-
-    console.log("### Mapshaper commands ###");
-    console.log(commands);
-
-    const output = await mapshaper.applyCommands(commands, input);
-
-    switch (format) {
-      case "topojson": {
-        if (query.download !== undefined) {
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename="swiss-maps.json"`
-          );
-        }
-
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).send(output["output.topojson"]);
-        break;
-      }
-
-      case "svg": {
-        res.setHeader("Content-Type", "image/svg+xml");
-
-        if (query.download !== undefined) {
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename="swiss-maps.svg"`
-          );
-        }
-        res.status(200).send(output["output.svg"]);
-        break;
-      }
-      default:
-        res.status(500).json({ message: "Unsupported format" });
-        break;
+    if (query.download !== undefined) {
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="swiss-maps.${formatExtensions[format]}"`
+      );
     }
+    res.setHeader("Content-Type", formatContentTypes[format]);
+    res.status(200).send(output);
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Internal error" });
