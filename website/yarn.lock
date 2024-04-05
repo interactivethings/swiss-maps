@@ -1459,10 +1459,10 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-mapshaper@^0.6.25:
-  version "0.6.25"
-  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.25.tgz#dedd7fb54dddd0e3f4af8e72bbb5745efc6bc82d"
-  integrity sha512-Np5LImN5Pdnp1R1H9RMoAZj0MA8parOmVj4MIFuHl1xQ1vNMDRC4ZvtAFYNqeOEncsUZqsMsBHjxCehi4qcWvw==
+mapshaper@^0.6.87:
+  version "0.6.87"
+  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.87.tgz#d4b4d831a50f19b005723acca0dba69b3c3e4a1d"
+  integrity sha512-8edC4dYpqg1rXTfSH1xfCIJVIOTdW7feVTagQv8HVEniChwvyFHmf3WW6a5hn+2e8Ic5wsKfs9q6FU4xyIXnTg==
   dependencies:
     "@placemarkio/tokml" "^0.3.3"
     "@tmcw/togeojson" "^5.6.0"
@@ -1480,8 +1480,8 @@ mapshaper@^0.6.25:
     iconv-lite "^0.6.3"
     idb-keyval "^6.2.0"
     kdbush "^3.0.0"
-    mproj "0.0.35"
-    msgpackr "^1.8.5"
+    mproj "0.0.38"
+    msgpackr "^1.10.1"
     opn "^5.3.0"
     rw "~1.3.3"
     sync-request "5.0.0"
@@ -1534,15 +1534,15 @@ mjolnir.js@^2.7.0:
     "@types/hammerjs" "^2.0.41"
     hammerjs "^2.0.8"
 
-mproj@0.0.35:
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/mproj/-/mproj-0.0.35.tgz#8a9f8f5e9822c530691476c951dc126fbce084ca"
-  integrity sha512-xqO9BXjTezwyPFbAShWRkYZ98DD9wWOyr86WX6miWq3brBNGypsErMmobpUx3G45SrfvyJ5jI997Zw0qr7Ko7A==
+mproj@0.0.38:
+  version "0.0.38"
+  resolved "https://registry.yarnpkg.com/mproj/-/mproj-0.0.38.tgz#c90a20665fb135b3aecbeeb6d0dfd562c339b96f"
+  integrity sha512-dIVHkXdfilVf/wfu4iPma0ifPCGBN7eRPGiBkF/r45EUf0+0SVQEnpcrmRU4KaU+Xe+tXNPJSYUg8omzrGEPhA==
   dependencies:
     geographiclib "1.48.0"
     rw "~1.3.2"
 
-msgpackr-extract@^3.0.1:
+msgpackr-extract@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/msgpackr-extract/-/msgpackr-extract-3.0.2.tgz#e05ec1bb4453ddf020551bcd5daaf0092a2c279d"
   integrity sha512-SdzXp4kD/Qf8agZ9+iTu6eql0m3kWm1A2y1hkpTeVNENutaB0BwHlSvAIaMxwntmRUAUjon2V4L8Z/njd0Ct8A==
@@ -1556,12 +1556,12 @@ msgpackr-extract@^3.0.1:
     "@msgpackr-extract/msgpackr-extract-linux-x64" "3.0.2"
     "@msgpackr-extract/msgpackr-extract-win32-x64" "3.0.2"
 
-msgpackr@^1.8.5:
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.8.5.tgz#8cadfb935357680648f33699d0e833c9179dbfeb"
-  integrity sha512-mpPs3qqTug6ahbblkThoUY2DQdNXcm4IapwOS3Vm/87vmpzLVelvp9h3It1y9l1VPpiFLV11vfOXnmeEwiIXwg==
+msgpackr@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.10.1.tgz#51953bb4ce4f3494f0c4af3f484f01cfbb306555"
+  integrity sha512-r5VRLv9qouXuLiIBrLpl2d5ZvPt8svdQTl5/vMvE4nzDMyEX4sgW5yWhuBBj5UmgwOTWj8CIdSXn5sAfsHAWIQ==
   optionalDependencies:
-    msgpackr-extract "^3.0.1"
+    msgpackr-extract "^3.0.2"
 
 nano-time@1.0.0:
   version "1.0.0"
