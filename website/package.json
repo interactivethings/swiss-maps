@@ -32,7 +32,7 @@
     "swiss-maps": "^4.5.0",
     "topojson": "^3.0.2",
     "typescript": "^5.4.3",
-    "use-immer": "^0.8.1"
+    "use-immer": "^0.10.0"
   },
   "devDependencies": {}
 }
