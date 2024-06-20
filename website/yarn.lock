@@ -1940,10 +1940,10 @@ unload@2.2.0:
     "@babel/runtime" "^7.6.2"
     detect-node "^2.0.4"
 
-use-immer@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.8.1.tgz#db7442bdd64ecf826ce274a91aa8cf821945cf0f"
-  integrity sha512-OfTFf1pL+ICjjcLPn9+ZnaJO/Yg4MBzYZtACEe2mZ/W2A5col28PNUnwowOAaBuOogACOK/37TU17KgsIhUpOw==
+use-immer@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.10.0.tgz#ed23afd424454604cb42bc112a455bddba894309"
+  integrity sha512-/eVwNR4TG9Tm/dd+aHYLLaI0FLfYKlkTqKMkn78Ah/EYVzWd/zJIgpkdoFEKbhQJOGo8XN7/mWrTx0exp1c+Ug==
 
 util-deprecate@~1.0.1:
   version "1.0.2"
