@@ -123,6 +123,22 @@ export default function Page() {
           borderRight: "1px solid #ccc",
           p: 1,
         }}
+        onKeyDown={(ev) => {
+          if (!groupedMutations) {
+            return;
+          }
+          const index = highlightedMunicipalities
+            ? groupedMutations.indexOf(highlightedMunicipalities)
+            : -1;
+          if (ev.key === "ArrowDown" && index < groupedMutations.length - 1) {
+            ev.preventDefault();
+            setHighlightedMunicipalities(groupedMutations[index + 1]);
+          }
+          if (ev.key === "ArrowUp" && index > 0) {
+            ev.preventDefault();
+            setHighlightedMunicipalities(groupedMutations[index - 1]);
+          }
+        }}
       >
         <Box sx={{ p: 1 }}>
           <Box
@@ -153,12 +169,18 @@ export default function Page() {
           </Box>
         </Box>
         {(groupedMutations ?? []).map((parsed, index) => {
+          const selected = highlightedMunicipalities === parsed;
           return (
             <ListItem
-              selected={highlightedMunicipalities === parsed}
+              selected={selected}
               key={index}
               button
               onClick={() => handleMutationSelect(parsed)}
+              ref={
+                selected
+                  ? (node) => node?.scrollIntoView({ behavior: "smooth" })
+                  : undefined
+              }
             >
               <ListItemText
                 primary={
@@ -171,7 +193,7 @@ export default function Page() {
                   </>
                 }
                 secondary={`${parsed.year}${
-                  parsed.type ? `- ${parsed.type?.toLowerCase()}` : ""
+                  parsed.type ? ` - ${parsed.type?.toLowerCase()}` : ""
                 }`}
               />
             </ListItem>
