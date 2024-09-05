@@ -7,134 +7,24 @@ import {
   List,
   ListItem,
   ListItemText,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import dynamic from "next/dynamic";
 import { groupBy } from "fp-ts/lib/NonEmptyArray";
 import { GeoDataFeature, useGeoData } from "src/domain/geodata";
+import {
+  MunicipalityMigrationData,
+  MunicipalityMigrationDataItem,
+} from "src/domain/municipality-migrations";
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { parse } from "path";
-
-const row = z.object({
-  "N° d'hist.": z.string(),
-  Canton: z.string(),
-  "N° du district": z.string(),
-  "Nom du district": z.string(),
-  "N° OFS commune": z.string().transform((x) => Number(x)),
-  "Nom de la commune": z.string(),
-  "Raison de la radiation": z.string(),
-  "Raison de l'inscription": z.string(),
-
-  "Numéro de mutation": z.string(),
-  "Type de mutation": z.string(),
-  "Entrée en vigueur": z.string(),
-});
-
-interface CsvRow {
-  "N° d'hist.": string;
-  Canton: string;
-  "N° du district": string;
-  "Nom du district": string;
-  "N° OFS commune": string;
-  "Nom de la commune": string;
-  "Raison de la radiation": string;
-  "Raison de l'inscription": string;
-  "Numéro de mutation": string;
-  "Type de mutation": string;
-  "Entrée en vigueur": string;
-}
-
-const parseHTML = (htmlContent: string) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(
-    `<html><body>${htmlContent}</body></html>`,
-    "text/html"
-  );
-  const table = doc.querySelector("table");
-  if (!table) {
-    throw new Error("Could not find table");
-  }
-  const rows = table.querySelectorAll("tr");
-  const headers = Array.from(rows[0].querySelectorAll("th")).map(
-    (header) => header.textContent
-  );
-  const data: CsvRow[] = [];
-  for (let i = 1; i < rows.length; i++) {
-    const cells = rows[i].querySelectorAll("td");
-    const rowData: CsvRow = {} as CsvRow;
-    for (let j = 0; j < cells.length; j++) {
-      const header = headers[j];
-      if (!header) {
-        continue;
-      }
-      rowData[header as NonNullable<keyof CsvRow>] = cells[j]
-        .textContent as string;
-    }
-    data.push(rowData);
-  }
-
-  // Filter out special lines and extract mutation information
-  const filteredData: CsvRow[] = [];
-  let mutationInfo: { num: string; type: string; date: string } | null = null;
-
-  data.forEach((row) => {
-    if (row["N° d'hist."].includes("Numéro de mutation :")) {
-      mutationInfo = {
-        num: "",
-        type: "",
-        date: "",
-      };
-      const rx =
-        /Numéro de mutation : (.*), Type de mutation : (.*), Entrée en vigueur : (.*)/;
-      const match = row["N° d'hist."].match(rx);
-      if (match) {
-        mutationInfo.num = match[1];
-        mutationInfo.type = match[2];
-        mutationInfo.date = match[3];
-      }
-    } else {
-      if (mutationInfo) {
-        row["Numéro de mutation"] = mutationInfo.num;
-        row["Type de mutation"] = mutationInfo.type;
-        row["Entrée en vigueur"] = mutationInfo.date;
-      }
-      filteredData.push(row);
-    }
-  });
-
-  const mutations = z.array(row).parse(filteredData);
-  const groupedMutations = groupBy<Row>(
-    (mutation) => mutation["Numéro de mutation"]
-  )(mutations);
-
-  return groupedMutations;
-};
-
-type Row = z.infer<typeof row>;
+import { useQuery } from "react-query";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
 });
-
-const parseMutationRows = (rows: Row[]) => {
-  const removed = rows.filter((r) => r["Raison de la radiation"]);
-  const added = rows.filter((r) => r["Raison de l'inscription"]);
-  return {
-    label: `+ ${added
-      .map((x) => x["Nom de la commune"])
-      .join(", ")} / - ${removed
-      .map((x) => x["Nom de la commune"])
-      .join(", ")}`,
-    added,
-    removed,
-    year: Number(rows[0]?.["Entrée en vigueur"].split(".")[2]),
-    "Entrée en vigueur": rows[0]?.["Entrée en vigueur"],
-    "Numéro de mutation": rows[0]?.["Numéro de mutation"],
-  };
-};
-
-type Parsed = ReturnType<typeof parseMutationRows>;
 
 const INITIAL_VIEW_STATE = {
   latitude: 46.8182,
@@ -149,22 +39,27 @@ const INITIAL_VIEW_STATE = {
 };
 
 export default function Page() {
-  const [groupedMutations, setGroupedMutations] = useState<
-    ReturnType<typeof parseMutationRows>[]
-  >([]);
+  const [year1, setYear1] = useState("2022");
+  const [year2, setYear2] = useState("2024");
+  const { data: groupedMutations } = useQuery({
+    queryKey: ["mutations", year1, year2],
+    queryFn: async () => {
+      const mutations = (await (
+        await fetch(`/api/mutations?from=01.01.${year1}&to=01.01.${year2}`)
+      ).json()) as MunicipalityMigrationData;
+      console.log({ mutations });
+      return mutations;
+    },
+  });
   const [highlightedMunicipalities, setHighlightedMunicipalities] =
-    useState<Parsed>();
+    useState<MunicipalityMigrationDataItem>();
 
-  const handleMutationSelect = (parsed: Parsed) => {
+  const handleMutationSelect = (parsed: MunicipalityMigrationDataItem) => {
     setHighlightedMunicipalities(parsed);
-    setYear1(`${parsed.year - 1}`);
-    setYear2(`${parsed.year}`);
   };
 
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
 
-  const [year1, setYear1] = useState("2022");
-  const [year2, setYear2] = useState("2024");
   const { data: geoData1 } = useGeoData({
     year: year1,
     format: "topojson",
@@ -188,7 +83,7 @@ export default function Page() {
   });
   useEffect(() => {
     const { added = [], removed = [] } = highlightedMunicipalities ?? {};
-    const all = [...added, ...removed].map((x) => x["N° OFS commune"]);
+    const all = [...added, ...removed].map((x) => x.ofsNumber);
     const findFeature = (x: GeoDataFeature) => all.includes(x.properties?.id);
     const municipality =
       geoData1.municipalities?.features.find(findFeature) ??
@@ -213,17 +108,6 @@ export default function Page() {
     }
   }, [highlightedMunicipalities, geoData1, geoData2]);
 
-  const handleChangeContent = (html: string) => {
-    try {
-      const data = Object.values(parseHTML(html));
-      const groupedMutations = data.map(parseMutationRows);
-      setGroupedMutations(groupedMutations);
-      setHighlightedMunicipalities(groupedMutations[0]);
-    } catch (e) {
-      alert(e instanceof Error ? e.message : `${e}`);
-    }
-  };
-
   return (
     <Box
       display="grid"
@@ -241,38 +125,34 @@ export default function Page() {
         }}
       >
         <Box sx={{ p: 1 }}>
-          <Typography variant="body1">
-            Copy/paste here the HTML content of the mutation table, see for{" "}
-            <Link
-              target="_blank"
-              href="https://www.agvchapp.bfs.admin.ch/fr/mutations/results?EntriesFrom=01.01.2023&EntriesTo=01.01.2024"
-            >
-              here
-            </Link>
-            . Choose display "100" elements to be able to copy all mutations. .
-          </Typography>
-          <textarea
-            onPaste={(event) => {
-              event.preventDefault();
-              const clipboardData = event.clipboardData;
-              const html =
-                clipboardData.getData("text/html") ??
-                clipboardData.getData("text/plain");
-              event.currentTarget.value = html;
-              // Display the HTML in the textarea
-              handleChangeContent(html);
-            }}
-          />
-          <Button
-            size="small"
-            onClick={() => {
-              handleChangeContent(SAMPLE_HTML);
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              p: 1,
+              /** @ts-ignore */
+              gap: "0.5rem",
+              borderBottom: "1px solid #ccc",
             }}
           >
-            Load sample
-          </Button>
+            <TextField
+              label="From:"
+              variant="outlined"
+              value={year1}
+              onChange={(e) => setYear1(e.target.value)}
+              size="small"
+            />
+            <TextField
+              label="To:"
+              variant="outlined"
+              value={year2}
+              size="small"
+              onChange={(e) => setYear2(e.target.value)}
+            />
+          </Box>
         </Box>
-        {Object.values(groupedMutations).map((parsed, index) => {
+        {(groupedMutations ?? []).map((parsed, index) => {
           return (
             <ListItem
               selected={highlightedMunicipalities === parsed}
@@ -281,8 +161,18 @@ export default function Page() {
               onClick={() => handleMutationSelect(parsed)}
             >
               <ListItemText
-                primary={parsed.label}
-                secondary={`${parsed["Entrée en vigueur"]} - ${parsed["Numéro de mutation"]}`}
+                primary={
+                  <>
+                    <Typography variant="overline">
+                      {parsed.migrationNumber}
+                    </Typography>
+                    <br />
+                    <Typography variant="inherit">{parsed.label}</Typography>
+                  </>
+                }
+                secondary={`${parsed.year}${
+                  parsed.type ? `- ${parsed.type?.toLowerCase()}` : ""
+                }`}
               />
             </ListItem>
           );
@@ -306,12 +196,11 @@ export default function Page() {
                 }
                 highlightedMunicipalities={{
                   added:
-                    highlightedMunicipalities?.added.map(
-                      (x) => x["N° OFS commune"]
-                    ) ?? [],
+                    highlightedMunicipalities?.added.map((x) => x.ofsNumber) ??
+                    [],
                   removed:
                     highlightedMunicipalities?.removed.map(
-                      (x) => x["N° OFS commune"]
+                      (x) => x.ofsNumber
                     ) ?? [],
                 }}
               />
@@ -325,12 +214,11 @@ export default function Page() {
                 viewState={viewState}
                 highlightedMunicipalities={{
                   added:
-                    highlightedMunicipalities?.added.map(
-                      (x) => x["N° OFS commune"]
-                    ) ?? [],
+                    highlightedMunicipalities?.added.map((x) => x.ofsNumber) ??
+                    [],
                   removed:
                     highlightedMunicipalities?.removed.map(
-                      (x) => x["N° OFS commune"]
+                      (x) => x.ofsNumber
                     ) ?? [],
                 }}
               />
