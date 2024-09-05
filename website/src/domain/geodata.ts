@@ -4,26 +4,38 @@ import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { Value } from "../components/Generator/context";
 import { MultiPolygon } from "geojson";
+import { Feature, Geometry, GeoJsonProperties } from "geojson";
+
+export type GeoDataFeature = Feature<Geometry, GeoJsonProperties>;
+
+const castFeatures = (d: any) => {
+  return d as { features: GeoDataFeature[] };
+};
 
 const getGeoData = (json: any) => {
   const geoData = {
     country: json.objects?.country
-      ? topojson.feature(json, json.objects.country)
+      ? castFeatures(topojson.feature(json, json.objects.country))
       : undefined,
     cantons: json.objects?.cantons
-      ? topojson.feature(json, json.objects.cantons)
+      ? castFeatures(topojson.feature(json, json.objects.cantons))
       : undefined,
     neighbors: json.objects?.cantons
       ? topojson.neighbors(json.objects.cantons.geometries)
       : undefined,
     municipalities: json.objects?.municipalities
-      ? topojson.feature(json, json.objects.municipalities as MultiPolygon)
+      ? castFeatures(topojson.feature(json, json.objects.municipalities))
       : undefined,
     lakes: json.objects?.lakes
-      ? topojson.feature(json, json.objects.lakes)
+      ? castFeatures(topojson.feature(json, json.objects.lakes))
       : undefined,
     city: cityData
-      ? topojson.feature(cityData as any, cityData.objects["swiss-city"] as any)
+      ? castFeatures(
+          topojson.feature(
+            cityData as any,
+            cityData.objects["swiss-city"] as any
+          )
+        )
       : undefined,
   };
   return geoData;
@@ -33,6 +45,7 @@ const fetchGeoData = (options: Value["state"]["options"]) => {
   return fetch(previewSourceUrl(options, "v0"))
     .then((res) => res.json())
     .then((json) => {
+      console.log({ json });
       return getGeoData(json);
     });
 };
