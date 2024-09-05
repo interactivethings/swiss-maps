@@ -58,6 +58,21 @@ function Examples(props: Props, ref: any) {
             />
           </MUI.CardMedia>
         </MUI.Card>
+        <MUI.Card className={classes.card} elevation={4}>
+          <img
+            src="/screenshot-mutations.jpg"
+            width="100%"
+            alt="Screenshot of mutations tool"
+          />
+          <MUI.Box className={classes.cardFooter}>
+            <MUI.Typography className={classes.cardAuthor}>
+              InteractiveThings
+            </MUI.Typography>
+            <MUI.Link className={classes.cardTitle} href="/mutations">
+              Municipalities change audit
+            </MUI.Link>
+          </MUI.Box>
+        </MUI.Card>
       </div>
     </Root>
   );
@@ -79,6 +94,30 @@ const useStyles = MUI.makeStyles(
 
     card: {
       width: 424,
+    },
+
+    cardFooter: {
+      backgroundColor: "white",
+      borderTop: "1px solid #f0f0f0",
+      padding: theme.spacing(1, 2),
+      color: "black",
+    },
+
+    cardAuthor: {
+      fontSize: "13px",
+      fontWeight: "bold",
+      display: "inline",
+      marginRight: "0.375rem",
+    },
+
+    cardTitle: {
+      fontSize: "13px",
+      display: "inline",
+      fontWeight: "normal",
+
+      "&:active, &:visited": {
+        color: "black",
+      },
     },
   }),
   { name: "XuiExamples" }
