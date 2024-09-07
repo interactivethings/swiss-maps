@@ -32,11 +32,11 @@ const Minimap = ({
         data={geoDataMinimap.country}
       />
       <ScatterplotLayer
-        id="window"
+        id="location"
         stroked
         filled
         getRadius={() => 10000}
-        getPosition={(d) => d.coordinates}
+        getPosition={(d: { coordinates: [number, number] }) => d.coordinates}
         getFillColor={[0, 0, 255, 50]}
         getLineColor={[0, 0, 0]}
         getLineWidth={10}
