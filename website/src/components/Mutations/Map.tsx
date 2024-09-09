@@ -18,12 +18,25 @@ const MutationsMap = ({
   geoData: ReturnType<typeof useGeoData>["data"];
 } & ComponentProps<typeof DeckGL>) => {
   return (
-    <DeckGL controller={MapController} {...props}>
+    <DeckGL
+      controller={MapController}
+      getTooltip={({
+        object,
+      }: {
+        object: { properties: { name: string } };
+      }) => {
+        if (!object) {
+          return;
+        }
+        return "Municipality: " + object.properties.name;
+      }}
+      {...props}
+    >
       {geoData.municipalities && (
         <GeoJsonLayer
           id="municipalities"
           data={geoData.municipalities}
-          pickable={false}
+          pickable={true}
           stroked={true}
           filled={true}
           extruded={false}
