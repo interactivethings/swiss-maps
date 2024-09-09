@@ -91,7 +91,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
         // if not exist, a random number 30 is assigned
         .domain([
           "1",
-          geoData?.cantons?.features?.length
+          geoData.cantons?.features?.length
             ? `${geoData?.cantons?.features?.length}`
             : "30",
         ])
