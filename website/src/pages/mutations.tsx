@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -59,17 +59,26 @@ export default function Page() {
       return mutations;
     },
   });
-  const [highlightedMunicipalities, setHighlightedMunicipalities] =
+  const [migrationItem, setMigrationItem] =
     useState<MunicipalityMigrationDataItem>();
 
   const handleMutationSelect = (parsed: MunicipalityMigrationDataItem) => {
-    setHighlightedMunicipalities(parsed);
+    setMigrationItem(parsed);
   };
 
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
 
+  const geoDataYears = useMemo(() => {
+    if (!migrationItem) {
+      return [year1, year2] as const;
+    } else {
+      const year = Number(migrationItem.year);
+      return [year - 1, year] as const;
+    }
+  }, [migrationItem, year1, year2]);
+
   const { data: geoData1 } = useGeoData({
-    year: year1,
+    year: `${geoDataYears[0]}`,
     format: "topojson",
     simplify: 0.02,
     shapes: new Set(["municipalities"]),
@@ -80,7 +89,7 @@ export default function Page() {
   });
 
   const { data: geoData2 } = useGeoData({
-    year: year2,
+    year: `${geoDataYears[1]}`,
     format: "topojson",
     simplify: 0.02,
     shapes: new Set(["municipalities"]),
@@ -89,8 +98,9 @@ export default function Page() {
     dimensions: { width: 800, height: 600 },
     withName: false,
   });
+
   useEffect(() => {
-    const { added = [], removed = [] } = highlightedMunicipalities ?? {};
+    const { added = [], removed = [] } = migrationItem ?? {};
     const all = [...added, ...removed].map((x) => x.ofsNumber);
     const findFeature = (x: GeoDataFeature) => all.includes(x.properties?.id);
     const municipality =
@@ -108,13 +118,14 @@ export default function Page() {
         transitionDuration: 300,
       }));
     } else {
-      console.log(
-        "Cannot find municipality",
-        municipality,
-        highlightedMunicipalities
-      );
+      console.log("Cannot find municipality", municipality, migrationItem);
     }
-  }, [highlightedMunicipalities, geoData1, geoData2]);
+  }, [migrationItem, geoData1, geoData2]);
+
+  const highlightedMunicipalities = {
+    added: migrationItem?.added.map((x) => x.ofsNumber) ?? [],
+    removed: migrationItem?.removed.map((x) => x.ofsNumber) ?? [],
+  };
 
   return (
     <Box
@@ -135,16 +146,16 @@ export default function Page() {
           if (!groupedMutations) {
             return;
           }
-          const index = highlightedMunicipalities
-            ? groupedMutations.indexOf(highlightedMunicipalities)
+          const index = migrationItem
+            ? groupedMutations.indexOf(migrationItem)
             : -1;
           if (ev.key === "ArrowDown" && index < groupedMutations.length - 1) {
             ev.preventDefault();
-            setHighlightedMunicipalities(groupedMutations[index + 1]);
+            handleMutationSelect(groupedMutations[index + 1]);
           }
           if (ev.key === "ArrowUp" && index > 0) {
             ev.preventDefault();
-            setHighlightedMunicipalities(groupedMutations[index - 1]);
+            handleMutationSelect(groupedMutations[index - 1]);
           }
         }}
       >
@@ -177,7 +188,7 @@ export default function Page() {
           </Box>
         </Box>
         {(groupedMutations ?? []).map((parsed, index) => {
-          const selected = highlightedMunicipalities === parsed;
+          const selected = migrationItem === parsed;
           return (
             <ListItem
               selected={selected}
@@ -216,7 +227,7 @@ export default function Page() {
           height="100%"
         >
           <div>
-            <Typography variant="h5">{year1}</Typography>
+            <Typography variant="h5">{geoDataYears[0]}</Typography>
             <Box
               height="calc(100% - 2rem)"
               position="relative"
@@ -228,20 +239,12 @@ export default function Page() {
                 onViewStateChange={({ viewState }: { viewState: $FixMe }) =>
                   setViewState(viewState)
                 }
-                highlightedMunicipalities={{
-                  added:
-                    highlightedMunicipalities?.added.map((x) => x.ofsNumber) ??
-                    [],
-                  removed:
-                    highlightedMunicipalities?.removed.map(
-                      (x) => x.ofsNumber
-                    ) ?? [],
-                }}
+                highlightedMunicipalities={highlightedMunicipalities}
               />
             </Box>
           </div>
           <div>
-            <Typography variant="h5">{year2}</Typography>
+            <Typography variant="h5">{geoDataYears[1]}</Typography>
             <Box
               height="calc(100% - 2rem)"
               position="relative"
@@ -250,15 +253,7 @@ export default function Page() {
               <MutationsMap
                 geoData={geoData2}
                 viewState={viewState}
-                highlightedMunicipalities={{
-                  added:
-                    highlightedMunicipalities?.added.map((x) => x.ofsNumber) ??
-                    [],
-                  removed:
-                    highlightedMunicipalities?.removed.map(
-                      (x) => x.ofsNumber
-                    ) ?? [],
-                }}
+                highlightedMunicipalities={highlightedMunicipalities}
               />
             </Box>
           </div>
