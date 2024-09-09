@@ -4,15 +4,12 @@ import DeckGL from "@deck.gl/react";
 import * as MUI from "@material-ui/core";
 import clsx from "clsx";
 import * as d3 from "d3";
-import cityData from "public/swiss-city-topo.json";
 import * as React from "react";
-import { useQuery } from "react-query";
 import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
-import { previewSourceUrl } from "src/shared";
-import * as topojson from "topojson";
 import { useImmer } from "use-immer";
-import { useContext } from "../context";
+import { useContext, Value } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
+import { useGeoData } from "src/domain/geodata";
 
 interface Props {}
 
@@ -33,58 +30,11 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   const { options } = ctx.state;
 
   const [state, mutate] = useImmer({
-    fetching: false,
     viewState: INITIAL_VIEW_STATE,
-    geoData: {
-      country: undefined as any,
-      cantons: undefined as any,
-      neighbors: undefined as Array<number[]> | undefined,
-      municipalities: undefined as any,
-      lakes: undefined as any,
-      city: undefined as any,
-    },
   });
 
-  const { data: json, isFetching } = useQuery(
-    ["preview", options.year, options.simplify, ...options.shapes],
-    () => fetch(previewSourceUrl(options, "v0")).then((res) => res.json())
-  );
-
-  React.useEffect(() => {
-    if (!json) {
-      return;
-    }
-    mutate((draft) => {
-      if (cityData) {
-        draft.geoData.city = topojson.feature(
-          cityData as any,
-          cityData.objects["swiss-city"] as any
-        );
-      }
-
-      if (json.objects?.country) {
-        draft.geoData.country = topojson.feature(json, json.objects.country);
-      }
-
-      if (json.objects?.cantons) {
-        draft.geoData.cantons = topojson.feature(json, json.objects.cantons);
-        draft.geoData.neighbors = topojson.neighbors(
-          json.objects.cantons.geometries
-        );
-      }
-
-      if (json.objects?.municipalities) {
-        draft.geoData.municipalities = topojson.feature(
-          json,
-          json.objects.municipalities
-        );
-      }
-
-      if (json.objects?.lakes) {
-        draft.geoData.lakes = topojson.feature(json, json.objects.lakes);
-      }
-    });
-  }, [json]);
+  const query = useGeoData(options);
+  const { data: geoData, isFetching } = query;
 
   /*
   const onViewStateChange = React.useCallback(
@@ -118,11 +68,11 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
    * See https://observablehq.com/@mbostock/map-coloring
    * */
   const colorIndex = (() => {
-    const { cantons, neighbors } = state.geoData;
+    const { cantons, neighbors } = geoData;
     if (!neighbors) {
       return undefined;
     }
-    const index = new Int32Array(cantons.features.length);
+    const index = new Int32Array(cantons ? cantons.features.length : 0);
     for (let i = 0; i < index.length; ++i) {
       index[i] = ((d3.max(neighbors[i], (j) => index[j]) as number) + 1) | 0;
     }
@@ -139,10 +89,15 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
         // domain is decided by coloring item size
         // currently only support cantons
         // if not exist, a random number 30 is assigned
-        .domain(["1", state.geoData?.cantons?.length ?? "30"])
+        .domain([
+          "1",
+          geoData.cantons?.features?.length
+            ? `${geoData.cantons.features.length}`
+            : "30",
+        ])
         .range(color)
     );
-  }, [options.color, state.geoData.cantons]);
+  }, [options.color, geoData.cantons]);
 
   return (
     <div className={clsx(classes.root)}>
@@ -165,7 +120,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
           {options.shapes.has("country") && (
             <GeoJsonLayer
               id="country"
-              data={state.geoData?.country}
+              data={geoData?.country}
               pickable={false}
               stroked={true}
               filled={false}
@@ -181,7 +136,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
           {options.shapes.has("cantons") && (
             <GeoJsonLayer
               id="cantons"
-              data={state.geoData.cantons}
+              data={geoData.cantons}
               pickable={false}
               stroked={true}
               filled={true}
@@ -204,28 +159,27 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
             />
           )}
 
-          {state.geoData.municipalities &&
-            options.shapes.has("municipalities") && (
-              <GeoJsonLayer
-                id="municipalities"
-                data={state.geoData.municipalities}
-                pickable={false}
-                stroked={true}
-                filled={false}
-                getFillColor={[230, 230, 230]}
-                extruded={false}
-                lineWidthMinPixels={0.5}
-                lineWidthMaxPixels={1}
-                getLineWidth={200}
-                lineMiterLimit={1}
-                getLineColor={LINE_COLOR}
-              />
-            )}
+          {geoData.municipalities && options.shapes.has("municipalities") && (
+            <GeoJsonLayer
+              id="municipalities"
+              data={geoData.municipalities}
+              pickable={false}
+              stroked={true}
+              filled={false}
+              getFillColor={[230, 230, 230]}
+              extruded={false}
+              lineWidthMinPixels={0.5}
+              lineWidthMaxPixels={1}
+              getLineWidth={200}
+              lineMiterLimit={1}
+              getLineColor={[255, 0, 0, 255]}
+            />
+          )}
 
           {options.shapes.has("lakes") && (
             <GeoJsonLayer
               id="lakes"
-              data={state.geoData.lakes}
+              data={geoData.lakes}
               pickable={false}
               stroked={true}
               filled={true}
@@ -242,7 +196,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
           {options.withName && (
             <GeoJsonLayer
               id="city"
-              data={state.geoData?.city}
+              data={geoData?.city}
               pickable={false}
               stroked={true}
               filled={false}
@@ -265,8 +219,8 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
           {ctx.state.highlightedShape &&
             options.shapes.has(ctx.state.highlightedShape) &&
             (() => {
-              const data = state.geoData[
-                ctx.state.highlightedShape as keyof typeof state.geoData
+              const data = geoData[
+                ctx.state.highlightedShape as keyof typeof geoData
               ] as $FixMe;
 
               if (ctx.state.highlightedShape === "lakes") {
