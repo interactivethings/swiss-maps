@@ -92,7 +92,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
         .domain([
           "1",
           geoData.cantons?.features?.length
-            ? `${geoData?.cantons?.features?.length}`
+            ? `${geoData.cantons.features.length}`
             : "30",
         ])
         .range(color)
