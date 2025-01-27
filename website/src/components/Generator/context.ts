@@ -1,4 +1,4 @@
-import { Draft } from "immer/dist/internal";
+import { Draft } from "immer";
 import * as React from "react";
 import { defaultOptions, Options, Shape } from "src/shared";
 
