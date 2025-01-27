@@ -20,7 +20,7 @@ import {
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { parse } from "path";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 
