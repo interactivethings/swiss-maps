@@ -1,25 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "rangeStrategy": "bump",
   "prHourlyLimit": 0,
   "postUpdateOptions": ["yarnDedupeHighest"],
   "dependencyDashboardApproval": true,
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
-      "addLabels": ["dependencies"]
+      "addLabels": ["dependencies"],
+      "matchPackageNames": ["*"]
     },
     {
       "matchPackageNames": ["mapshaper"],
       "groupName": "Mapshaper"
     },
     {
-      "extends": "monorepo:react",
+      "extends": ["monorepo:react"],
       "groupName": "React"
     },
     {
-      "extends": "monorepo:nextjs",
+      "extends": ["monorepo:nextjs"],
       "groupName": "Next.js"
     },
     {
@@ -27,12 +27,12 @@
       "groupName": "Immer"
     },
     {
-      "matchPackagePatterns": ["^@deck.gl/"],
-      "groupName": "deck.gl"
+      "groupName": "deck.gl",
+      "matchPackageNames": ["/^@deck.gl//"]
     },
     {
-      "matchPackagePatterns": ["^@types/", "^typescript$"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^@types//", "/^typescript$/"]
     }
   ]
 }
