@@ -36,7 +36,7 @@
     "topojson": "^3.0.2",
     "typescript": "^5.7.3",
     "use-immer": "^0.11.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {}
 }
