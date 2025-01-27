@@ -2,7 +2,7 @@ import { ThemeProvider } from "@/theme";
 import { enableMapSet } from "immer";
 import { AppProps } from "next/app";
 import * as React from "react";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
 enableMapSet();
 

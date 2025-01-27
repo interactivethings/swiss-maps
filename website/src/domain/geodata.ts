@@ -1,5 +1,5 @@
 import cityData from "public/swiss-city-topo.json";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson";
 import { Value } from "../components/Generator/context";

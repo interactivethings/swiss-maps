@@ -3,7 +3,7 @@ import * as React from "react";
 import { downloadUrl } from "src/shared";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 /**
  * The underlying DOM element which is rendered by this component.
