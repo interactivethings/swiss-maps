@@ -1,10 +1,8 @@
-import { createTheme } from "@material-ui/core";
-import createPalette from "@material-ui/core/styles/createPalette";
-import createTypography, {
-  FontStyleOptions,
-} from "@material-ui/core/styles/createTypography";
+import { createTheme } from "@mui/material";
 import shadows from "./shadows";
 import * as colors from "./colors";
+import createTypography, { FontStyleOptions } from "@mui/material/styles/createTypography";
+import createPalette from "@mui/material/styles/createPalette";
 
 const t = createTheme({});
 

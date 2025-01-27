@@ -1,9 +1,10 @@
 import { domCopyText } from "@/components/Generator/domain/dom";
 import LayoutDefault from "@/components/Layout/LayoutDefault";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import { GetServerSideProps } from "next";
 import { Copy, Download } from "react-feather";
 import { downloadUrl } from "src/shared";
+import { makeStyles } from '@mui/styles';
 
 type Props = { host: string };
 
@@ -181,7 +182,7 @@ export default function Page(props: Props) {
   );
 }
 
-const useStyles = MUI.makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   container: {
     padding: "50px 60px",

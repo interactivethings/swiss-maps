@@ -1,6 +1,7 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -69,7 +70,7 @@ function Header(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       position: "relative",

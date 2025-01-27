@@ -1,7 +1,8 @@
 import * as React from "react";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as colors from "src/theme/colors";
 import { GitHub as IcGitHub } from "react-feather";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -34,7 +35,7 @@ function GitHub(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       backgroundColor: colors.palette.purple[100],
