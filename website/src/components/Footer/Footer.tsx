@@ -1,7 +1,8 @@
 import * as React from "react";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as colors from "src/theme/colors";
 import * as Icons from "@/icons";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -70,7 +71,7 @@ function Footer(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       padding: theme.spacing(5, 7.5),

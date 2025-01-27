@@ -1,4 +1,4 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import {
   SupportedColorSchema,
@@ -6,6 +6,7 @@ import {
 } from "src/domain/color-schema";
 import { useContext } from "../context";
 import ShapeOption from "./ShapeOption";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -229,7 +230,7 @@ function Panel(props: Props) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       padding: theme.spacing(5),

@@ -1,5 +1,5 @@
 import { generateClassName } from "@/theme";
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import { ServerStyleSheets } from "@mui/styles";
 import Document, {
   DocumentContext,
   Head,

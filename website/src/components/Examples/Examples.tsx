@@ -1,5 +1,6 @@
 import * as React from "react";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -78,7 +79,7 @@ function Examples(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       padding: theme.spacing(15, 3),

@@ -6,7 +6,8 @@ import { Provider, State } from "./context";
 import Export from "./internal/Export";
 import Panel from "./internal/Panel";
 import Stats from "./internal/Stats";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -44,7 +45,7 @@ function Generator(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       backgroundColor: "#F9F9F9",

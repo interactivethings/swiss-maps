@@ -1,8 +1,9 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import { Shape } from "src/shared";
 import * as colors from "src/theme/colors";
 import { useContext } from "../context";
+import { makeStyles } from '@mui/styles';
 
 export default function ShapeOption({
   shape,
@@ -53,7 +54,7 @@ export default function ShapeOption({
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       margin: theme.spacing(0, -1),

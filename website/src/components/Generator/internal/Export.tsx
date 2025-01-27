@@ -1,9 +1,10 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import { Download } from "react-feather";
 import { downloadUrl } from "src/shared";
 import { useContext } from "../context";
 import { domDataUrlDownload } from "../domain/dom";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -69,7 +70,7 @@ function Export(props: Props) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       position: "sticky",
