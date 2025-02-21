@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023 2024
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023 2024 2025
 SHAPES := country cantons districts municipalities lakes
 SHAPEFILE_EXT := shp dbf prj shx
 
@@ -84,7 +84,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 	yarn run mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
 		-clean \
-		-each 'id=this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
+		-each 'id=this.properties.GDENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
 		-filter-fields id,name,KTNR \
 		-filter '+id < 7000' \
 	  -o format=shapefile encoding=utf8 $@
@@ -185,6 +185,26 @@ shapefile/2024/$(1).$(2): downloads/2024.zip
 	@mkdir -p $$(dir $$@)
 	unzip -p $$< ag-b-00.03-875-gg24/ggg_2024_LV95/shp/g1$(1)24.$(2) > $$@
 
+shapefile/2025/$(1).$(2): downloads/2025.zip
+	@mkdir -p $$(dir $$@)
+	case $(1) in \
+		b) \
+		unzip -p $$< Districts_G1_20250101.$(2) > shapefile/2025/$(1).$(2) \
+		;; \
+		g) \
+		unzip -p $$< Communes_G1_20250101.$(2) > shapefile/2025/$(1).$(2) \
+		;; \
+		k) \
+		unzip -p $$< Cantons_G1_20250101.$(2) > shapefile/2025/$(1).$(2) \
+		;; \
+		l) \
+		unzip -p $$< Country_G1_20250101.$(2) > shapefile/2025/$(1).$(2) \
+		;; \
+		s) \
+		unzip -p $$< Lacs_G1_20250101.$(2) > shapefile/2025/$(1).$(2) \
+		;; \
+	esac
+
 # Files from 2018 on seem to be consistently structured
 shapefile/20%/$(1).$(2): downloads/20%.zip
 	@mkdir -p $$(dir $$@)
@@ -205,6 +225,12 @@ $(foreach type,g k l s b,$(foreach ext,$(SHAPEFILE_EXT),$(eval $(call extract_fr
 # 	@echo 'municipalities -> $(call rename,municipalities)'
 # 	@echo 'cantons -> $(call rename,cantons)'
 # 	@echo 'districts -> $(call rename,districts)'
+
+downloads/2025.zip:
+	mkdir -p $(dir $@)
+	curl -o downloads/2025.tmp.zip "https://dam-api.bfs.admin.ch/hub/api/dam/assets/34367751/master"
+	unzip -p downloads/2025.tmp.zip "ag-b-00.03-875-gg25/Historized boundaries G1 20250101/Historized_boundaries_G1_20250101_2056.shp.zip" > $@
+	rm downloads/2025.tmp.zip
 
 downloads/2024.zip:
 	mkdir -p $(dir $@)
@@ -267,4 +293,3 @@ downloads/2011.zip:
 downloads/2010.zip:
 	mkdir -p $(dir $@)
 	curl -o $@ "https://www.bfs.admin.ch/bfsstatic/dam/assets/301383/master"
-
