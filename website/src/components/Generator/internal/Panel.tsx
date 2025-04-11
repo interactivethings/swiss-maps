@@ -152,7 +152,7 @@ function Panel(props: Props) {
             value={simplify}
             onChange={(_, value) => {
               if (typeof value === "number") {
-                mutate((draft) => {
+                mutate(() => {
                   setSimplify(value);
                 });
               }

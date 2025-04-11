@@ -10,12 +10,6 @@ import { defaultOptions, Shape } from "src/shared";
 
 enableMapSet();
 
-async function get(url: string) {
-  return fetch(url)
-    .then((res) => res.arrayBuffer())
-    .then((ab) => Buffer.from(ab));
-}
-
 function initMiddleware(middleware: $FixMe) {
   return (req: NextApiRequest, res: NextApiResponse) =>
     new Promise((resolve, reject) => {
@@ -31,7 +25,7 @@ function initMiddleware(middleware: $FixMe) {
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "OPTIONS"],
-  })
+  }),
 );
 
 const Query = t.type({
@@ -44,13 +38,13 @@ const Query = t.type({
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     await cors(req, res);
 
     const query = either.getOrElseW<unknown, undefined>(() => undefined)(
-      Query.decode(req.query)
+      Query.decode(req.query),
     );
 
     if (!query) {
@@ -87,10 +81,10 @@ export default async function handler(
                   "public",
                   "swiss-maps",
                   year,
-                  `${shape}.${ext}`
-                )
+                  `${shape}.${ext}`,
+                ),
               ),
-            ] as const
+            ] as const,
         );
       });
       return Object.fromEntries(await Promise.all(props));
@@ -116,7 +110,7 @@ export default async function handler(
       if (query.download !== undefined) {
         res.setHeader(
           "Content-Disposition",
-          `attachment; filename="swiss-maps.json"`
+          `attachment; filename="swiss-maps.json"`,
         );
       }
 
@@ -128,7 +122,7 @@ export default async function handler(
       if (query.download !== undefined) {
         res.setHeader(
           "Content-Disposition",
-          `attachment; filename="swiss-maps.svg"`
+          `attachment; filename="swiss-maps.svg"`,
         );
       }
       res.status(200).send(output["output.svg"]);

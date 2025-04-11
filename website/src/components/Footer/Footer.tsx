@@ -96,7 +96,7 @@ const Bar = styled("div", {
 const Left = styled("div", {
   name: "SwissMaps-Footer",
   slot: "left",
-})(({ theme }) => ({
+})(() => ({
   display: "flex",
   alignItems: "center",
 }));
@@ -104,7 +104,7 @@ const Left = styled("div", {
 const Right = styled("div", {
   name: "SwissMaps-Footer",
   slot: "right",
-})(({ theme }) => ({
+})(() => ({
   display: "flex",
   alignItems: "center",
 }));

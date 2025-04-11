@@ -2,12 +2,11 @@ import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import * as MUI from "@mui/material";
-import clsx from "clsx";
 import * as d3 from "d3";
 import * as React from "react";
 import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
 import { useImmer } from "use-immer";
-import { useContext, Value } from "../context";
+import { useContext } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
 import { useGeoData } from "src/domain/geodata";
 import { styled } from "@mui/material/styles";
@@ -153,7 +152,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               pickable={false}
               stroked={true}
               filled={true}
-              getFillColor={(d: any, { index }: { index: number }) => {
+              getFillColor={(_d: any, { index }: { index: number }) => {
                 if (!colorIndex) {
                   return [230, 230, 230];
                 }
