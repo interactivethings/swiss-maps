@@ -14,8 +14,8 @@
     "@types/cors": "^2.8.17",
     "@types/d3": "^7.4.3",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.10.10",
-    "@types/react": "^19.0.8",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
     "@types/topojson": "^3.2.6",
     "bezier-easing": "^2.1.0",
     "clsx": "^2.1.1",
@@ -27,16 +27,16 @@
     "jsdom": "^26.0.0",
     "jss": "^10.10.0",
     "mapshaper": "^0.6.102",
-    "next": "^14.2.23",
+    "next": "^14.2.28",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-feather": "^2.0.10",
-    "@tanstack/react-query": "^4.0.5",
+    "@tanstack/react-query": "^4.36.1",
     "swiss-maps": "^4.5.0",
     "topojson": "^3.0.2",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.3",
     "use-immer": "^0.11.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   },
   "devDependencies": {}
 }
