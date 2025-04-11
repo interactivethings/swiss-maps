@@ -1,22 +1,38 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import {
   SupportedColorSchema,
-  SUPPORTED_COLOR_LIST
+  SUPPORTED_COLOR_LIST,
 } from "src/domain/color-schema";
 import { useContext } from "../context";
 import ShapeOption from "./ShapeOption";
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = MUI.Paper;
+const Root = styled(MUI.Paper, {
+  name: "SwissMaps-Generator-Panel",
+  slot: "root",
+})(({ theme }) => ({
+  padding: theme.spacing(5),
+  margin: theme.spacing(5, 0, 5, 5),
+  width: 400,
+  display: "flex",
+  flexDirection: "column",
+  zIndex: 1,
+  borderRadius: 8,
+  overflowY: "scroll",
+  maxHeight: 700,
+  [theme.breakpoints.down("sm")]: {
+    width: "auto",
+    margin: theme.spacing(2),
+  },
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Panel(props: Props) {
-  const classes = useStyles();
-
   const { ...rest } = props;
 
   const { state, mutate } = useContext();
@@ -24,7 +40,7 @@ function Panel(props: Props) {
   const [simplify, setSimplify] = React.useState(state.options.simplify);
 
   return (
-    <Root elevation={4} className={classes.root} {...rest}>
+    <Root elevation={4} {...rest}>
       {/* <div style={{ marginBottom: 32 }}>
           <MUI.Typography variant="h3">Region</MUI.Typography>
           <MUI.TextField
@@ -37,24 +53,24 @@ function Panel(props: Props) {
           </MUI.TextField>
         </div> */}
 
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Shapes</MUI.Typography>
 
         <ShapeOption shape="country" label="Switzerland" />
         <ShapeOption shape="cantons" label="Cantons" />
         <ShapeOption shape="municipalities" label="Municipalities" />
         <ShapeOption shape="lakes" label="Lakes" />
-      </div>
+      </Section>
 
       {/* Projection */}
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Projection</MUI.Typography>
 
         <MUI.RadioGroup
           name="projection"
           value={state.options.projection}
           onChange={(ev) => {
-            const { value } = ev.target
+            const { value } = ev.target;
             mutate((draft) => {
               draft.options.projection = value as $FixMe;
             });
@@ -88,7 +104,7 @@ function Panel(props: Props) {
                 }}
                 value={state.options.dimensions.width}
                 onChange={(ev) => {
-                  const { value } = ev.currentTarget
+                  const { value } = ev.currentTarget;
                   mutate((draft) => {
                     draft.options.dimensions.width = +value;
                   });
@@ -104,7 +120,7 @@ function Panel(props: Props) {
                 }}
                 value={state.options.dimensions.height}
                 onChange={(ev) => {
-                  const { value } = ev.currentTarget
+                  const { value } = ev.currentTarget;
                   mutate((draft) => {
                     draft.options.dimensions.height = +value;
                   });
@@ -113,10 +129,10 @@ function Panel(props: Props) {
             </div>
           </div>
         </MUI.RadioGroup>
-      </div>
+      </Section>
 
       {/* Simplification */}
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Simplification</MUI.Typography>
 
         <MUI.Typography variant="body2" color="textSecondary">
@@ -136,7 +152,7 @@ function Panel(props: Props) {
             value={simplify}
             onChange={(_, value) => {
               if (typeof value === "number") {
-                mutate((draft) => {
+                mutate(() => {
                   setSimplify(value);
                 });
               }
@@ -151,9 +167,9 @@ function Panel(props: Props) {
             }}
           />
         </div>
-      </div>
+      </Section>
 
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Options</MUI.Typography>
 
         <div>
@@ -163,7 +179,7 @@ function Panel(props: Props) {
                 color="primary"
                 checked={state.options.withName}
                 onChange={(event) => {
-                  const { checked } = event.currentTarget
+                  const { checked } = event.currentTarget;
                   mutate((draft) => {
                     draft.options.withName = checked;
                   });
@@ -173,17 +189,17 @@ function Panel(props: Props) {
             label="Include names"
           />
         </div>
-      </div>
+      </Section>
 
       {/* Coloring */}
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Color</MUI.Typography>
         <MUI.TextField
           fullWidth
           select
           value={state.options.color}
           onChange={(ev) => {
-            const { value } = ev.target
+            const { value } = ev.target;
             mutate((draft) => {
               draft.options.color = value as SupportedColorSchema;
             });
@@ -196,17 +212,17 @@ function Panel(props: Props) {
             </MUI.MenuItem>
           ))}
         </MUI.TextField>
-      </div>
+      </Section>
 
       {/* Year */}
-      <div className={classes.section}>
+      <Section>
         <MUI.Typography variant="h3">Year</MUI.Typography>
         <MUI.TextField
           fullWidth
           select
           value={state.options.year}
           onChange={(ev) => {
-            const { value } = ev.target
+            const { value } = ev.target;
             mutate((draft) => {
               draft.options.year = value;
             });
@@ -215,7 +231,7 @@ function Panel(props: Props) {
         >
           {[
             2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
-            2021, 2022, 2023, 2024
+            2021, 2022, 2023, 2024,
           ]
             .reverse()
             .map((year) => (
@@ -224,38 +240,20 @@ function Panel(props: Props) {
               </MUI.MenuItem>
             ))}
         </MUI.TextField>
-      </div>
+      </Section>
     </Root>
   );
 }
 
-const useStyles = MUI.makeStyles(
-  (theme) => ({
-    root: {
-      padding: theme.spacing(5),
-      margin: theme.spacing(5, 0, 5, 5),
-      width: 400,
-      display: "flex",
-      flexDirection: "column",
-      zIndex: 1,
-      borderRadius: 8,
-      overflowY: "scroll",
-      maxHeight: 700,
-      [theme.breakpoints.down("sm")]: {
-        width: "auto",
-        margin: theme.spacing(2),
-      },
-    },
+const Section = styled("div", {
+  name: "SwissMaps-Generator-Panel",
+  slot: "section",
+})(({ theme }) => ({
+  marginBottom: theme.spacing(4),
 
-    section: {
-      marginBottom: theme.spacing(4),
-
-      "& > h3": {
-        marginBottom: theme.spacing(0.5),
-      },
-    },
-  }),
-  { name: "XuiGenerator:Panel" }
-);
+  "& > h3": {
+    marginBottom: theme.spacing(0.5),
+  },
+}));
 
 export default Panel;

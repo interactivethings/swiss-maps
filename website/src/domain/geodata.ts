@@ -1,9 +1,8 @@
 import cityData from "public/swiss-city-topo.json";
 import { useQuery } from "@tanstack/react-query";
 import { previewSourceUrl } from "src/shared";
-import * as topojson from "topojson";
+import * as topojson from "topojson-client";
 import { Value } from "../components/Generator/context";
-import { MultiPolygon } from "geojson";
 import { Feature, Geometry, GeoJsonProperties } from "geojson";
 
 export type GeoDataFeature = Feature<Geometry, GeoJsonProperties>;

@@ -1,30 +1,26 @@
-import * as MUI from "@material-ui/core";
-import { createTheme } from "@material-ui/core";
+import * as MUI from "@mui/material";
+import { createTheme } from "@mui/material";
 import * as React from "react";
-import createGenerateClassName from "./createGenerateClassName";
 import options from "./options";
 
-declare module "@material-ui/core/styles/createTypography" {
-  interface TypographyOptions {
-    display1: TypographyStyle;
-    display2: TypographyStyle;
+declare module "@mui/material/styles" {
+  interface TypographyVariantsOptions {
+    display1: React.CSSProperties;
+    display2: React.CSSProperties;
   }
-  interface Typography {
-    display1: TypographyStyle;
-    display2: TypographyStyle;
+  interface TypographyVariants {
+    display1: React.CSSProperties;
+    display2: React.CSSProperties;
   }
 }
 
-const theme = createTheme(options as any);
-export const generateClassName = createGenerateClassName();
+const theme = createTheme(options);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <MUI.StylesProvider generateClassName={generateClassName}>
-      <MUI.ThemeProvider theme={theme}>
-        <MUI.CssBaseline />
-        {children}
-      </MUI.ThemeProvider>
-    </MUI.StylesProvider>
+    <MUI.ThemeProvider theme={theme}>
+      <MUI.CssBaseline />
+      {children}
+    </MUI.ThemeProvider>
   );
 };

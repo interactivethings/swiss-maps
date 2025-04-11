@@ -1,9 +1,9 @@
 import { domCopyText } from "@/components/Generator/domain/dom";
 import LayoutDefault from "@/components/Layout/LayoutDefault";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import { GetServerSideProps } from "next";
 import { Copy, Download } from "react-feather";
-import { downloadUrl } from "src/shared";
+import { styled } from "@mui/material/styles";
 
 type Props = { host: string };
 
@@ -22,7 +22,8 @@ const API_PARAMETERS = [
   },
   {
     name: "shapes",
-    description: "Which kinds of shapes you want to include (comma-separation).",
+    description:
+      "Which kinds of shapes you want to include (comma-separation).",
     value: ["country", "lakes", "cantons", "municipalities"],
     defaultValue: "country,cantons,lakes",
   },
@@ -73,29 +74,29 @@ const API_EXAMPLES = [
   },
 ];
 export default function Page(props: Props) {
-  const classes = useStyles();
   const { host } = props;
 
   const endpoint = `${host}/api/v0`;
 
   return (
     <LayoutDefault>
-      <div className={classes.container}>
+      <Container>
         <h1>Documentation</h1>
 
-        <section id="location" className={classes.section}>
+        <Section>
           <h2>Location</h2>
-          <pre className={classes.code}>{endpoint}</pre>
-        </section>
 
-        <section id="parameters" className={classes.section}>
+          <Code>{endpoint}</Code>
+        </Section>
+
+        <Section id="parameters">
           <h2>Parameters</h2>
 
-          <div className={classes.parameterTable}>
-            <div className={classes.th}>Name</div>
-            <div className={classes.th}>Description</div>
-            <div className={classes.th}>Value</div>
-            <div className={classes.th}>Example value</div>
+          <ParameterTable>
+            <div className={"th"}>Name</div>
+            <div className={"th"}>Description</div>
+            <div className={"th"}>Value</div>
+            <div className={"th"}>Example value</div>
             {API_PARAMETERS.map(
               ({ name, description, value, defaultValue }) => {
                 return (
@@ -104,184 +105,216 @@ export default function Page(props: Props) {
                     <div>{description}</div>
                     <div>
                       {Array.isArray(value) ? (
-                        <div className={classes.valueList}>
+                        <ValueList>
                           {value.map((x, i) => (
-                            <span className={classes.value} key={i}>
-                              {x}
-                            </span>
+                            <Value key={i}>{x}</Value>
                           ))}
-                        </div>
+                        </ValueList>
                       ) : (
-                        <span className={classes.value}>{value}</span>
+                        <Value>{value}</Value>
                       )}
                     </div>
                     <div>
                       {Array.isArray(defaultValue) ? (
-                        <div className={classes.valueList}>
+                        <ValueList>
                           {defaultValue.map((x, i) => (
-                            <span className={classes.valueExample} key={i}>
-                              {x}
-                            </span>
+                            <ValueExample key={i}>{x}</ValueExample>
                           ))}
-                        </div>
+                        </ValueList>
                       ) : (
-                        <span className={classes.valueExample}>
-                          {defaultValue}
-                        </span>
+                        <ValueExample>{defaultValue}</ValueExample>
                       )}
                     </div>
                   </>
                 );
-              }
+              },
             )}
-          </div>
-        </section>
+          </ParameterTable>
+        </Section>
 
-        <section id="examples" className={classes.section}>
+        <Section id="examples">
           <h2>Examples</h2>
+
           {API_EXAMPLES.map(({ name, query }) => {
             const url = `${endpoint}?${query}`;
             const downloadUrl = `/api/v0?${query}&download=true`;
 
             return (
-              <div className={classes.eg}>
+              <Eg>
                 <div>{name}</div>
-                <div className={classes.url}>
+                <Url>
                   <span>{url}</span>
 
                   <div style={{ display: "flex", flexWrap: "nowrap" }}>
-                    <MUI.IconButton
+                    <CopyIconButton
                       size="small"
-                      className={classes.copy}
                       onClick={() => domCopyText(url)}
                     >
-                      <span className={classes.tooltip}>Copy to clipboard</span>
+                      <Tooltip className="tooltip">Copy to clipboard</Tooltip>
 
                       <Copy width={16} height={16} />
-                    </MUI.IconButton>
-                    <MUI.IconButton
+                    </CopyIconButton>
+                    <CopyIconButton
                       size="small"
-                      component="a"
-                      download
-                      className={classes.copy}
-                      href={downloadUrl}
+                      {...{ component: "a", download: true, href: downloadUrl }}
                     >
-                      <span className={classes.tooltip}>Download the data</span>
+                      <Tooltip className="tooltip">Download the data</Tooltip>
 
                       <Download width={16} height={16} />
-                    </MUI.IconButton>
+                    </CopyIconButton>
                   </div>
-                </div>
-              </div>
+                </Url>
+              </Eg>
             );
           })}
-        </section>
-      </div>
+        </Section>
+      </Container>
     </LayoutDefault>
   );
 }
 
-const useStyles = MUI.makeStyles((theme) => ({
-  root: {},
-  container: {
-    padding: "50px 60px",
+const Container = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "container",
+})(() => ({
+  padding: "50px 60px",
+}));
+
+const Section = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "section",
+})(({ theme }) => ({
+  margin: theme.spacing(4, 0),
+  "& h2": {
+    color: theme.palette.primary.main,
   },
-  section: {
-    margin: theme.spacing(4, 0),
-    "& h2": {
-      color: theme.palette.primary.main,
-    },
+}));
+
+const Code = styled("pre", {
+  name: "SwissMaps-Docs",
+  slot: "code",
+})(({ theme }) => ({
+  backgroundColor: "#f5f5f5",
+  padding: theme.spacing(1, 1.5),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const ParameterTable = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "parameterTable",
+})(({ theme }) => ({
+  overflow: "auto",
+  display: "grid",
+  gridTemplateColumns: "1fr 3fr 1fr 1fr",
+  // maxWidth: "480px",
+  columnGap: theme.spacing(1),
+  rowGap: theme.spacing(1),
+  "& > div": {
+    padding: theme.spacing(0.5),
   },
-  code: {
-    backgroundColor: "#f5f5f5",
-    padding: theme.spacing(1, 1.5),
-    borderRadius: theme.shape.borderRadius,
-  },
-  parameterTable: {
-    overflow: "auto",
-    display: "grid",
-    gridTemplateColumns: "1fr 3fr 1fr 1fr",
-    // maxWidth: "480px",
-    columnGap: theme.spacing(1),
-    rowGap: theme.spacing(1),
-    "& > div": {
-      padding: theme.spacing(0.5),
-    },
-  },
-  th: {
+
+  "& > .th": {
     borderBottom: "1px solid #eee",
   },
-  valueList: {
-    display: "flex",
-    gap: theme.spacing(0.5),
+}));
+
+const ValueList = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "valueList",
+})(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(0.5),
+}));
+
+const Value = styled("span", {
+  name: "SwissMaps-Docs",
+  slot: "value",
+})(({ theme }) => ({
+  backgroundColor: "rgb(255, 245, 177)",
+  border: "1px solid rgb(249, 197, 19)",
+  color: "rgb(115, 92, 15)",
+  padding: theme.spacing(0.25, 0.5),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const ValueExample = styled("span", {
+  name: "SwissMaps-Docs",
+  slot: "valueExample",
+})(({ theme }) => ({
+  backgroundColor: "#E8DAEE",
+  border: "1px solid #cba1dc",
+  color: theme.palette.primary.main,
+  padding: theme.spacing(0.25, 0.5),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const Eg = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "eg",
+})(({ theme }) => ({
+  margin: theme.spacing(2, 0),
+}));
+
+const Url = styled("div", {
+  name: "SwissMaps-Docs",
+  slot: "url",
+})(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  backgroundColor: "rgb(255, 245, 177)",
+  border: "1px solid rgb(249, 197, 19)",
+  color: "rgb(115, 92, 15)",
+  padding: theme.spacing(1),
+  margin: theme.spacing(1, 0),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const CopyIconButton = styled(MUI.IconButton, {
+  name: "SwissMaps-Docs",
+  slot: "copyIconButton",
+})(() => ({
+  position: "relative",
+  display: "inline-block",
+  "&:hover .tooltip": {
+    visibility: "visible",
+    opacity: 1,
   },
-  value: {
-    backgroundColor: "rgb(255, 245, 177)",
-    border: "1px solid rgb(249, 197, 19)",
-    color: "rgb(115, 92, 15)",
-    padding: theme.spacing(0.25, 0.5),
-    borderRadius: theme.shape.borderRadius,
-  },
-  valueExample: {
-    backgroundColor: "#E8DAEE",
-    border: "1px solid #cba1dc",
-    color: theme.palette.primary.main,
-    padding: theme.spacing(0.25, 0.5),
-    borderRadius: theme.shape.borderRadius,
-  },
-  eg: {
-    margin: theme.spacing(2, 0),
-  },
-  url: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "rgb(255, 245, 177)",
-    border: "1px solid rgb(249, 197, 19)",
-    color: "rgb(115, 92, 15)",
-    padding: theme.spacing(1),
-    margin: theme.spacing(1, 0),
-    borderRadius: theme.shape.borderRadius,
-  },
-  copy: {
-    position: "relative",
-    display: "inline-block",
-    "&:hover $tooltip": {
-      visibility: "visible",
-      opacity: 1,
-    },
-  },
-  tooltip: {
-    visibility: "hidden",
-    width: 120,
-    fontSize: "12px",
-    backgroundColor: "#555",
-    color: "#fff",
-    textAlign: "center",
-    borderRadius: "6px",
-    padding: "5px",
+}));
+
+const Tooltip = styled("span", {
+  name: "SwissMaps-Docs",
+  slot: "tooltip",
+})(() => ({
+  visibility: "hidden",
+  width: 120,
+  fontSize: "12px",
+  backgroundColor: "#555",
+  color: "#fff",
+  textAlign: "center",
+  borderRadius: "6px",
+  padding: "5px",
+  position: "absolute",
+  zIndex: 1,
+  bottom: "150%",
+  left: "50%",
+  marginLeft: -60,
+  opacity: "0",
+  transition: "opacity 0.3s",
+  "&::after": {
+    content: '""',
     position: "absolute",
-    zIndex: 1,
-    bottom: "150%",
+    top: "100%",
     left: "50%",
-    marginLeft: -60,
-    opacity: "0",
-    transition: "opacity 0.3s",
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      top: "100%",
-      left: "50%",
-      marginLeft: "-5px",
-      borderWidth: "5px",
-      borderStyle: "solid",
-      borderColor: "#555 transparent transparent transparent",
-    },
+    marginLeft: "-5px",
+    borderWidth: "5px",
+    borderStyle: "solid",
+    borderColor: "#555 transparent transparent transparent",
   },
 }));
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
+  context,
 ) => {
   const host = context.req.headers.host;
   if (!host) {

@@ -6,12 +6,20 @@ import { Provider, State } from "./context";
 import Export from "./internal/Export";
 import Panel from "./internal/Panel";
 import Stats from "./internal/Stats";
-import * as MUI from "@material-ui/core";
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = "div";
+const Root = styled("div", {
+  name: "SwissMaps-Generator",
+  slot: "root",
+})(() => ({
+  backgroundColor: "#F9F9F9",
+  position: "relative",
+  contain: "content",
+  width: "100%",
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
@@ -21,7 +29,7 @@ const Preview = dynamic(() => import("./internal/WrappedPreview"), {
 
 function Generator(props: Props, ref: any) {
   const { ...rest } = props;
-  const classes = useStyles();
+
   const deckRef = React.useRef<any>(null);
 
   const [state, mutate] = useImmer<State>({
@@ -30,45 +38,44 @@ function Generator(props: Props, ref: any) {
 
   return (
     <Provider value={{ state, mutate }}>
-      <Root ref={ref} id="generator" className={classes.root} {...rest}>
-        <div className={classes.container}>
+      <Root ref={ref} id="generator" {...rest}>
+        <Container>
           <Panel />
-          <div className={classes.right}>
+          <Right>
             <Preview deckRef={deckRef} />
-            <Export deckRef={deckRef} style={{ marginTop: "-80px", marginRight: "40px" }} />
-          </div>
-        </div>
+            <Export
+              deckRef={deckRef}
+              style={{ marginTop: "-80px", marginRight: "40px" }}
+            />
+          </Right>
+        </Container>
         <Stats />
       </Root>
     </Provider>
   );
 }
 
-const useStyles = MUI.makeStyles(
-  (theme) => ({
-    root: {
-      backgroundColor: "#F9F9F9",
-      position: "relative",
-      contain: "content",
-      width: "100%",
+const Container = styled("div", {
+  name: "SwissMaps-Generator",
+  slot: "container",
+})(({ theme }) => ({
+  display: "flex",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    "& $right": {
+      minHeight: "800px",
     },
-    container: {
-      display: "flex",
-      [theme.breakpoints.down("sm")]: {
-        flexDirection: "column",
-        "& $right": {
-          minHeight: "800px",
-        },
-      },
-    },
-    right: {
-      flex: 1,
-      position: "relative",
-      display: "flex",
-      flexDirection: "column",
-    },
-  }),
-  { name: "XuiGenerator" }
-);
+  },
+}));
+
+const Right = styled("div", {
+  name: "SwissMaps-Generator",
+  slot: "right",
+})(() => ({
+  flex: 1,
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+}));
 
 export default React.forwardRef(Generator);
