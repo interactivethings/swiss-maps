@@ -1,5 +1,6 @@
 import * as React from "react";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -68,7 +69,11 @@ function Examples(props: Props, ref: any) {
             <MUI.Typography className={classes.cardAuthor}>
               InteractiveThings
             </MUI.Typography>
-            <MUI.Link className={classes.cardTitle} href="/mutations">
+            <MUI.Link
+              className={classes.cardTitle}
+              href="/mutations"
+              sx={{ textDecoration: "none" }}
+            >
               Municipalities change audit
             </MUI.Link>
           </MUI.Box>
@@ -78,7 +83,7 @@ function Examples(props: Props, ref: any) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       padding: theme.spacing(15, 3),
@@ -120,7 +125,7 @@ const useStyles = MUI.makeStyles(
       },
     },
   }),
-  { name: "XuiExamples" }
+  { name: "XuiExamples" },
 );
 
 export default React.forwardRef(Examples);

@@ -2,7 +2,12 @@ import { ThemeProvider } from "@/theme";
 import { enableMapSet } from "immer";
 import { AppProps } from "next/app";
 import * as React from "react";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter";
 
 enableMapSet();
 
@@ -11,17 +16,21 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       staleTime: Infinity,
-      retry: false
+      retry: false,
     },
   },
 });
 
-function App({ Component, pageProps }: AppProps) {
+function App(props: AppProps) {
+  const { Component, pageProps } = props;
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AppCacheProvider {...props}>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </AppCacheProvider>
     </QueryClientProvider>
   );
 }

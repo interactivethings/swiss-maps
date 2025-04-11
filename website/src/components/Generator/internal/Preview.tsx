@@ -1,7 +1,7 @@
 import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import clsx from "clsx";
 import * as d3 from "d3";
 import * as React from "react";
@@ -10,6 +10,7 @@ import { useImmer } from "use-immer";
 import { useContext, Value } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
 import { useGeoData } from "src/domain/geodata";
+import { makeStyles } from "@mui/styles";
 
 interface Props {}
 
@@ -56,11 +57,11 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
       mutate((draft) => {
         draft.viewState = constrainZoom(
           { ...draft.viewState, width, height },
-          CH_BBOX
+          CH_BBOX,
         );
       });
     },
-    [mutate]
+    [mutate],
   );
 
   /**
@@ -257,7 +258,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   );
 });
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       zIndex: 1,
@@ -267,6 +268,7 @@ const useStyles = MUI.makeStyles(
     },
     deck: {
       pointerEvents: "none",
+      minHeight: 200,
     },
     loader: {
       position: "absolute",
@@ -287,5 +289,5 @@ const useStyles = MUI.makeStyles(
       }),
     },
   }),
-  { name: "XuiGenerator:Preview" }
+  { name: "XuiGenerator:Preview" },
 );

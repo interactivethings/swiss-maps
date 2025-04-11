@@ -1,9 +1,10 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import { downloadUrl } from "src/shared";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
 import { useQuery } from "@tanstack/react-query";
+import { makeStyles } from '@mui/styles';
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -80,7 +81,7 @@ function Stats(props: Props) {
   );
 }
 
-const useStyles = MUI.makeStyles(
+const useStyles = makeStyles(
   (theme) => ({
     root: {
       position: "absolute",
