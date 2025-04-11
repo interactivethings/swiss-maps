@@ -12,7 +12,7 @@ export const LINE_COLOR = [100, 100, 100, 127] as const;
 export const constrainZoom = (
   viewState: $FixMe,
   bbox: BBox,
-  { padding = 60 }: { padding?: number } = {}
+  { padding = 60 }: { padding?: number } = {},
 ) => {
   const vp = new WebMercatorViewport(viewState);
 

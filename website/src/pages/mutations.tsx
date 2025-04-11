@@ -9,7 +9,7 @@ import {
   ListItemText,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import dynamic from "next/dynamic";
 import { groupBy } from "fp-ts/lib/NonEmptyArray";
 import { GeoDataFeature, useGeoData } from "src/domain/geodata";
@@ -31,7 +31,7 @@ const MutationsMinimap = dynamic(
   () => import("../components/Mutations/Minimap"),
   {
     ssr: false,
-  }
+  },
 );
 
 const INITIAL_VIEW_STATE = {
@@ -191,9 +191,7 @@ export default function Page() {
           const selected = migrationItem === parsed;
           return (
             <ListItem
-              selected={selected}
               key={index}
-              button
               onClick={() => handleMutationSelect(parsed)}
               ref={
                 selected
@@ -223,7 +221,7 @@ export default function Page() {
         <Box
           display="grid"
           gridTemplateColumns="1fr 1fr"
-          gridColumnGap="1rem"
+          columnGap="1rem"
           height="100%"
         >
           <div>
