@@ -1,9 +1,6 @@
-import { z } from "zod";
 import { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  Button,
-  Link,
   List,
   ListItem,
   ListItemText,
@@ -11,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import dynamic from "next/dynamic";
-import { groupBy } from "fp-ts/lib/NonEmptyArray";
 import { GeoDataFeature, useGeoData } from "src/domain/geodata";
 import {
   MunicipalityMigrationData,
@@ -19,10 +15,7 @@ import {
 } from "src/domain/municipality-migrations";
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
-import { parse } from "path";
 import { useQuery } from "@tanstack/react-query";
-import { GeoJsonLayer } from "@deck.gl/layers";
-import DeckGL from "@deck.gl/react";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,

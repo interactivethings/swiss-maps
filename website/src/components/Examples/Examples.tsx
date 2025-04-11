@@ -92,7 +92,7 @@ const Cards = styled("div", {
 const Card = styled(MUI.Card, {
   name: "SwissMaps-Examples",
   slot: "card",
-})(({ theme }) => ({
+})(() => ({
   width: 424,
 }));
 
@@ -109,7 +109,7 @@ const CardFooter = styled("div", {
 const CardAuthor = styled(MUI.Typography, {
   name: "SwissMaps-Examples",
   slot: "cardAuthor",
-})(({ theme }) => ({
+})(() => ({
   fontSize: "13px",
   fontWeight: "bold",
   display: "inline",
@@ -119,7 +119,7 @@ const CardAuthor = styled(MUI.Typography, {
 const CardTitle = styled(MUI.Link, {
   name: "SwissMaps-Examples",
   slot: "cardTitle",
-})(({ theme }) => ({
+})(() => ({
   fontSize: "13px",
   display: "inline",
   fontWeight: "normal",

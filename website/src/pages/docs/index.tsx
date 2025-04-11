@@ -3,7 +3,6 @@ import LayoutDefault from "@/components/Layout/LayoutDefault";
 import * as MUI from "@mui/material";
 import { GetServerSideProps } from "next";
 import { Copy, Download } from "react-feather";
-import { downloadUrl } from "src/shared";
 import { styled } from "@mui/material/styles";
 
 type Props = { host: string };

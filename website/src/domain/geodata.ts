@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { previewSourceUrl } from "src/shared";
 import * as topojson from "topojson-client";
 import { Value } from "../components/Generator/context";
-import { MultiPolygon } from "geojson";
 import { Feature, Geometry, GeoJsonProperties } from "geojson";
 
 export type GeoDataFeature = Feature<Geometry, GeoJsonProperties>;

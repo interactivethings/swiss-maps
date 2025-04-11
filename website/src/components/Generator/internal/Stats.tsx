@@ -49,7 +49,7 @@ function Stats(props: Props) {
       ),
   });
 
-  const { data: svgData, error } = useQuery({
+  const { data: svgData } = useQuery({
     queryKey: [
       "stat",
       "svg",

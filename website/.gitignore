@@ -3,3 +3,5 @@
 node_modules/
 
 public/swiss-maps/
+
+tsconfig.tsbuildinfo
