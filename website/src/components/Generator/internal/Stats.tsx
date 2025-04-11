@@ -25,21 +25,33 @@ function Stats(props: Props) {
     svg: { size: 0 },
   });
 
-  const { data: topoData } = useQuery(
-    ["stat", "topojson", options.year, options.simplify, ...options.shapes],
-    () =>
+  const { data: topoData } = useQuery({
+    queryKey: [
+      "stat",
+      "topojson",
+      options.year,
+      options.simplify,
+      ...options.shapes,
+    ],
+    queryFn: () =>
       fetch(downloadUrl({ ...options, format: "topojson" }, "v0")).then((res) =>
-        res.text()
-      )
-  );
+        res.text(),
+      ),
+  });
 
-  const { data: svgData,error } = useQuery(
-    ["stat", "svg", options.year, options.simplify, ...options.shapes],
-    () =>
+  const { data: svgData, error } = useQuery({
+    queryKey: [
+      "stat",
+      "svg",
+      options.year,
+      options.simplify,
+      ...options.shapes,
+    ],
+    queryFn: () =>
       fetch(downloadUrl({ ...options, format: "svg" }, "v0")).then((res) =>
-        res.text()
-      )
-  );
+        res.text(),
+      ),
+  });
 
   React.useEffect(() => {
     mutate((draft) => {
@@ -85,7 +97,7 @@ const useStyles = MUI.makeStyles(
       justifyContent: "space-between",
     },
   }),
-  { name: "XuiGenerator:Stats" }
+  { name: "XuiGenerator:Stats" },
 );
 
 export default Stats;
