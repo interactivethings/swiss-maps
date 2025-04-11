@@ -2,24 +2,30 @@ import * as React from "react";
 import * as MUI from "@mui/material";
 import * as colors from "src/theme/colors";
 import * as Icons from "@/icons";
-import { makeStyles } from '@mui/styles';
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = "div";
+const Root = styled("div", {
+  name: "SwissMaps-Footer",
+  slot: "root",
+})(({ theme }) => ({
+  padding: theme.spacing(5, 7.5),
+  [theme.breakpoints.down("sm")]: {
+    padding: theme.spacing(5, 2, 2),
+  },
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Footer(props: Props, ref: any) {
-  const classes = useStyles();
-
   const { ...rest } = props;
 
   return (
-    <Root ref={ref} className={classes.root} {...rest}>
-      <div className={classes.bar}>
-        <div className={classes.left}>
+    <Root ref={ref} {...rest}>
+      <Bar>
+        <Left>
           <Icons.InteractiveThingsBrandmark40 />
 
           <MUI.Typography
@@ -28,137 +34,140 @@ function Footer(props: Props, ref: any) {
           >
             Swiss Maps is created by Interactive Things.
           </MUI.Typography>
-        </div>
+        </Left>
 
-        <div className={classes.right}>
-          <MUI.Link
-            className={classes.website}
-            href="https://www.interactivethings.com/"
-          >
+        <Right>
+          <Website href="https://www.interactivethings.com/">
             Visit Website
-          </MUI.Link>
+          </Website>
 
-          <MUI.Link
-            className={classes.social}
+          <Social
             aria-label="Interactive Things on Facebook"
             href="https://facebook.com/interactivethings/"
           >
             <Icons.Facebook24 />
-          </MUI.Link>
+          </Social>
 
-          <MUI.Link
-            className={classes.social}
+          <Social
             aria-label="Interactive Things on Twitter"
             href="https://twitter.com/ixt"
           >
             <Icons.Twitter24 />
-          </MUI.Link>
+          </Social>
 
-          <MUI.Link
-            className={classes.social}
+          <Social
             aria-label="Interactive Things on Instagram"
             href="https://instagram.com/interactivethings/"
           >
             <Icons.Instagram24 />
-          </MUI.Link>
-        </div>
-      </div>
+          </Social>
+        </Right>
+      </Bar>
 
-      <div className={classes.copyright}>
+      <Copyright>
         Copyright © 2020 Interactive Things All rights reserved.
-      </div>
+      </Copyright>
     </Root>
   );
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      padding: theme.spacing(5, 7.5),
-      [theme.breakpoints.down("sm")]: {
-        padding: theme.spacing(5, 2, 2),
-      },
-    },
+const Bar = styled("div", {
+  name: "SwissMaps-Footer",
+  slot: "bar",
+})(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: colors.palette.blue[900],
+  color: theme.palette.common.white,
 
-    bar: {
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: colors.palette.blue[900],
-      color: theme.palette.common.white,
+  minHeight: theme.spacing(8),
+  padding: theme.spacing(0, 3),
 
-      minHeight: theme.spacing(8),
-      padding: theme.spacing(0, 3),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: theme.spacing(2),
 
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: theme.spacing(2),
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    padding: theme.spacing(3),
+  },
+}));
 
-      [theme.breakpoints.down("sm")]: {
-        flexDirection: "column",
-        padding: theme.spacing(3),
-      },
-    },
-    left: {
-      display: "flex",
-      alignItems: "center",
-    },
-    right: {
-      display: "flex",
-      alignItems: "center",
-    },
-    website: {
-      borderRadius: "20px",
-      height: "40px",
-      padding: theme.spacing(0, 3),
+const Left = styled("div", {
+  name: "SwissMaps-Footer",
+  slot: "left",
+})(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+}));
 
-      cursor: "pointer",
-      whiteSpace: "nowrap",
+const Right = styled("div", {
+  name: "SwissMaps-Footer",
+  slot: "right",
+})(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+}));
 
-      color: "white",
-      backgroundColor: colors.palette.blue[600],
+const Website = styled(MUI.Link, {
+  name: "SwissMaps-Footer",
+  slot: "website",
+})(({ theme }) => ({
+  borderRadius: "20px",
+  height: "40px",
+  padding: theme.spacing(0, 3),
 
-      marginRight: theme.spacing(1),
+  cursor: "pointer",
+  whiteSpace: "nowrap",
 
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+  color: "white",
+  backgroundColor: colors.palette.blue[600],
 
-      "&:hover": {
-        backgroundColor: colors.palette.blue[500],
-        textDecoration: "none",
-      },
-    },
+  marginRight: theme.spacing(1),
 
-    social: {
-      cursor: "pointer",
-      whiteSpace: "nowrap",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-      color: "white",
-      backgroundColor: colors.palette.blue[600],
+  "&:hover": {
+    backgroundColor: colors.palette.blue[500],
+    textDecoration: "none",
+  },
+}));
 
-      borderRadius: "50%",
-      marginLeft: theme.spacing(2),
+const Social = styled(MUI.Link, {
+  name: "SwissMaps-Footer",
+  slot: "social",
+})(({ theme }) => ({
+  cursor: "pointer",
+  whiteSpace: "nowrap",
 
-      height: "36px",
-      width: "36px",
-      padding: "0 2px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+  color: "white",
+  backgroundColor: colors.palette.blue[600],
 
-      "&:hover": {
-        backgroundColor: colors.palette.blue[500],
-        textDecoration: "none",
-      },
-    },
+  borderRadius: "50%",
+  marginLeft: theme.spacing(2),
 
-    copyright: {
-      ...theme.typography.body2,
-      color: theme.palette.text.secondary,
-      marginTop: theme.spacing(3),
-    },
-  }),
-  { name: "XuiFooter" }
-);
+  height: "36px",
+  width: "36px",
+  padding: "0 2px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+
+  "&:hover": {
+    backgroundColor: colors.palette.blue[500],
+    textDecoration: "none",
+  },
+}));
+
+const Copyright = styled("div", {
+  name: "SwissMaps-Footer",
+  slot: "copyright",
+})(({ theme }) => ({
+  ...theme.typography.body2,
+  color: theme.palette.text.secondary,
+  marginTop: theme.spacing(3),
+}));
 
 export default React.forwardRef(Footer);

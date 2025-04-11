@@ -10,7 +10,20 @@ import { useImmer } from "use-immer";
 import { useContext, Value } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
 import { useGeoData } from "src/domain/geodata";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
+
+/**
+ * The underlying DOM element which is rendered by this component.
+ */
+const Root = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "root",
+})(() => ({
+  zIndex: 1,
+  position: "relative",
+  height: "100%",
+  flex: 1,
+}));
 
 interface Props {}
 
@@ -26,7 +39,6 @@ const INITIAL_VIEW_STATE = {
 };
 
 export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
-  const classes = useStyles();
   const ctx = useContext();
   const { options } = ctx.state;
 
@@ -101,16 +113,16 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   }, [options.color, geoData.cantons]);
 
   return (
-    <div className={clsx(classes.root)}>
+    <Root>
       {isFetching && (
-        <div className={classes.loader}>
+        <Loader>
           <MUI.Fade in style={{ transitionDelay: "800ms" }}>
             <MUI.CircularProgress variant="indeterminate" size={300} />
           </MUI.Fade>
-        </div>
+        </Loader>
       )}
 
-      <div className={classes.deck}>
+      <Deck>
         <DeckGL
           ref={deckRef}
           controller={{ type: MapController }}
@@ -253,41 +265,37 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               }
             })()}
         </DeckGL>
-      </div>
-    </div>
+      </Deck>
+    </Root>
   );
 });
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      zIndex: 1,
-      position: "relative",
-      height: "100%",
-      flex: 1,
-    },
-    deck: {
-      pointerEvents: "none",
-      minHeight: 200,
-    },
-    loader: {
-      position: "absolute",
-      zIndex: 2,
-      top: 0,
-      left: -theme.spacing(55),
-      paddingLeft: theme.spacing(55),
-      right: 0,
-      bottom: 0,
-      pointerEvents: "none",
+const Loader = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "loader",
+})(({ theme }) => ({
+  position: "absolute",
+  zIndex: 2,
+  top: 0,
+  left: theme.spacing(-55),
+  paddingLeft: theme.spacing(55),
+  right: 0,
+  bottom: 0,
+  pointerEvents: "none",
 
-      display: "grid",
-      placeItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
+  display: "grid",
+  placeItems: "center",
+  backgroundColor: "rgba(0, 0, 0, 0.05)",
 
-      transition: theme.transitions.create("all", {
-        duration: theme.transitions.duration.short,
-      }),
-    },
+  transition: theme.transitions.create("all", {
+    duration: theme.transitions.duration.short,
   }),
-  { name: "XuiGenerator:Preview" },
-);
+}));
+
+const Deck = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "deck",
+})(() => ({
+  pointerEvents: "none",
+  minHeight: 200,
+}));

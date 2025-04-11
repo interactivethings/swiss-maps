@@ -1,6 +1,7 @@
 import shadows from "./shadows";
 import * as colors from "./colors";
 import { FontStyleOptions } from "@mui/material/styles/createTypography";
+import { Shadows, ThemeOptions } from "@mui/material";
 
 const fontStyleOptions: FontStyleOptions = {
   fontWeightLight: 300,
@@ -125,19 +126,5 @@ export default {
     },
   },
 
-  shadows: ["none", ...shadows],
-
-  overrides: {
-    MuiOutlinedInput: {
-      inputMarginDense: {
-        paddingTop: 10,
-      },
-    },
-  },
-
-  props: {
-    MuiTextField: {
-      variant: "outlined",
-    },
-  },
-} as const;
+  shadows: ["none", ...shadows] as Shadows,
+} satisfies ThemeOptions;
