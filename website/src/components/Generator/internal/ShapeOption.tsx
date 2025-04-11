@@ -1,8 +1,22 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import { Shape } from "src/shared";
 import * as colors from "src/theme/colors";
 import { useContext } from "../context";
+import { styled } from "@mui/material/styles";
+
+const Root = styled("div", {
+  name: "SwissMaps-Generator-ShareOption",
+  slot: "root",
+})(({ theme }) => ({
+  margin: theme.spacing(0, -1),
+  padding: theme.spacing(0, 1),
+  borderRadius: theme.shape.borderRadius,
+
+  "&:hover": {
+    backgroundColor: colors.palette.purple[50],
+  },
+}));
 
 export default function ShapeOption({
   shape,
@@ -11,12 +25,10 @@ export default function ShapeOption({
   shape: Shape;
   label: React.ReactNode;
 }) {
-  const classes = useStyles();
   const { state, mutate } = useContext();
 
   return (
-    <div
-      className={classes.root}
+    <Root
       onMouseEnter={() => {
         mutate((draft) => {
           draft.highlightedShape = shape;
@@ -36,7 +48,7 @@ export default function ShapeOption({
             color="primary"
             checked={state.options.shapes.has(shape)}
             onChange={(event) => {
-              const { checked } = event.currentTarget
+              const { checked } = event.currentTarget;
               mutate((draft) => {
                 if (checked) {
                   draft.options.shapes.add(shape);
@@ -49,21 +61,6 @@ export default function ShapeOption({
         }
         label={label}
       />
-    </div>
+    </Root>
   );
 }
-
-const useStyles = MUI.makeStyles(
-  (theme) => ({
-    root: {
-      margin: theme.spacing(0, -1),
-      padding: theme.spacing(0, 1),
-      borderRadius: theme.shape.borderRadius,
-
-      "&:hover": {
-        backgroundColor: colors.palette.purple[50],
-      },
-    },
-  }),
-  { name: "XuiGenerator:ShapeOption" }
-);

@@ -1,22 +1,34 @@
-import * as MUI from "@material-ui/core";
+import * as MUI from "@mui/material";
 import * as React from "react";
 import { Download } from "react-feather";
 import { downloadUrl } from "src/shared";
 import { useContext } from "../context";
 import { domDataUrlDownload } from "../domain/dom";
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = "div";
+const Root = styled("div", {
+  name: "SwissMaps-Generator-Export",
+  slot: "root",
+})(({ theme }) => ({
+  position: "sticky",
+  bottom: 40,
+  marginBottom: theme.spacing(5),
+  justifyContent: "flex-end",
+
+  display: "flex",
+  flexWrap: "nowrap",
+  gap: "24px",
+  zIndex: theme.zIndex.tooltip,
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {
   deckRef: any;
 }
 
 function Export(props: Props) {
-  const classes = useStyles();
-
   const { deckRef, ...rest } = props;
 
   const { state } = useContext();
@@ -32,7 +44,7 @@ function Export(props: Props) {
   }
 
   return (
-    <Root className={classes.root} {...rest}>
+    <Root {...rest}>
       <MUI.Button
         component="a"
         download
@@ -68,22 +80,5 @@ function Export(props: Props) {
     </Root>
   );
 }
-
-const useStyles = MUI.makeStyles(
-  (theme) => ({
-    root: {
-      position: "sticky",
-      bottom: 40,
-      marginBottom: theme.spacing(5),
-      justifyContent: "flex-end",
-
-      display: "flex",
-      flexWrap: "nowrap",
-      gap: "24px",
-      zIndex: theme.zIndex.tooltip,
-    },
-  }),
-  { name: "XuiGenerator:Export" }
-);
 
 export default Export;

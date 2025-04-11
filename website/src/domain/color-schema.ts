@@ -7,7 +7,7 @@ import { lch } from "d3";
 function getLCH(n = 7, l = 90, c = 50, hueStep = 30) {
   return Array(n)
     .fill("")
-    .map((x, i) => lch(l, c, i * hueStep).formatHex());
+    .map((_, i) => lch(l, c, i * hueStep).formatHex());
 }
 
 /**

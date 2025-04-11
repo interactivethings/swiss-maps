@@ -1,15 +1,28 @@
 import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
-import * as MUI from "@material-ui/core";
-import clsx from "clsx";
+import * as MUI from "@mui/material";
 import * as d3 from "d3";
 import * as React from "react";
 import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
 import { useImmer } from "use-immer";
-import { useContext, Value } from "../context";
+import { useContext } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
 import { useGeoData } from "src/domain/geodata";
+import { styled } from "@mui/material/styles";
+
+/**
+ * The underlying DOM element which is rendered by this component.
+ */
+const Root = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "root",
+})(() => ({
+  zIndex: 1,
+  position: "relative",
+  height: "100%",
+  flex: 1,
+}));
 
 interface Props {}
 
@@ -25,7 +38,6 @@ const INITIAL_VIEW_STATE = {
 };
 
 export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
-  const classes = useStyles();
   const ctx = useContext();
   const { options } = ctx.state;
 
@@ -56,11 +68,11 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
       mutate((draft) => {
         draft.viewState = constrainZoom(
           { ...draft.viewState, width, height },
-          CH_BBOX
+          CH_BBOX,
         );
       });
     },
-    [mutate]
+    [mutate],
   );
 
   /**
@@ -100,16 +112,16 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   }, [options.color, geoData.cantons]);
 
   return (
-    <div className={clsx(classes.root)}>
+    <Root>
       {isFetching && (
-        <div className={classes.loader}>
+        <Loader>
           <MUI.Fade in style={{ transitionDelay: "800ms" }}>
             <MUI.CircularProgress variant="indeterminate" size={300} />
           </MUI.Fade>
-        </div>
+        </Loader>
       )}
 
-      <div className={classes.deck}>
+      <Deck>
         <DeckGL
           ref={deckRef}
           controller={{ type: MapController }}
@@ -140,7 +152,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               pickable={false}
               stroked={true}
               filled={true}
-              getFillColor={(d: any, { index }: { index: number }) => {
+              getFillColor={(_d: any, { index }: { index: number }) => {
                 if (!colorIndex) {
                   return [230, 230, 230];
                 }
@@ -252,40 +264,37 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
               }
             })()}
         </DeckGL>
-      </div>
-    </div>
+      </Deck>
+    </Root>
   );
 });
 
-const useStyles = MUI.makeStyles(
-  (theme) => ({
-    root: {
-      zIndex: 1,
-      position: "relative",
-      height: "100%",
-      flex: 1,
-    },
-    deck: {
-      pointerEvents: "none",
-    },
-    loader: {
-      position: "absolute",
-      zIndex: 2,
-      top: 0,
-      left: -theme.spacing(55),
-      paddingLeft: theme.spacing(55),
-      right: 0,
-      bottom: 0,
-      pointerEvents: "none",
+const Loader = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "loader",
+})(({ theme }) => ({
+  position: "absolute",
+  zIndex: 2,
+  top: 0,
+  left: theme.spacing(-55),
+  paddingLeft: theme.spacing(55),
+  right: 0,
+  bottom: 0,
+  pointerEvents: "none",
 
-      display: "grid",
-      placeItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
+  display: "grid",
+  placeItems: "center",
+  backgroundColor: "rgba(0, 0, 0, 0.05)",
 
-      transition: theme.transitions.create("all", {
-        duration: theme.transitions.duration.short,
-      }),
-    },
+  transition: theme.transitions.create("all", {
+    duration: theme.transitions.duration.short,
   }),
-  { name: "XuiGenerator:Preview" }
-);
+}));
+
+const Deck = styled("div", {
+  name: "SwissMaps-Generator-Preview",
+  slot: "deck",
+})(() => ({
+  pointerEvents: "none",
+  minHeight: 200,
+}));

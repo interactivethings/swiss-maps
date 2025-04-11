@@ -1,17 +1,13 @@
-import { z } from "zod";
 import { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  Button,
-  Link,
   List,
   ListItem,
   ListItemText,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import dynamic from "next/dynamic";
-import { groupBy } from "fp-ts/lib/NonEmptyArray";
 import { GeoDataFeature, useGeoData } from "src/domain/geodata";
 import {
   MunicipalityMigrationData,
@@ -19,10 +15,7 @@ import {
 } from "src/domain/municipality-migrations";
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
-import { parse } from "path";
 import { useQuery } from "@tanstack/react-query";
-import { GeoJsonLayer } from "@deck.gl/layers";
-import DeckGL from "@deck.gl/react";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -31,7 +24,7 @@ const MutationsMinimap = dynamic(
   () => import("../components/Mutations/Minimap"),
   {
     ssr: false,
-  }
+  },
 );
 
 const INITIAL_VIEW_STATE = {
@@ -191,9 +184,7 @@ export default function Page() {
           const selected = migrationItem === parsed;
           return (
             <ListItem
-              selected={selected}
               key={index}
-              button
               onClick={() => handleMutationSelect(parsed)}
               ref={
                 selected
@@ -223,7 +214,7 @@ export default function Page() {
         <Box
           display="grid"
           gridTemplateColumns="1fr 1fr"
-          gridColumnGap="1rem"
+          columnGap="1rem"
           height="100%"
         >
           <div>
