@@ -1,28 +1,31 @@
 import * as MUI from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = "div";
+const Root = styled("div", {
+  name: "SwissMaps-Header",
+  slot: "root",
+})(() => ({
+  position: "relative",
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Header(props: Props, ref: any) {
-  const classes = useStyles();
-
   const { ...rest } = props;
 
   return (
-    <Root ref={ref} className={classes.root} {...rest}>
-      <div className={classes.pattern}>
+    <Root ref={ref} {...rest}>
+      <Pattern>
         <img src="/pattern.svg" />
         <div />
-      </div>
+      </Pattern>
 
-      <div className={classes.constainer}>
+      <Container>
         <div>
           <Link href="/" passHref legacyBehavior>
             <MUI.Link variant="h1" color="primary" underline="none">
@@ -38,103 +41,86 @@ function Header(props: Props, ref: any) {
           </MUI.Typography>
         </div>
 
-        <nav className={classes.nav}>
-          <MUI.Link
-            href="/#examples"
-            variant="h4"
-            color="textPrimary"
-            className={classes.navItem}
-          >
+        <Nav>
+          <NavItem href="/#examples" variant="h4" color="textPrimary">
             Examples
-          </MUI.Link>
-          <MUI.Link
-            href="/docs"
-            variant="h4"
-            color="textPrimary"
-            className={classes.navItem}
-          >
+          </NavItem>
+          <NavItem href="/docs" variant="h4" color="textPrimary">
             Documentation
-          </MUI.Link>
-          <MUI.Link
+          </NavItem>
+          <NavItem
             href="https://github.com/interactivethings/swiss-maps"
             target="_blank"
             variant="h4"
             color="textPrimary"
-            className={classes.navItem}
           >
             GitHub
-          </MUI.Link>
-        </nav>
-      </div>
+          </NavItem>
+        </Nav>
+      </Container>
     </Root>
   );
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: "relative",
-    },
+const Pattern = styled("div", {
+  name: "SwissMaps-Header",
+  slot: "pattern",
+})(() => ({
+  zIndex: -1,
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  opacity: 0.5,
+  overflow: "hidden",
 
-    constainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "50px 60px",
-      [theme.breakpoints.down("sm")]: {
-        flexDirection: "column",
-        padding: theme.spacing(4),
-        alignItems: "flex-start",
-      },
-    },
+  "& img": {
+    display: "block",
+    width: "100%",
+  },
 
-    nav: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: theme.spacing(3),
-    },
-    navItem: {
-      padding: theme.spacing(2, 0),
-      textDecoration: "none",
-    },
+  "& div": {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background:
+      "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)",
+  },
+}));
 
-    pattern: {
-      zIndex: -1,
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      opacity: 0.5,
-      overflow: "hidden",
+const Container = styled("div", {
+  name: "SwissMaps-Header",
+  slot: "container",
+})(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "50px 60px",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    padding: theme.spacing(4),
+    alignItems: "flex-start",
+  },
+}));
 
-      "& img": {
-        display: "block",
-        width: "100%",
-      },
+const Nav = styled("nav", {
+  name: "SwissMaps-Header",
+  slot: "nav",
+})(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(3),
+}));
 
-      "& div": {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background:
-          "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)",
-      },
-    },
-
-    title: {
-      ...theme.typography.display1,
-      maxWidth: 800,
-      margin: "0 auto",
-    },
-    subtitle: {
-      ...theme.typography.body1,
-      marginTop: theme.spacing(3),
-    },
-  }),
-  { name: "XuiHeader" },
-);
+const NavItem = styled(MUI.Link, {
+  name: "SwissMaps-Header",
+  slot: "navItem",
+})(({ theme }) => ({
+  padding: theme.spacing(2, 0),
+  textDecoration: "none",
+}));
 
 export default React.forwardRef(Header);

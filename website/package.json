@@ -16,7 +16,6 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.0.2",
     "@mui/material-nextjs": "^7.0.2",
-    "@mui/styles": "^6.4.8",
     "@tanstack/react-query": "^5.72.2",
     "@turf/turf": "^7.2.0",
     "@types/cors": "^2.8.17",

@@ -4,19 +4,28 @@ import { downloadUrl } from "src/shared";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
 import { useQuery } from "@tanstack/react-query";
-import { makeStyles } from '@mui/styles';
+import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
  */
-const Root = MUI.Paper;
+const Root = styled(MUI.Paper, {
+  name: "SwissMaps-Generator-Stats",
+  slot: "root",
+})(({ theme }) => ({
+  position: "absolute",
+  top: 40,
+  right: 40,
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(1.5, 2),
+  width: 160,
+}));
 
 interface Props extends React.ComponentPropsWithoutRef<typeof Root> {}
 
 function Stats(props: Props) {
   const { ...rest } = props;
-
-  const classes = useStyles();
 
   const ctx = useContext();
   const { options } = ctx.state;
@@ -62,44 +71,24 @@ function Stats(props: Props) {
   }, [topoData, svgData]);
 
   return (
-    <Root elevation={4} className={classes.root} {...rest}>
-      <MUI.Typography
-        className={classes.stat}
-        variant="body2"
-        color="textSecondary"
-      >
+    <Root elevation={4} {...rest}>
+      <Stat variant="body2" color="textSecondary">
         TopoJSON <span>{humanFileSize(state.topojson.size, false, 0)}</span>
-      </MUI.Typography>
-      <MUI.Typography
-        className={classes.stat}
-        variant="body2"
-        color="textSecondary"
-      >
+      </Stat>
+      <Stat variant="body2" color="textSecondary">
         SVG <span>{humanFileSize(state.svg.size, false, 0)}</span>
-      </MUI.Typography>
+      </Stat>
     </Root>
   );
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: "absolute",
-      top: 40,
-      right: 40,
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(1.5, 2),
-      width: 160,
-    },
-
-    stat: {
-      display: "flex",
-      justifyContent: "space-between",
-    },
-  }),
-  { name: "XuiGenerator:Stats" },
-);
+const Stat = styled(MUI.Typography, {
+  name: "SwissMaps-Generator-Stats",
+  slot: "stat",
+})(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+}));
 
 export default Stats;
 
