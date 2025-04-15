@@ -19,4 +19,4 @@ jobs:
           restore-keys: |
             downloads-
 
-      - run: make
+      - run: make -j
