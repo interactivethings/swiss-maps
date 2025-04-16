@@ -22,7 +22,7 @@
     "@types/d3": "^7.4.3",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.14.1",
-    "@types/react": "^19.1.0",
+    "@types/react": "^19.1.2",
     "@types/topojson": "^3.2.6",
     "bezier-easing": "^2.1.0",
     "clsx": "^2.1.1",
