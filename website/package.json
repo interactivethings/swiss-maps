@@ -6,10 +6,10 @@
     "build": "cp -r node_modules/swiss-maps public/ && next build"
   },
   "dependencies": {
-    "@deck.gl/core": "^9.1.8",
-    "@deck.gl/layers": "^9.1.8",
-    "@deck.gl/react": "^9.1.8",
-    "@deck.gl/widgets": "^9.1.8",
+    "@deck.gl/core": "^9.1.11",
+    "@deck.gl/layers": "^9.1.11",
+    "@deck.gl/react": "^9.1.11",
+    "@deck.gl/widgets": "^9.1.11",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
