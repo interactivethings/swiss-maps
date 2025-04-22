@@ -29,5 +29,9 @@
   "dependencies": {},
   "devDependencies": {
     "mapshaper": "^0.6.102"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
