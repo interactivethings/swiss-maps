@@ -3976,10 +3976,10 @@ sweepline-intersections@^1.5.0:
   dependencies:
     tinyqueue "^2.0.0"
 
-swiss-maps@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.5.0.tgz#070a1b3e0661556424299d2b0c2ec5fe697d25fe"
-  integrity sha512-1NfF4mZF5Uf4epd2UbR/L13rZ8DluJ65cSEwWb+eA9mLQM7oE86SpUeKn1POGb+yrHAEZU3yuTtVwN87f5bcDQ==
+swiss-maps@^4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/swiss-maps/-/swiss-maps-4.6.1.tgz#c008a410b3a694d011d42580efdcfcd7b306c9f6"
+  integrity sha512-2vuH1bQUcNBjXznA2w7c9q/ZEo3k99qlcHWBptzi66vMqsSkGwZwrJ7S7TxLnqpeOCaAswEnkLylUNe//ZVHLQ==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
