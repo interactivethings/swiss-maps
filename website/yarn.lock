@@ -121,10 +121,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/css-tokenizer/-/css-tokenizer-3.0.3.tgz#a5502c8539265fecbd873c1e395a890339f119c2"
   integrity sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==
 
-"@deck.gl/core@^9.1.11":
-  version "9.1.11"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-9.1.11.tgz#d67aa026cd72d49bdae26af894abf907edb75b4c"
-  integrity sha512-ibqeLgx7fRqvJeCWtugbPE/LcOl3uDy8wSSd+l0FBhOqOPQcLdluTVMs0JW2OyqMuR2eOqcfarxzXdDVM7CcJA==
+"@deck.gl/core@^9.1.13":
+  version "9.1.13"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-9.1.13.tgz#41e696d1ebadf7cc537e48b1a4f1b10568231633"
+  integrity sha512-c15DpwUEvDjmt3+/azSjcfhVQ5L5HiIj6LJob1KAwQOnB5zgVdKWukN/21ELQ7ekppEkfT0x4byRv5k4QVocqQ==
   dependencies:
     "@loaders.gl/core" "^4.2.0"
     "@loaders.gl/images" "^4.2.0"
@@ -144,10 +144,10 @@
     gl-matrix "^3.0.0"
     mjolnir.js "^3.0.0"
 
-"@deck.gl/layers@^9.1.11":
-  version "9.1.11"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-9.1.11.tgz#bfc496e3229486e13eeb0da3d82d8e82a98cc55e"
-  integrity sha512-RDFF+YH4BP3HPUCtblnfTaWXBt1DBk0i7FbQ9jgcjdv4CB7MtEOHme5k2LJ0cBV4ROQtSHg/vjAvMayZewI4vg==
+"@deck.gl/layers@^9.1.13":
+  version "9.1.13"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-9.1.13.tgz#44a48b5deeb6be711223d3a37750777a01ee6f20"
+  integrity sha512-2eD2uARmObtCXrc1Q051fqy+LS2w6a700qPerqtqz+J/bOWTHSEZxAdIoHawDU7g+fi4/1lti0m8bdp2X/kZLA==
   dependencies:
     "@loaders.gl/images" "^4.2.0"
     "@loaders.gl/schema" "^4.2.0"
@@ -158,15 +158,15 @@
     "@math.gl/web-mercator" "^4.1.0"
     earcut "^2.2.4"
 
-"@deck.gl/react@^9.1.11":
-  version "9.1.11"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-9.1.11.tgz#70e2bcbe8538ef12461394f8805691a99e3eb481"
-  integrity sha512-RYjVYMZteyGwlZtuAiVD54TqvFgtZEJYBju2E/a6Bg3LBZ1eNtGHCpx5dIVKiOOU99gOkw2g2h0yrRgQt1j1cQ==
+"@deck.gl/react@^9.1.13":
+  version "9.1.13"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-9.1.13.tgz#b0f9101a5aabdc1944d7d034170de20cf00c0cc4"
+  integrity sha512-9tu5roGzvy4plLvUVUxDpEy3KHDxpAEBRdM/qC06Ijognfl/A9bECdQt4cqqGflkvg6VzQaw2Cy7eIRvzhXJbA==
 
-"@deck.gl/widgets@^9.1.11":
-  version "9.1.11"
-  resolved "https://registry.yarnpkg.com/@deck.gl/widgets/-/widgets-9.1.11.tgz#7ea9382a0b27d152544fb6fc1975d433cc18a3d1"
-  integrity sha512-E2t3YijvBEjIvPf2zTqaaPMYGpm3YLSTA3ap2JwEn+F+UQhkrCcahlPu4dXhpd0HHG8QEQCMZed/umad6kWZ2g==
+"@deck.gl/widgets@^9.1.13":
+  version "9.1.13"
+  resolved "https://registry.yarnpkg.com/@deck.gl/widgets/-/widgets-9.1.13.tgz#8ea5f89d1e8bd5a5c30ad68dd8716ae4dc5b1c80"
+  integrity sha512-6nriLKNzXovWrm4Lj9MAdYf2W9/bSwJ1Rlq4jc8WvrOr1wtIJ7j6NdHlfGUs2Vv1PLt72M0jSqMwHQQevLvsqQ==
   dependencies:
     preact "^10.17.0"
 
