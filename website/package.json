@@ -18,7 +18,7 @@
     "@mui/material-nextjs": "^7.2.0",
     "@tanstack/react-query": "^5.83.0",
     "@turf/turf": "^7.2.0",
-    "@types/cors": "^2.8.17",
+    "@types/cors": "^2.8.19",
     "@types/d3": "^7.4.3",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.16.5",
