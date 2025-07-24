@@ -37,6 +37,11 @@
   resolved "https://registry.yarnpkg.com/@placemarkio/tokml/-/tokml-0.3.3.tgz#5b42c19d38fda3577cb6c09904ca7e9622bb793e"
   integrity sha512-Y6lprxpPfDxLoUyeNcI/vfxMkeWlTjNFvh73zlxfQtZ8TWIj+rmPY99l5wNFVkHQOAwCzLaBXyxULpbtaMGyHQ==
 
+"@rollup/rollup-linux-x64-gnu@^4.44.1":
+  version "4.45.1"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.45.1.tgz#0d4c8d0b8f801902f0844a40a9d981a0179f4971"
+  integrity sha512-+E/lYl6qu1zqgPEnTrs4WysQtvc/Sh4fC2nByfFExqgYrqkKWp1tWIbe+ELhixnenSpBbLXNi6vbEEJ8M7fiHw==
+
 "@tmcw/togeojson@^5.6.0":
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/@tmcw/togeojson/-/togeojson-5.6.0.tgz#a6c96971acdf36eef73a1c398cf19a565eb02831"
@@ -196,10 +201,10 @@ detect-libc@^2.0.1:
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.3.tgz#f0cd503b40f9939b894697d19ad50895e30cf700"
   integrity sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==
 
-fflate@^0.7.4:
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.7.4.tgz#61587e5d958fdabb5a9368a302c25363f4f69f50"
-  integrity sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==
+fflate@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.8.2.tgz#fc8631f5347812ad6028bbe4a2308b2792aa1dea"
+  integrity sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==
 
 flatbush@^3.2.1:
   version "3.3.0"
@@ -325,10 +330,10 @@ keygrip@~1.1.0:
   dependencies:
     tsscmp "1.0.6"
 
-mapshaper@^0.6.102:
-  version "0.6.102"
-  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.102.tgz#ca5108611ba07c46c788fbfbcf49fdf467f9fc33"
-  integrity sha512-LYflAzywcFskJ4aQVdctuymmOzB15MEjRY2nU+tkEH2hXNtsNSsM/IhOTF+NuoQziKxx7tHZObxnQSpcH5yaAA==
+mapshaper@^0.6.106:
+  version "0.6.106"
+  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.106.tgz#789b75bd25ca4a495965e4e61170a5623851a176"
+  integrity sha512-hf2T5yycfLVnD7AMz5v+iSDs7h+ioUR3iKAN6oW69y9aclJXfOjjGdK8mCpu/7dLjj1r+QvQVANaaaCDJC98Tw==
   dependencies:
     "@placemarkio/tokml" "^0.3.3"
     "@tmcw/togeojson" "^5.6.0"
@@ -340,7 +345,7 @@ mapshaper@^0.6.102:
     d3-interpolate "^3.0.1"
     d3-scale-chromatic "3.0.0"
     delaunator "^5.0.0"
-    fflate "^0.7.4"
+    fflate "0.8.2"
     flatbush "^3.2.1"
     geokdbush "^1.1.0"
     iconv-lite "^0.6.3"
@@ -352,6 +357,8 @@ mapshaper@^0.6.102:
     rw "~1.3.3"
     sync-request "5.0.0"
     tinyqueue "^2.0.3"
+  optionalDependencies:
+    "@rollup/rollup-linux-x64-gnu" "^4.44.1"
 
 mime-db@1.49.0:
   version "1.49.0"
