@@ -39,7 +39,7 @@
     "react-dom": "^19.1.0",
     "react-feather": "^2.0.10",
     "swiss-maps": "^4.6.1",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "use-immer": "^0.11.0",
     "zod": "^3.25.76"
   },
