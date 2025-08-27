@@ -106,6 +106,11 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
+big.js@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/big.js/-/big.js-7.0.1.tgz#c537c649ec6ea11d1306723d13c096ba199aadc4"
+  integrity sha512-iFgV784tD8kq4ccF1xtNMZnXeZzVuXWWM+ERFzKQjv+A5G9HC8CY3DuV45vgzFFcW+u2tIvmF95+AzWgs6BjCg==
+
 buffer-from@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
@@ -330,15 +335,16 @@ keygrip@~1.1.0:
   dependencies:
     tsscmp "1.0.6"
 
-mapshaper@^0.6.106:
-  version "0.6.106"
-  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.106.tgz#789b75bd25ca4a495965e4e61170a5623851a176"
-  integrity sha512-hf2T5yycfLVnD7AMz5v+iSDs7h+ioUR3iKAN6oW69y9aclJXfOjjGdK8mCpu/7dLjj1r+QvQVANaaaCDJC98Tw==
+mapshaper@^0.6.111:
+  version "0.6.111"
+  resolved "https://registry.yarnpkg.com/mapshaper/-/mapshaper-0.6.111.tgz#4dc67e94844b3134ad05d6fedcd5678c1742dd62"
+  integrity sha512-17ywtn2q35U21O3OQOunGVQ2AAfjya0+gZPvPh3C/IcCJ0BEO6fTq3JK6UL5JN2sr4w33YrnKhIJiPkcqPwNVg==
   dependencies:
     "@placemarkio/tokml" "^0.3.3"
     "@tmcw/togeojson" "^5.6.0"
     "@xmldom/xmldom" "^0.8.6"
     adm-zip "^0.5.9"
+    big.js "^7.0.1"
     commander "7.0.0"
     cookies "^0.8.0"
     d3-color "3.1.0"
