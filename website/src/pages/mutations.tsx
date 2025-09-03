@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  alpha,
   Box,
   List,
   ListItem,
   ListItemText,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -16,6 +18,8 @@ import {
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
+import { Chip } from "@mui/material";
+import { ADDED_COLOR, REMOVED_COLOR } from "@/components/Mutations/Map";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -24,7 +28,7 @@ const MutationsMinimap = dynamic(
   () => import("../components/Mutations/Minimap"),
   {
     ssr: false,
-  },
+  }
 );
 
 const INITIAL_VIEW_STATE = {
@@ -39,6 +43,63 @@ const INITIAL_VIEW_STATE = {
   transitionDuration: 1000,
 };
 
+export const DiffLabel = ({
+  item,
+}: {
+  item: MunicipalityMigrationDataItem;
+}) => {
+  const { added, removed } = item;
+  if (added.length === 0 && removed.length === 0) {
+    return "No changes";
+  }
+  const renderMunicipalities = (
+    municipalities: typeof added,
+    type: "addition" | "removal"
+  ) =>
+    municipalities.map((municipality, index) => (
+      <Box
+        component="span"
+        sx={{
+          display: "inline-block",
+          mb: 0.25,
+          mr: 0.25,
+          height: 24,
+          whiteSpace: "balance",
+          bgcolor: alpha(
+            type === "addition" ? ADDED_COLOR.hex : REMOVED_COLOR.hex,
+            0.1
+          ),
+        }}
+        key={municipality.ofsNumber}
+      >
+        <Tooltip
+          sx={{ pointerEvents: "none" }}
+          title={`${type === "addition" ? "Added" : "Removed"} municipality ${
+            municipality.municipalityName
+          }`}
+          arrow
+        >
+          <span>{municipality.municipalityName}</span>
+        </Tooltip>{" "}
+        <Tooltip title="This is the ofsNumber" arrow>
+          <Chip label={municipality.ofsNumber} size="small" />
+        </Tooltip>
+      </Box>
+    ));
+
+  return (
+    <>
+      {added.length > 0 && (
+        <span>{renderMunicipalities(added, "addition")}</span>
+      )}
+      {added.length > 0 && removed.length > 0 && <>&nbsp;</>}
+      {removed.length > 0 && (
+        <span>{renderMunicipalities(removed, "removal")}</span>
+      )}
+    </>
+  );
+};
+
 export default function Page() {
   const [year1, setYear1] = useState("2022");
   const [year2, setYear2] = useState("2024");
@@ -48,7 +109,6 @@ export default function Page() {
       const mutations = (await (
         await fetch(`/api/mutations?from=01.01.${year1}&to=01.01.${year2}`)
       ).json()) as MunicipalityMigrationData;
-      console.log({ mutations });
       return mutations;
     },
   });
@@ -115,10 +175,28 @@ export default function Page() {
     }
   }, [migrationItem, geoData1, geoData2]);
 
-  const highlightedMunicipalities = {
-    added: migrationItem?.added.map((x) => x.ofsNumber) ?? [],
-    removed: migrationItem?.removed.map((x) => x.ofsNumber) ?? [],
-  };
+  const all = useMemo(() => {
+    const def = { added: [], removed: [] };
+    return (
+      groupedMutations?.reduce<{ added: number[]; removed: number[] }>(
+        (acc, curr) => {
+          acc.added.push(...(curr.added.map((x) => x.ofsNumber) ?? []));
+          acc.removed.push(...(curr.removed.map((x) => x.ofsNumber) ?? []));
+          return acc;
+        },
+        def
+      ) ?? def
+    );
+  }, [groupedMutations]);
+  const highlightedMunicipalities = migrationItem
+    ? {
+        added: migrationItem?.added.map((x) => x.ofsNumber) ?? [],
+        removed: migrationItem?.removed.map((x) => x.ofsNumber) ?? [],
+      }
+    : {
+        added: all.added,
+        removed: all.removed,
+      };
 
   return (
     <Box
@@ -127,8 +205,7 @@ export default function Page() {
       height="100vh"
       overflow="hidden"
     >
-      <Box
-        component={List}
+      <List
         sx={{
           overflow: "scroll",
           height: "100%",
@@ -195,11 +272,15 @@ export default function Page() {
               <ListItemText
                 primary={
                   <>
-                    <Typography variant="overline">
-                      {parsed.migrationNumber}
-                    </Typography>
+                    <Tooltip title="Migration number" arrow>
+                      <Typography variant="overline">
+                        {parsed.migrationNumber}
+                      </Typography>
+                    </Tooltip>
                     <br />
-                    <Typography variant="inherit">{parsed.label}</Typography>
+                    <Typography variant="inherit">
+                      <DiffLabel item={parsed} />
+                    </Typography>
                   </>
                 }
                 secondary={`${parsed.year}${
@@ -209,7 +290,7 @@ export default function Page() {
             </ListItem>
           );
         })}
-      </Box>
+      </List>
       <Box sx={{ p: 2 }}>
         <Box
           display="grid"
