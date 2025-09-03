@@ -25,6 +25,7 @@ import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
 import { Close, ExpandMore } from "@mui/icons-material";
 import { DiffLabel } from "@/components/Mutations/DiffLabel";
+import Head from "next/head";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -158,6 +159,9 @@ export default function Page() {
       height="100vh"
       overflow="hidden"
     >
+      <Head>
+        <title>Municipality Mutations - Swiss Maps</title>
+      </Head>
       <List
         sx={{
           overflow: "scroll",
@@ -297,6 +301,7 @@ export default function Page() {
               {/* IconButton with Close icon to setMigrationItem to undefined */}
               {selected ? (
                 <IconButton
+                  size="small"
                   sx={{
                     position: "absolute",
                     top: 8,
@@ -308,7 +313,7 @@ export default function Page() {
                     setMigrationItem(undefined);
                   }}
                 >
-                  <Close />
+                  <Close fontSize="small" />
                 </IconButton>
               ) : null}
 
