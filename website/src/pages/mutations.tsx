@@ -112,6 +112,9 @@ export const DiffLabel = ({
 
   return (
     <>
+      {changed.length > 0 && (
+        <span>{renderMunicipalities(changed, "change")}</span>
+      )}
       {onlyAdded.length > 0 && (
         <span>{renderMunicipalities(onlyAdded, "addition")}</span>
       )}
@@ -121,9 +124,6 @@ export const DiffLabel = ({
         <span>{renderMunicipalities(onlyRemoved, "removal")}</span>
       )}
       {onlyRemoved.length > 0 && changed.length > 0 && <>&nbsp;</>}
-      {changed.length > 0 && (
-        <span>{renderMunicipalities(changed, "change")}</span>
-      )}
     </>
   );
 };
