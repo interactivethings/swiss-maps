@@ -51,7 +51,7 @@ export const DiffLabel = ({
         key={municipality.ofsNumber}
       >
         <Tooltip
-          sx={{ pointerEvents: "none" }}
+          enterDelay={500}
           title={`${
             type === "addition"
               ? "Added"
@@ -63,7 +63,7 @@ export const DiffLabel = ({
         >
           <span>{municipality.municipalityName}</span>
         </Tooltip>{" "}
-        <Tooltip title="This is the ofsNumber" arrow>
+        <Tooltip title="This is the ofsNumber" arrow enterDelay={500}>
           <Chip label={municipality.ofsNumber} size="small" />
         </Tooltip>
       </Box>

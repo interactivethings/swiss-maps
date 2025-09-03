@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  IconButton,
   Link,
   List,
   ListItem,
@@ -22,7 +23,7 @@ import {
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
-import { ExpandMore } from "@mui/icons-material";
+import { Close, ExpandMore } from "@mui/icons-material";
 import { DiffLabel } from "@/components/Mutations/DiffLabel";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
@@ -119,6 +120,11 @@ export default function Page() {
       }));
     } else {
       console.log("Cannot find municipality", municipality, migrationItem);
+    }
+
+    if (!migrationItem) {
+      // reset view state
+      setViewState(INITIAL_VIEW_STATE);
     }
   }, [migrationItem, geoData1, geoData2]);
 
@@ -258,7 +264,7 @@ export default function Page() {
           </Box>
         </Box>
         <Button variant="text" onClick={() => setMigrationItem(undefined)}>
-          Deselect
+          Reset view
         </Button>
 
         {(groupedMutations ?? []).map((parsed, index) => {
@@ -267,27 +273,49 @@ export default function Page() {
             <ListItem
               key={index}
               sx={{
+                position: "relative",
                 borderRadius: "10px",
                 scrollMarginTop: 48,
                 borderWidth: "4px",
                 borderStyle: "solid",
                 cursor: "pointer",
                 borderColor: (theme) =>
-                  parsed.migrationNumber === migrationItem?.migrationNumber
-                    ? theme.palette.primary.main
-                    : "transparent",
+                  selected ? theme.palette.primary.main : "transparent",
               }}
-              onClick={() => handleMutationSelect(parsed)}
+              onClick={(ev) => {
+                if (ev.defaultPrevented) {
+                  return;
+                }
+                handleMutationSelect(parsed);
+              }}
               ref={
                 selected
                   ? (node) => node?.scrollIntoView({ behavior: "smooth" })
                   : undefined
               }
             >
+              {/* IconButton with Close icon to setMigrationItem to undefined */}
+              {selected ? (
+                <IconButton
+                  sx={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    zIndex: 1,
+                  }}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    setMigrationItem(undefined);
+                  }}
+                >
+                  <Close />
+                </IconButton>
+              ) : null}
+
               <ListItemText
                 primary={
                   <>
-                    <Tooltip title="Migration number" arrow>
+                    <Tooltip title="Migration number" arrow enterDelay={500}>
                       <Typography variant="overline">
                         {parsed.migrationNumber}
                       </Typography>
