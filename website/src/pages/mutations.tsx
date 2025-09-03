@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   alpha,
   Box,
   Button,
+  Link,
   List,
   ListItem,
   ListItemText,
@@ -21,6 +25,7 @@ import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
 import { Chip } from "@mui/material";
 import { ADDED_COLOR, REMOVED_COLOR } from "@/components/Mutations/Map";
+import { ExpandMore } from "@mui/icons-material";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -257,6 +262,59 @@ export default function Page() {
           }
         }}
       >
+        <Accordion sx={{ mb: 2 }} disableGutters elevation={0}>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography component="h1" variant="h5" mb={0}>
+              Municipality Mutations
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2">
+              Below you can see all municipality changes from {year1} to {year2}
+              . The mutations data comes from the{" "}
+              <Link
+                href="https://www.agvchapp.bfs.admin.ch/de"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Swiss Federal Statistical Office's Application of Swiss
+                Municipalities API
+              </Link>
+              . You can query the data yourself at{" "}
+              <Link
+                href="https://www.agvchapp.bfs.admin.ch/de/mutated-communes/query"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                this query interface
+              </Link>
+              .
+            </Typography>
+            <Typography variant="body2">
+              The municipality geoshapes are provided by{" "}
+              <Link
+                href="https://www.npmjs.com/package/swiss-maps"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                swiss-maps
+              </Link>
+              .
+            </Typography>
+            {/* Mentions that it was made by InteractiveThings in Zürich https://www.interactivethings.com */}
+            <Typography variant="body2">
+              Made by{" "}
+              <Link
+                href="https://www.interactivethings.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Interactive Things
+              </Link>{" "}
+              in Zürich.
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
         <Box sx={{ p: 1 }}>
           <Box
             component="form"
