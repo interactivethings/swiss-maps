@@ -3,7 +3,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  alpha,
   Box,
   Button,
   Link,
@@ -23,9 +22,8 @@ import {
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
-import { Chip } from "@mui/material";
-import { ADDED_COLOR, REMOVED_COLOR } from "@/components/Mutations/Map";
 import { ExpandMore } from "@mui/icons-material";
+import { DiffLabel } from "@/components/Mutations/DiffLabel";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -47,90 +45,6 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
   transitionInterpolator: new FlyToInterpolator(),
   transitionDuration: 1000,
-};
-
-export const DiffLabel = ({
-  item,
-}: {
-  item: MunicipalityMigrationDataItem;
-}) => {
-  const { added, removed } = item;
-
-  // Find municipalities that are both added and removed (changed)
-  const addedOfsNumbers = new Set(added.map((m) => m.ofsNumber));
-  const removedOfsNumbers = new Set(removed.map((m) => m.ofsNumber));
-
-  const changed = added.filter((m) => removedOfsNumbers.has(m.ofsNumber));
-  const onlyAdded = added.filter((m) => !removedOfsNumbers.has(m.ofsNumber));
-  const onlyRemoved = removed.filter((m) => !addedOfsNumbers.has(m.ofsNumber));
-
-  if (
-    onlyAdded.length === 0 &&
-    onlyRemoved.length === 0 &&
-    changed.length === 0
-  ) {
-    return "No changes";
-  }
-
-  const renderMunicipalities = (
-    municipalities: typeof added,
-    type: "addition" | "removal" | "change"
-  ) =>
-    municipalities.map((municipality, index) => (
-      <Box
-        component="span"
-        sx={{
-          display: "inline-block",
-          mb: 0.25,
-          mr: 0.25,
-          height: 24,
-          whiteSpace: "balance",
-          bgcolor: alpha(
-            type === "addition"
-              ? ADDED_COLOR.hex
-              : type === "removal"
-              ? REMOVED_COLOR.hex
-              : "#ff9800", // Orange for changes
-            0.1
-          ),
-        }}
-        key={municipality.ofsNumber}
-      >
-        <Tooltip
-          sx={{ pointerEvents: "none" }}
-          title={`${
-            type === "addition"
-              ? "Added"
-              : type === "removal"
-              ? "Removed"
-              : "Changed"
-          } municipality ${municipality.municipalityName}`}
-          arrow
-        >
-          <span>{municipality.municipalityName}</span>
-        </Tooltip>{" "}
-        <Tooltip title="This is the ofsNumber" arrow>
-          <Chip label={municipality.ofsNumber} size="small" />
-        </Tooltip>
-      </Box>
-    ));
-
-  return (
-    <>
-      {changed.length > 0 && (
-        <span>{renderMunicipalities(changed, "change")}</span>
-      )}
-      {onlyAdded.length > 0 && (
-        <span>{renderMunicipalities(onlyAdded, "addition")}</span>
-      )}
-      {onlyAdded.length > 0 &&
-        (onlyRemoved.length > 0 || changed.length > 0) && <>&nbsp;</>}
-      {onlyRemoved.length > 0 && (
-        <span>{renderMunicipalities(onlyRemoved, "removal")}</span>
-      )}
-      {onlyRemoved.length > 0 && changed.length > 0 && <>&nbsp;</>}
-    </>
-  );
 };
 
 export default function Page() {
