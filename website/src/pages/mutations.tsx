@@ -49,12 +49,26 @@ export const DiffLabel = ({
   item: MunicipalityMigrationDataItem;
 }) => {
   const { added, removed } = item;
-  if (added.length === 0 && removed.length === 0) {
+
+  // Find municipalities that are both added and removed (changed)
+  const addedOfsNumbers = new Set(added.map((m) => m.ofsNumber));
+  const removedOfsNumbers = new Set(removed.map((m) => m.ofsNumber));
+
+  const changed = added.filter((m) => removedOfsNumbers.has(m.ofsNumber));
+  const onlyAdded = added.filter((m) => !removedOfsNumbers.has(m.ofsNumber));
+  const onlyRemoved = removed.filter((m) => !addedOfsNumbers.has(m.ofsNumber));
+
+  if (
+    onlyAdded.length === 0 &&
+    onlyRemoved.length === 0 &&
+    changed.length === 0
+  ) {
     return "No changes";
   }
+
   const renderMunicipalities = (
     municipalities: typeof added,
-    type: "addition" | "removal"
+    type: "addition" | "removal" | "change"
   ) =>
     municipalities.map((municipality, index) => (
       <Box
@@ -66,7 +80,11 @@ export const DiffLabel = ({
           height: 24,
           whiteSpace: "balance",
           bgcolor: alpha(
-            type === "addition" ? ADDED_COLOR.hex : REMOVED_COLOR.hex,
+            type === "addition"
+              ? ADDED_COLOR.hex
+              : type === "removal"
+              ? REMOVED_COLOR.hex
+              : "#ff9800", // Orange for changes
             0.1
           ),
         }}
@@ -74,9 +92,13 @@ export const DiffLabel = ({
       >
         <Tooltip
           sx={{ pointerEvents: "none" }}
-          title={`${type === "addition" ? "Added" : "Removed"} municipality ${
-            municipality.municipalityName
-          }`}
+          title={`${
+            type === "addition"
+              ? "Added"
+              : type === "removal"
+              ? "Removed"
+              : "Changed"
+          } municipality ${municipality.municipalityName}`}
           arrow
         >
           <span>{municipality.municipalityName}</span>
@@ -89,12 +111,17 @@ export const DiffLabel = ({
 
   return (
     <>
-      {added.length > 0 && (
-        <span>{renderMunicipalities(added, "addition")}</span>
+      {onlyAdded.length > 0 && (
+        <span>{renderMunicipalities(onlyAdded, "addition")}</span>
       )}
-      {added.length > 0 && removed.length > 0 && <>&nbsp;</>}
-      {removed.length > 0 && (
-        <span>{renderMunicipalities(removed, "removal")}</span>
+      {onlyAdded.length > 0 &&
+        (onlyRemoved.length > 0 || changed.length > 0) && <>&nbsp;</>}
+      {onlyRemoved.length > 0 && (
+        <span>{renderMunicipalities(onlyRemoved, "removal")}</span>
+      )}
+      {onlyRemoved.length > 0 && changed.length > 0 && <>&nbsp;</>}
+      {changed.length > 0 && (
+        <span>{renderMunicipalities(changed, "change")}</span>
       )}
     </>
   );
