@@ -1,10 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
+  Button,
+  IconButton,
+  Link,
   List,
   ListItem,
   ListItemText,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -16,6 +23,9 @@ import {
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
+import { Close, ExpandMore } from "@mui/icons-material";
+import { DiffLabel } from "@/components/Mutations/DiffLabel";
+import Head from "next/head";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
@@ -24,7 +34,7 @@ const MutationsMinimap = dynamic(
   () => import("../components/Mutations/Minimap"),
   {
     ssr: false,
-  },
+  }
 );
 
 const INITIAL_VIEW_STATE = {
@@ -48,7 +58,6 @@ export default function Page() {
       const mutations = (await (
         await fetch(`/api/mutations?from=01.01.${year1}&to=01.01.${year2}`)
       ).json()) as MunicipalityMigrationData;
-      console.log({ mutations });
       return mutations;
     },
   });
@@ -113,12 +122,35 @@ export default function Page() {
     } else {
       console.log("Cannot find municipality", municipality, migrationItem);
     }
+
+    if (!migrationItem) {
+      // reset view state
+      setViewState(INITIAL_VIEW_STATE);
+    }
   }, [migrationItem, geoData1, geoData2]);
 
-  const highlightedMunicipalities = {
-    added: migrationItem?.added.map((x) => x.ofsNumber) ?? [],
-    removed: migrationItem?.removed.map((x) => x.ofsNumber) ?? [],
-  };
+  const all = useMemo(() => {
+    const def = { added: [], removed: [] };
+    return (
+      groupedMutations?.reduce<{ added: number[]; removed: number[] }>(
+        (acc, curr) => {
+          acc.added.push(...(curr.added.map((x) => x.ofsNumber) ?? []));
+          acc.removed.push(...(curr.removed.map((x) => x.ofsNumber) ?? []));
+          return acc;
+        },
+        def
+      ) ?? def
+    );
+  }, [groupedMutations]);
+  const highlightedMunicipalities = migrationItem
+    ? {
+        added: migrationItem?.added.map((x) => x.ofsNumber) ?? [],
+        removed: migrationItem?.removed.map((x) => x.ofsNumber) ?? [],
+      }
+    : {
+        added: all.added,
+        removed: all.removed,
+      };
 
   return (
     <Box
@@ -127,8 +159,10 @@ export default function Page() {
       height="100vh"
       overflow="hidden"
     >
-      <Box
-        component={List}
+      <Head>
+        <title>Municipality Mutations - Swiss Maps</title>
+      </Head>
+      <List
         sx={{
           overflow: "scroll",
           height: "100%",
@@ -152,6 +186,59 @@ export default function Page() {
           }
         }}
       >
+        <Accordion sx={{ mb: 2 }} disableGutters elevation={0}>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography component="h1" variant="h5" mb={0}>
+              Municipality Mutations
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2">
+              Below you can see all municipality changes from {year1} to {year2}
+              . The mutations data comes from the{" "}
+              <Link
+                href="https://www.agvchapp.bfs.admin.ch/de"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Swiss Federal Statistical Office's Application of Swiss
+                Municipalities API
+              </Link>
+              . You can query the data yourself at{" "}
+              <Link
+                href="https://www.agvchapp.bfs.admin.ch/de/mutated-communes/query"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                this query interface
+              </Link>
+              .
+            </Typography>
+            <Typography variant="body2">
+              The municipality geoshapes are provided by{" "}
+              <Link
+                href="https://www.npmjs.com/package/swiss-maps"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                swiss-maps
+              </Link>
+              .
+            </Typography>
+            {/* Mentions that it was made by InteractiveThings in Zürich https://www.interactivethings.com */}
+            <Typography variant="body2">
+              Made by{" "}
+              <Link
+                href="https://www.interactivethings.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Interactive Things
+              </Link>{" "}
+              in Zürich.
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
         <Box sx={{ p: 1 }}>
           <Box
             component="form"
@@ -180,26 +267,68 @@ export default function Page() {
             />
           </Box>
         </Box>
+        <Button variant="text" onClick={() => setMigrationItem(undefined)}>
+          Reset view
+        </Button>
+
         {(groupedMutations ?? []).map((parsed, index) => {
           const selected = migrationItem === parsed;
           return (
             <ListItem
               key={index}
-              onClick={() => handleMutationSelect(parsed)}
+              sx={{
+                position: "relative",
+                borderRadius: "10px",
+                scrollMarginTop: 48,
+                borderWidth: "4px",
+                borderStyle: "solid",
+                cursor: "pointer",
+                borderColor: (theme) =>
+                  selected ? theme.palette.primary.main : "transparent",
+              }}
+              onClick={(ev) => {
+                if (ev.defaultPrevented) {
+                  return;
+                }
+                handleMutationSelect(parsed);
+              }}
               ref={
                 selected
                   ? (node) => node?.scrollIntoView({ behavior: "smooth" })
                   : undefined
               }
             >
+              {/* IconButton with Close icon to setMigrationItem to undefined */}
+              {selected ? (
+                <IconButton
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    zIndex: 1,
+                  }}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    setMigrationItem(undefined);
+                  }}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              ) : null}
+
               <ListItemText
                 primary={
                   <>
-                    <Typography variant="overline">
-                      {parsed.migrationNumber}
-                    </Typography>
+                    <Tooltip title="Migration number" arrow enterDelay={500}>
+                      <Typography variant="overline">
+                        {parsed.migrationNumber}
+                      </Typography>
+                    </Tooltip>
                     <br />
-                    <Typography variant="inherit">{parsed.label}</Typography>
+                    <Typography variant="inherit">
+                      <DiffLabel item={parsed} />
+                    </Typography>
                   </>
                 }
                 secondary={`${parsed.year}${
@@ -209,7 +338,7 @@ export default function Page() {
             </ListItem>
           );
         })}
-      </Box>
+      </List>
       <Box sx={{ p: 2 }}>
         <Box
           display="grid"

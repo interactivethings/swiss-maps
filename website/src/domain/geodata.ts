@@ -44,7 +44,6 @@ const fetchGeoData = (options: Value["state"]["options"]) => {
   return fetch(previewSourceUrl(options, "v0"))
     .then((res) => res.json())
     .then((json) => {
-      console.log({ json });
       return getGeoData(json);
     });
 };

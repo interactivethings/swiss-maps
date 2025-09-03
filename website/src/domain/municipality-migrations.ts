@@ -5,6 +5,7 @@ const mutationTypes = {
   1: "INCLUSION",
   2: "FUSION",
 };
+
 export const MunicipalityMigrationData = z
   .object({
     ds: z.array(
@@ -67,9 +68,6 @@ export const MunicipalityMigrationData = z
         year: items[0].year,
         migrationNumber: Number(migrationNumber),
         type: items[0].type,
-        label: `+${added.map((x) => x.municipalityName).join(", ")} / -${removed
-          .map((x) => x.municipalityName)
-          .join(", ")}`,
       };
     });
   });
