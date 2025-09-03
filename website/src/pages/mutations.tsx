@@ -295,8 +295,11 @@ export default function Page() {
             <ListItem
               key={index}
               sx={{
-                borderRadius: "4px",
+                borderRadius: "10px",
+                scrollMarginTop: 48,
                 borderWidth: "4px",
+                borderStyle: "solid",
+                cursor: "pointer",
                 borderColor: (theme) =>
                   parsed.migrationNumber === migrationItem?.migrationNumber
                     ? theme.palette.primary.main
