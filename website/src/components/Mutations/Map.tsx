@@ -3,7 +3,7 @@ import DeckGL from "@deck.gl/react";
 import React, { ComponentProps } from "react";
 import { useGeoData } from "src/domain/geodata";
 import { MapController } from "@deck.gl/core";
-import { Color, color, HSLColor, RGBColor } from "d3";
+import { color } from "d3";
 
 export const LINE_COLOR = [100, 100, 100, 127] as const;
 const createColor = (colorString: string) => {

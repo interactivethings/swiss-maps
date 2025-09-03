@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   alpha,
   Box,
+  Button,
   List,
   ListItem,
   ListItemText,
@@ -284,11 +285,23 @@ export default function Page() {
             />
           </Box>
         </Box>
+        <Button variant="text" onClick={() => setMigrationItem(undefined)}>
+          Deselect
+        </Button>
+
         {(groupedMutations ?? []).map((parsed, index) => {
           const selected = migrationItem === parsed;
           return (
             <ListItem
               key={index}
+              sx={{
+                borderRadius: "4px",
+                borderWidth: "4px",
+                borderColor: (theme) =>
+                  parsed.migrationNumber === migrationItem?.migrationNumber
+                    ? theme.palette.primary.main
+                    : "transparent",
+              }}
               onClick={() => handleMutationSelect(parsed)}
               ref={
                 selected
