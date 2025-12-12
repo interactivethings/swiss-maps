@@ -36,7 +36,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 
 20%/ch-combined.json: $(SHAPEFILE_TARGETS)
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 	  -i $^ combine-files string-fields=* \
 	  -proj wgs84 \
 		-clean \
@@ -47,7 +47,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 # - Unify ID ("CH")
 20%/country.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/l.$(ext))
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 		-i $< \
 		-clean \
 		-each 'id="CH"; name="Schweiz / Suisse / Svizzera"' \
@@ -58,7 +58,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 # - Unify IDs
 20%/cantons.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/k.$(ext))
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 		-i $< \
 		-clean \
 		-each 'id=this.properties.KTNR || this.properties.KT; name=this.properties.KTNAME || this.properties.NAME' \
@@ -69,7 +69,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 # - Unify IDs
 20%/districts.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/b.$(ext))
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 		-i $< \
 		-clean \
 		-each 'id=this.properties.BZNR || this.properties.BEZIRK; name=this.properties.BZNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
@@ -81,7 +81,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 # - Remove lakes (ID 9000+) and Liechtenstein municipalities from older shapefiles (ID 7000+)
 20%/municipalities.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/g.$(ext))
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 		-i $< $(if $(findstring 2017,$@),encoding=win1252,) \
 		-clean \
 		-each 'id=this.properties.GDENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.GMDNAME || this.properties.NAME; KTNR=this.properties.KTNR || this.properties.KT' \
@@ -94,7 +94,7 @@ SHAPEFILE_TARGETS := $(foreach shape,$(SHAPES),20%/$(shape).shp)
 # - Remove Lago di Como (9780)
 20%/lakes.shp: $(foreach ext,$(SHAPEFILE_EXT),shapefile/20%/s.$(ext))
 	mkdir -p $(dir $@)
-	yarn run mapshaper \
+	pnpm exec mapshaper \
 		-i $< \
 		-clean \
 		-each 'id=this.properties.SEENR || this.properties.GMDNR || this.properties.GMDE; name=this.properties.SEENAME || this.properties.GMDNAME || this.properties.NAME' \
