@@ -1,7 +1,7 @@
-.direnv/
 .next/
 node_modules/
 
 public/swiss-maps/
 
+next-env.d.ts
 tsconfig.tsbuildinfo

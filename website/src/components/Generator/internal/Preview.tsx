@@ -86,7 +86,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
     }
     const index = new Int32Array(cantons ? cantons.features.length : 0);
     for (let i = 0; i < index.length; ++i) {
-      index[i] = ((d3.max(neighbors[i], (j) => index[j]) as number) + 1) | 0;
+      index[i] = ((d3.max(neighbors[i], (j: number) => index[j]) as number) + 1) | 0;
     }
     return index;
   })();
