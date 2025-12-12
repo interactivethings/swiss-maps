@@ -3,7 +3,7 @@
   "name": "website",
   "scripts": {
     "dev": "next dev",
-    "build": "cp -r node_modules/swiss-maps public/ && next build"
+    "build": "cp -rL node_modules/swiss-maps public/ && next build"
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.13",
