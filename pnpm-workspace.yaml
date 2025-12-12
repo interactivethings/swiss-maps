@@ -2,5 +2,4 @@ packages:
   - "."
   - "website"
 
-# Temporarily decrease to 4 days to apply security fixes for CVE-2025-55182
-minimumReleaseAge: 5760 # 12960
+minimumReleaseAge: 12960
