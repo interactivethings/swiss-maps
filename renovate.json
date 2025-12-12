@@ -3,8 +3,8 @@
   "extends": ["config:recommended"],
   "rangeStrategy": "bump",
   "prHourlyLimit": 0,
-  "postUpdateOptions": ["yarnDedupeHighest"],
-  "dependencyDashboardApproval": true,  
+  "postUpdateOptions": ["pnpmDedupe"],
+  "dependencyDashboardApproval": true,
   "minimumReleaseAge": "9 days",
   "packageRules": [
     {
