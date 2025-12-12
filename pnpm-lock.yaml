@@ -59,6 +59,9 @@ importers:
       '@types/d3':
         specifier: ^7.4.3
         version: 7.4.3
+      '@types/geojson':
+        specifier: ^7946.0.16
+        version: 7946.0.16
       '@types/jsdom':
         specifier: ^27.0.0
         version: 27.0.0
@@ -71,6 +74,9 @@ importers:
       '@types/topojson':
         specifier: ^3.2.6
         version: 3.2.6
+      '@types/topojson-client':
+        specifier: ^3.1.5
+        version: 3.1.5
       bezier-easing:
         specifier: ^2.1.0
         version: 2.1.0
@@ -86,6 +92,9 @@ importers:
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
+      geojson:
+        specifier: ^0.5.0
+        version: 0.5.0
       immer:
         specifier: ^11.0.1
         version: 11.0.1
@@ -116,6 +125,9 @@ importers:
       swiss-maps:
         specifier: ^4.6.1
         version: 4.6.1
+      topojson-client:
+        specifier: ^3.1.0
+        version: 3.1.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1611,6 +1623,10 @@ packages:
 
   geojson-polygon-self-intersections@1.2.1:
     resolution: {integrity: sha512-/QM1b5u2d172qQVO//9CGRa49jEmclKEsYOQmWP9ooEjj63tBM51m2805xsbxkzlEELQ2REgTf700gUhhlegxA==}
+
+  geojson@0.5.0:
+    resolution: {integrity: sha512-/Bx5lEn+qRF4TfQ5aLu6NH+UKtvIv7Lhc487y/c8BdludrCTpiWf9wyI0RTyqg49MFefIAvFDuEi5Dfd/zgNxQ==}
+    engines: {node: '>= 0.10'}
 
   geokdbush@1.1.0:
     resolution: {integrity: sha512-pyyrGCMXZwWJaGt1YZIgGQg5ol3JjvEKESTon10HxdfWXlaqh5An8fNJkwOYUE+VkQfCdvYQKPVezTQU9AqWAA==}
@@ -4433,6 +4449,8 @@ snapshots:
   geojson-polygon-self-intersections@1.2.1:
     dependencies:
       rbush: 2.0.2
+
+  geojson@0.5.0: {}
 
   geokdbush@1.1.0:
     dependencies:

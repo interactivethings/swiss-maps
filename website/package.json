@@ -21,15 +21,18 @@
     "@turf/turf": "^7.3.0",
     "@types/cors": "^2.8.19",
     "@types/d3": "^7.4.3",
+    "@types/geojson": "^7946.0.16",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/topojson": "^3.2.6",
+    "@types/topojson-client": "^3.1.5",
     "bezier-easing": "^2.1.0",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "d3": "^7.9.0",
     "fp-ts": "^2.16.11",
+    "geojson": "^0.5.0",
     "immer": "^11.0.1",
     "io-ts": "^2.2.22",
     "jsdom": "^27.2.0",
@@ -40,9 +43,9 @@
     "react-dom": "^19.2.1",
     "react-feather": "^2.0.10",
     "swiss-maps": "^4.6.1",
+    "topojson-client": "^3.1.0",
     "typescript": "^5.9.3",
     "use-immer": "^0.11.0",
     "zod": "^3.25.76"
-  },
-  "devDependencies": {}
+  }
 }
