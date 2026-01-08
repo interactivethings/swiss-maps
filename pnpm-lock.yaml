@@ -96,8 +96,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       immer:
-        specifier: ^11.0.1
-        version: 11.0.1
+        specifier: ^11.1.0
+        version: 11.1.0
       io-ts:
         specifier: ^2.2.22
         version: 2.2.22(fp-ts@2.16.11)
@@ -133,7 +133,7 @@ importers:
         version: 5.9.3
       use-immer:
         specifier: ^0.11.0
-        version: 0.11.0(immer@11.0.1)(react@19.2.3)
+        version: 0.11.0(immer@11.1.0)(react@19.2.3)
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -1679,8 +1679,8 @@ packages:
   idb-keyval@6.2.0:
     resolution: {integrity: sha512-uw+MIyQn2jl3+hroD7hF8J7PUviBU7BPKWw4f/ISf32D4LoGu98yHjrzWWJDASu9QNrX10tCJqk9YY0ClWm8Ng==}
 
-  immer@11.0.1:
-    resolution: {integrity: sha512-naDCyggtcBWANtIrjQEajhhBEuL9b0Zg4zmlWK2CzS6xCWSE39/vvf4LqnMjUAWHBhot4m9MHCM/Z+mfWhUkiA==}
+  immer@11.1.0:
+    resolution: {integrity: sha512-dlzb07f5LDY+tzs+iLCSXV2yuhaYfezqyZQc+n6baLECWkOMEWxkECAOnXL0ba7lsA25fM9b2jtzpu/uxo1a7g==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -4511,7 +4511,7 @@ snapshots:
     dependencies:
       safari-14-idb-fix: 3.0.0
 
-  immer@11.0.1: {}
+  immer@11.1.0: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -4997,9 +4997,9 @@ snapshots:
 
   undici-types@7.16.0: {}
 
-  use-immer@0.11.0(immer@11.0.1)(react@19.2.3):
+  use-immer@0.11.0(immer@11.1.0)(react@19.2.3):
     dependencies:
-      immer: 11.0.1
+      immer: 11.1.0
       react: 19.2.3
 
   util-deprecate@1.0.2: {}
