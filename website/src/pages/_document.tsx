@@ -6,7 +6,6 @@ import {
   Main,
   NextScript,
 } from "next/document";
-import * as React from "react";
 import {
   DocumentHeadTags,
   DocumentHeadTagsProps,
