@@ -48,7 +48,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.6(@emotion/cache@11.14.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.3))(@emotion/server@11.11.0)(@types/react@19.2.7)(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
       '@tanstack/react-query':
-        specifier: ^5.90.10
+        specifier: ^5.90.12
         version: 5.90.12(react@19.2.3)
       '@turf/turf':
         specifier: ^7.3.0
