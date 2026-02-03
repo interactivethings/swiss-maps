@@ -3,7 +3,7 @@
 # https://www.bfs.admin.ch/bfs/de/home/dienstleistungen/geostat/geodaten-bundesstatistik/administrative-grenzen/generalisierte-gemeindegrenzen.html
 #
 
-YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023 2024 2025
+YEARS := 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2021-04 2021-07 2022 2022-05 2023 2024 2025 2026
 SHAPES := country cantons districts municipalities lakes
 SHAPEFILE_EXT := shp dbf prj shx
 
@@ -205,6 +205,26 @@ shapefile/2025/$(1).$(2): downloads/2025.zip
 		;; \
 	esac
 
+shapefile/2026/$(1).$(2): downloads/2026.zip
+	@mkdir -p $$(dir $$@)
+	case $(1) in \
+		b) \
+		unzip -p $$< Historized_boundaries_G1_20260101_2056.shp/Districts_G1_20260101.$(2) > shapefile/2026/$(1).$(2) \
+		;; \
+		g) \
+		unzip -p $$< Historized_boundaries_G1_20260101_2056.shp/Communes_G1_20260101.$(2) > shapefile/2026/$(1).$(2) \
+		;; \
+		k) \
+		unzip -p $$< Historized_boundaries_G1_20260101_2056.shp/Cantons_G1_20260101.$(2) > shapefile/2026/$(1).$(2) \
+		;; \
+		l) \
+		unzip -p $$< Historized_boundaries_G1_20260101_2056.shp/Country_G1_20260101.$(2) > shapefile/2026/$(1).$(2) \
+		;; \
+		s) \
+		unzip -p $$< Historized_boundaries_G1_20260101_2056.shp/Lacs_G1_20260101.$(2) > shapefile/2026/$(1).$(2) \
+		;; \
+	esac
+
 # Files from 2018 on seem to be consistently structured
 shapefile/20%/$(1).$(2): downloads/20%.zip
 	@mkdir -p $$(dir $$@)
@@ -225,6 +245,10 @@ $(foreach type,g k l s b,$(foreach ext,$(SHAPEFILE_EXT),$(eval $(call extract_fr
 # 	@echo 'municipalities -> $(call rename,municipalities)'
 # 	@echo 'cantons -> $(call rename,cantons)'
 # 	@echo 'districts -> $(call rename,districts)'
+
+downloads/2026.zip:
+	mkdir -p $(dir $@)
+	curl -o $@ "https://data.geo.admin.ch/ch.bfs.historisierte-administrative_grenzen_g1/historisierte-administrative_grenzen_g1_2026-01-01/historisierte-administrative_grenzen_g1_2026-01-01_2056.shp.zip"
 
 downloads/2025.zip:
 	mkdir -p $(dir $@)
