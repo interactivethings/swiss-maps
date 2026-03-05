@@ -123,8 +123,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@19.2.4)
       swiss-maps:
-        specifier: ^4.6.1
-        version: 4.6.1
+        specifier: ^4.7.0
+        version: 4.7.0
       topojson-client:
         specifier: ^3.1.0
         version: 3.1.0
@@ -2116,8 +2116,8 @@ packages:
   sweepline-intersections@1.5.0:
     resolution: {integrity: sha512-AoVmx72QHpKtItPu72TzFL+kcYjd67BPLDoR0LarIk+xyaRg+pDTMFXndIEvZf9xEKnJv6JdhgRMnocoG0D3AQ==}
 
-  swiss-maps@4.6.1:
-    resolution: {integrity: sha512-2vuH1bQUcNBjXznA2w7c9q/ZEo3k99qlcHWBptzi66vMqsSkGwZwrJ7S7TxLnqpeOCaAswEnkLylUNe//ZVHLQ==}
+  swiss-maps@4.7.0:
+    resolution: {integrity: sha512-MRX9u8rm6xHmBjAleGvmz2TqzIxrgflO4q7WIZP3mDv11V8j/L3AdbIJsurrKqUIR0FlUEncUIWNDMF2Djg/eg==}
 
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
@@ -5057,7 +5057,7 @@ snapshots:
     dependencies:
       tinyqueue: 2.0.3
 
-  swiss-maps@4.6.1: {}
+  swiss-maps@4.7.0: {}
 
   symbol-tree@3.2.4: {}
 
