@@ -22,7 +22,7 @@
     "@types/cors": "^2.8.19",
     "@types/d3": "^7.4.3",
     "@types/geojson": "^7946.0.16",
-    "@types/jsdom": "^27.0.0",
+    "@types/jsdom": "^28.0.0",
     "@types/node": "^24.10.12",
     "@types/react": "^19.2.13",
     "@types/topojson": "^3.2.6",
