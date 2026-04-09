@@ -27,7 +27,7 @@
     "@types/react": "^19.2.14",
     "@types/topojson": "^3.2.6",
     "@types/topojson-client": "^3.1.5",
-    "bezier-easing": "^2.1.0",
+    "bezier-easing": "^3.0.0",
     "clsx": "^2.1.1",
     "cors": "^2.8.6",
     "d3": "^7.9.0",

@@ -78,8 +78,8 @@ importers:
         specifier: ^3.1.5
         version: 3.1.5
       bezier-easing:
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^3.0.0
+        version: 3.0.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1322,8 +1322,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  bezier-easing@2.1.0:
-    resolution: {integrity: sha512-gbIqZ/eslnUFC1tjEvtz0sgx+xTK20wDnYMIA27VA04R7w6xxXQPZDbibjA9DTWZRA2CXtwHykkVzlCaAJAZig==}
+  bezier-easing@3.0.0:
+    resolution: {integrity: sha512-lE85voPXiK99T8NHOfhaUqCZpJdP1gBbbTEvdBDdPB+phyvPZPNWalBe42eb6lKOYchP0qZrtBiRCARtT4edRQ==}
 
   bidi-js@1.0.3:
     resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
@@ -4165,7 +4165,7 @@ snapshots:
 
   baseline-browser-mapping@2.10.10: {}
 
-  bezier-easing@2.1.0: {}
+  bezier-easing@3.0.0: {}
 
   bidi-js@1.0.3:
     dependencies:
