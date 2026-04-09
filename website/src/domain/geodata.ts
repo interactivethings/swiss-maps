@@ -1,6 +1,6 @@
-import cityData from "public/swiss-city-topo.json";
+import cityData from "@/public/swiss-city-topo.json";
 import { useQuery } from "@tanstack/react-query";
-import { previewSourceUrl } from "src/shared";
+import { previewSourceUrl } from "@/shared";
 import * as topojson from "topojson-client";
 import { Value } from "../components/Generator/context";
 import { Feature, Geometry, GeoJsonProperties } from "geojson";

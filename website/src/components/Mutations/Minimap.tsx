@@ -1,6 +1,6 @@
 import { GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
-import { useGeoData } from "src/domain/geodata";
+import { useGeoData } from "@/domain/geodata";
 
 const Minimap = ({
   viewState,

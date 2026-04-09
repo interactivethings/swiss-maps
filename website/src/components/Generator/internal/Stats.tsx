@@ -1,6 +1,6 @@
 import * as MUI from "@mui/material";
 import * as React from "react";
-import { downloadUrl } from "src/shared";
+import { downloadUrl } from "@/shared";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
 import { useQuery } from "@tanstack/react-query";

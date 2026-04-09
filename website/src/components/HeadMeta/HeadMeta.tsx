@@ -6,7 +6,7 @@ import {
   SITE_NAME,
   SITE_TWITTER,
   SITE_URL,
-} from "src/domain/constants";
+} from "@/domain/constants";
 
 export interface MetaProps {
   title?: string;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as MUI from "@mui/material";
-import * as colors from "src/theme/colors";
+import * as colors from "@/theme/colors";
 import * as Icons from "@/icons";
 import { styled } from "@mui/material/styles";
 

@@ -6,7 +6,7 @@ import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as path from "path";
-import { defaultOptions, Shape } from "src/shared";
+import { defaultOptions, Shape } from "@/shared";
 
 /**
  * Difference from `generate` api

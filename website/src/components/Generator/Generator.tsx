@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import * as React from "react";
-import { defaultOptions } from "src/shared";
+import { defaultOptions } from "@/shared";
 import { useImmer } from "use-immer";
 import { Provider, State } from "./context";
 import Export from "./internal/Export";
