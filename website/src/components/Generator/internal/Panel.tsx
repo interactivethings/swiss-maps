@@ -3,7 +3,7 @@ import * as React from "react";
 import {
   SupportedColorSchema,
   SUPPORTED_COLOR_LIST,
-} from "src/domain/color-schema";
+} from "@/domain/color-schema";
 import { useContext } from "../context";
 import ShapeOption from "./ShapeOption";
 import { styled } from "@mui/material/styles";

@@ -4,11 +4,11 @@ import DeckGL from "@deck.gl/react";
 import * as MUI from "@mui/material";
 import * as d3 from "d3";
 import * as React from "react";
-import { COLOR_SCHEMA_MAP } from "src/domain/color-schema";
+import { COLOR_SCHEMA_MAP } from "@/domain/color-schema";
 import { useImmer } from "use-immer";
 import { useContext } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
-import { useGeoData } from "src/domain/geodata";
+import { useGeoData } from "@/domain/geodata";
 import { styled } from "@mui/material/styles";
 
 /**

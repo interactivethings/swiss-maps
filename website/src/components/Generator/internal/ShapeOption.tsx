@@ -1,7 +1,7 @@
 import * as MUI from "@mui/material";
 import * as React from "react";
-import { Shape } from "src/shared";
-import * as colors from "src/theme/colors";
+import { Shape } from "@/shared";
+import * as colors from "@/theme/colors";
 import { useContext } from "../context";
 import { styled } from "@mui/material/styles";
 

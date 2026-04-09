@@ -15,11 +15,11 @@ import {
   Typography,
 } from "@mui/material";
 import dynamic from "next/dynamic";
-import { GeoDataFeature, useGeoData } from "src/domain/geodata";
+import { GeoDataFeature, useGeoData } from "@/domain/geodata";
 import {
   MunicipalityMigrationData,
   MunicipalityMigrationDataItem,
-} from "src/domain/municipality-migrations";
+} from "@/domain/municipality-migrations";
 import * as turf from "@turf/turf";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";

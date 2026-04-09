@@ -1,7 +1,7 @@
 import * as MUI from "@mui/material";
 import * as React from "react";
 import { Download } from "react-feather";
-import { downloadUrl } from "src/shared";
+import { downloadUrl } from "@/shared";
 import { useContext } from "../context";
 import { domDataUrlDownload } from "../domain/dom";
 import { styled } from "@mui/material/styles";

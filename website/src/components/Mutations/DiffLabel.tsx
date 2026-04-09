@@ -1,5 +1,5 @@
 import { alpha, Box, Tooltip } from "@mui/material";
-import { MunicipalityMigrationDataItem } from "src/domain/municipality-migrations";
+import { MunicipalityMigrationDataItem } from "@/domain/municipality-migrations";
 import { Chip } from "@mui/material";
 import { ADDED_COLOR, REMOVED_COLOR } from "@/components/Mutations/Map";
 

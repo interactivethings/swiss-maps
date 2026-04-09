@@ -1,7 +1,7 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import { ComponentProps } from "react";
-import { useGeoData } from "src/domain/geodata";
+import { useGeoData } from "@/domain/geodata";
 import { MapController } from "@deck.gl/core";
 import { color } from "d3";
 

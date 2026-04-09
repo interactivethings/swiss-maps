@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { NextApiHandler } from "next";
-import { MunicipalityMigrationData } from "src/domain/municipality-migrations";
+import { MunicipalityMigrationData } from "@/domain/municipality-migrations";
 
 async function fetchAndParse(dateFrom: string, dateTo: string) {
   const url = `https://www.agvchapp.bfs.admin.ch/fr/mutations/results?EntriesFrom=${dateFrom}&EntriesTo=${dateTo}`;

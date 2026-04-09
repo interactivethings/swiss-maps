@@ -16,11 +16,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/icons": ["src/icons"],
-      "@/theme": ["src/theme"]
+      "@/public/*": ["./public/*"],
+      "@/domain/*": ["./src/domain/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/icons": ["./src/icons"],
+      "@/shared": ["./src/shared"],
+      "@/theme": ["./src/theme"],
+      "@/theme/*": ["./src/theme/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

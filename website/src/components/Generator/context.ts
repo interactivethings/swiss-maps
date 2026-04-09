@@ -1,6 +1,6 @@
 import { Draft } from "immer";
 import * as React from "react";
-import { defaultOptions, Options, Shape } from "src/shared";
+import { defaultOptions, Options, Shape } from "@/shared";
 
 export interface State {
   options: Options;
