@@ -33,7 +33,7 @@ export const MunicipalityMigrationData = z
           inscriptionReason: val[8],
         }))
     ),
-    mutations: z.record(
+    mutations: z.record(z.string(),
       z
         .object({
           t: z.number(),
