@@ -63,8 +63,8 @@ importers:
         specifier: ^7946.0.16
         version: 7946.0.16
       '@types/jsdom':
-        specifier: ^28.0.0
-        version: 28.0.0
+        specifier: ^28.0.1
+        version: 28.0.1
       '@types/node':
         specifier: ^24.12.0
         version: 24.12.0
@@ -1251,8 +1251,8 @@ packages:
   '@types/geokdbush@1.1.5':
     resolution: {integrity: sha512-jIsYnXY+RQ/YCyBqeEHxYN9mh+7PqKJUJUp84wLfZ7T2kqyVPNaXwZuvf1A2uQUkrvVqEbsG94ff8jH32AlLvA==}
 
-  '@types/jsdom@28.0.0':
-    resolution: {integrity: sha512-A8TBQQC/xAOojy9kM8E46cqT00sF0h7dWjV8t8BJhUi2rG6JRh7XXQo/oLoENuZIQEpXsxLccLCnknyQd7qssQ==}
+  '@types/jsdom@28.0.1':
+    resolution: {integrity: sha512-GJq2QE4TAZ5ajSoCasn5DOFm8u1mI3tIFvM5tIq3W5U/RTB6gsHwc6Yhpl91X9VSDOUVblgXmG+2+sSvFQrdlw==}
 
   '@types/kdbush@1.0.7':
     resolution: {integrity: sha512-QM5iB8m/0mnGOjUKshErIZQ0LseyTieRSYc3yaOpmrRM0xbWiOuJUWlduJx+TPNK7/VFMWphUGwx3nus7eT1Wg==}
@@ -4127,7 +4127,7 @@ snapshots:
     dependencies:
       '@types/kdbush': 1.0.7
 
-  '@types/jsdom@28.0.0':
+  '@types/jsdom@28.0.1':
     dependencies:
       '@types/node': 24.12.0
       '@types/tough-cookie': 4.0.5
