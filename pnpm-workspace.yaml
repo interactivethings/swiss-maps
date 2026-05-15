@@ -2,4 +2,8 @@ packages:
   - "."
   - "website"
 
+allowBuilds:
+  msgpackr-extract: false
+  sharp: false
+
 minimumReleaseAge: 21600
