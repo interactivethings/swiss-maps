@@ -7,3 +7,6 @@ allowBuilds:
   sharp: false
 
 minimumReleaseAge: 21600
+minimumReleaseAgeExclude:
+  # Renovate security update: next@16.2.6
+  - next@16.2.6
