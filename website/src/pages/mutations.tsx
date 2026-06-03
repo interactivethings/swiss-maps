@@ -154,10 +154,12 @@ export default function Page() {
 
   return (
     <Box
-      display="grid"
-      gridTemplateColumns="300px 1fr"
-      height="100vh"
-      overflow="hidden"
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "300px 1fr",
+        height: "100vh",
+        overflow: "hidden",
+      }}
     >
       <Head>
         <title>Municipality Mutations - Swiss Maps</title>
@@ -188,7 +190,7 @@ export default function Page() {
       >
         <Accordion sx={{ mb: 2 }} disableGutters elevation={0}>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography component="h1" variant="h5" mb={0}>
+            <Typography component="h1" variant="h5" sx={{ mb: 0 }}>
               Municipality Mutations
             </Typography>
           </AccordionSummary>
@@ -341,17 +343,21 @@ export default function Page() {
       </List>
       <Box sx={{ p: 2 }}>
         <Box
-          display="grid"
-          gridTemplateColumns="1fr 1fr"
-          columnGap="1rem"
-          height="100%"
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            columnGap: "1rem",
+            height: "100%",
+          }}
         >
           <div>
             <Typography variant="h5">{geoDataYears[0]}</Typography>
             <Box
-              height="calc(100% - 2rem)"
-              position="relative"
-              border="1px solid #ccc"
+              sx={{
+                height: "calc(100% - 2rem)",
+                position: "relative",
+                border: "1px solid #ccc",
+              }}
             >
               <MutationsMap
                 viewState={viewState}
@@ -366,9 +372,11 @@ export default function Page() {
           <div>
             <Typography variant="h5">{geoDataYears[1]}</Typography>
             <Box
-              height="calc(100% - 2rem)"
-              position="relative"
-              border="1px solid #ccc"
+              sx={{
+                height: "calc(100% - 2rem)",
+                position: "relative",
+                border: "1px solid #ccc",
+              }}
             >
               <MutationsMap
                 geoData={geoData2}

@@ -97,10 +97,12 @@ function Panel(props: Props) {
               <MUI.TextField
                 size="small"
                 disabled={state.options.projection !== "cartesian"}
-                InputProps={{
-                  startAdornment: (
-                    <MUI.InputAdornment position="start">W</MUI.InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <MUI.InputAdornment position="start">W</MUI.InputAdornment>
+                    ),
+                  },
                 }}
                 value={state.options.dimensions.width}
                 onChange={(ev) => {
@@ -113,10 +115,12 @@ function Panel(props: Props) {
               <MUI.TextField
                 size="small"
                 disabled={state.options.projection !== "cartesian"}
-                InputProps={{
-                  startAdornment: (
-                    <MUI.InputAdornment position="start">H</MUI.InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <MUI.InputAdornment position="start">H</MUI.InputAdornment>
+                    ),
+                  },
                 }}
                 value={state.options.dimensions.height}
                 onChange={(ev) => {
