@@ -231,9 +231,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
           {ctx.state.highlightedShape &&
             options.shapes.has(ctx.state.highlightedShape) &&
             (() => {
-              const data = geoData[
-                ctx.state.highlightedShape as keyof typeof geoData
-              ] as $FixMe;
+              const data = geoData[ctx.state.highlightedShape] as $FixMe;
 
               if (ctx.state.highlightedShape === "lakes") {
                 return (

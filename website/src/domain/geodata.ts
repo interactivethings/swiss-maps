@@ -22,6 +22,9 @@ const getGeoData = (json: any) => {
     neighbors: json.objects?.cantons
       ? topojson.neighbors(json.objects.cantons.geometries)
       : undefined,
+    districts: json.objects?.districts
+      ? castFeatures(topojson.feature(json, json.objects.districts))
+      : undefined,
     municipalities: json.objects?.municipalities
       ? castFeatures(topojson.feature(json, json.objects.municipalities))
       : undefined,
@@ -72,6 +75,7 @@ export const useGeoData = (
       cantons: undefined,
       neighbors: undefined as Array<number[]> | undefined,
       municipalities: undefined,
+      districts: undefined,
       lakes: undefined,
       city: undefined,
     },
