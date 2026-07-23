@@ -23,7 +23,7 @@
     "@types/d3": "^7.4.3",
     "@types/geojson": "^7946.0.16",
     "@types/jsdom": "^28.0.3",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/topojson": "^3.2.6",
     "@types/topojson-client": "^3.1.5",
