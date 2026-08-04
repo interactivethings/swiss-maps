@@ -96,8 +96,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       immer:
-        specifier: ^11.1.8
-        version: 11.1.8
+        specifier: ^11.1.15
+        version: 11.1.15
       io-ts:
         specifier: ^2.2.22
         version: 2.2.22(fp-ts@2.16.11)
@@ -133,7 +133,7 @@ importers:
         version: 6.0.3
       use-immer:
         specifier: ^0.11.0
-        version: 0.11.0(immer@11.1.8)(react@19.2.7)
+        version: 0.11.0(immer@11.1.15)(react@19.2.7)
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -1809,8 +1809,8 @@ packages:
   idb-keyval@6.2.5:
     resolution: {integrity: sha512-eKQkTnS0relYsSOYomx8ozIbmdsQCKUdhyuIaQ2DZgKuaxtyQQMkyD/wlnQN32pO3yutN1b1L8uqwcDKaJd7/Q==}
 
-  immer@11.1.8:
-    resolution: {integrity: sha512-/tbkHMW7y10Lx6i1crLjD4/OhNkRG+Fo7byZHtah0547nIeXYcpIXaUh0IAQY6gO5459qpGGYapcEOHtFXkIuA==}
+  immer@11.1.15:
+    resolution: {integrity: sha512-VrNANlmnWQnh5COXIIOQXM9oOJw7naGKlBT74ZOOR6lpVXc3gFEu9FJLDFcpCJ2j+NWr8TIwtWD//T6ZX6TKiQ==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -4825,7 +4825,7 @@ snapshots:
 
   idb-keyval@6.2.5: {}
 
-  immer@11.1.8: {}
+  immer@11.1.15: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -5350,9 +5350,9 @@ snapshots:
 
   undici@7.28.0: {}
 
-  use-immer@0.11.0(immer@11.1.8)(react@19.2.7):
+  use-immer@0.11.0(immer@11.1.15)(react@19.2.7):
     dependencies:
-      immer: 11.1.8
+      immer: 11.1.15
       react: 19.2.7
 
   util-deprecate@1.0.2: {}
