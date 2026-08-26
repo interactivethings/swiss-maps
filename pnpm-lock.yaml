@@ -15,17 +15,17 @@ importers:
   website:
     dependencies:
       '@deck.gl/core':
-        specifier: ^9.3.7
-        version: 9.3.7
+        specifier: ^9.3.10
+        version: 9.3.10
       '@deck.gl/layers':
-        specifier: ^9.3.7
-        version: 9.3.7(@deck.gl/core@9.3.7)(@loaders.gl/core@4.4.3)(@luma.gl/core@9.3.4)(@luma.gl/engine@9.3.4(@luma.gl/core@9.3.4)(@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4)))
+        specifier: ^9.3.10
+        version: 9.3.10(@deck.gl/core@9.3.10)(@loaders.gl/core@4.4.3)(@luma.gl/core@9.3.6)(@luma.gl/engine@9.3.6(@luma.gl/core@9.3.6)(@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6)))
       '@deck.gl/react':
-        specifier: ^9.3.7
-        version: 9.3.7(@deck.gl/core@9.3.7)(@deck.gl/widgets@9.3.7(@deck.gl/core@9.3.7)(@luma.gl/core@9.3.4))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: ^9.3.10
+        version: 9.3.10(@deck.gl/core@9.3.10)(@deck.gl/widgets@9.3.10(@deck.gl/core@9.3.10)(@luma.gl/core@9.3.6))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@deck.gl/widgets':
-        specifier: ^9.3.7
-        version: 9.3.7(@deck.gl/core@9.3.7)(@luma.gl/core@9.3.4)
+        specifier: ^9.3.10
+        version: 9.3.10(@deck.gl/core@9.3.10)(@luma.gl/core@9.3.6)
       '@emotion/cache':
         specifier: ^11.14.0
         version: 11.14.0
@@ -233,30 +233,30 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@deck.gl/core@9.3.7':
-    resolution: {integrity: sha512-l+YPm1I0Fwj+b7xsu8FvyDT5MGPgEPJe2cQJUpQNgG742b2goB4tyYpteUhNAOeVo1gmenvqv36ZJGNsGxipJA==}
+  '@deck.gl/core@9.3.10':
+    resolution: {integrity: sha512-BAJ6r+eRV4euuGcIi2SnlzrodgZ+sD2VuXsoL1DER0LwwKXmKmQu6WA8ax6DB9KFsBghLVoTUN5zaCGF6uKHuQ==}
 
-  '@deck.gl/layers@9.3.7':
-    resolution: {integrity: sha512-T2CnkEU1QEqmusrSdot7+8Nl09gzntG5DvhaogyBbTjmABhTh4rUnS6dLOjf5/ju3aJ+Q58/FvDzgBBcK4V7kg==}
+  '@deck.gl/layers@9.3.10':
+    resolution: {integrity: sha512-F9CRJlRWXvTKlgjKmmTotm0cA5V7I1zMtdnwJbjBZTyCJ4skuskbIIt6f+BSQ+rSxM2uW4q5/8VkcCJ2SePhXg==}
     peerDependencies:
       '@deck.gl/core': ~9.3.0
       '@loaders.gl/core': ^4.4.3
-      '@luma.gl/core': ~9.3.3
-      '@luma.gl/engine': ~9.3.3
+      '@luma.gl/core': ~9.3.5
+      '@luma.gl/engine': ~9.3.5
 
-  '@deck.gl/react@9.3.7':
-    resolution: {integrity: sha512-lC86Daz/3d/cSX2qpyqKc0Ju+OJZVaQ+K9JyrYp76Zqzi4qej0plDWkkRNyo0pAvzL5LSaIpJpGO45QusgbtSw==}
+  '@deck.gl/react@9.3.10':
+    resolution: {integrity: sha512-kbfceQ6uZxFS5DVwM3JLY1gSVfx+IJ8ihnkSomxX5Nhhfos1GWnH5wJo8wznKGl9WdLd/iY5bHc8q9i0f5TVjA==}
     peerDependencies:
       '@deck.gl/core': ~9.3.0
       '@deck.gl/widgets': ~9.3.0
       react: '>=16.3.0'
       react-dom: '>=16.3.0'
 
-  '@deck.gl/widgets@9.3.7':
-    resolution: {integrity: sha512-Ygvn6XRQfh8hDnVczZNrh/nmKXdptavT/KmDzrBJbJaP8Upi/4bgo9p8pe1u7qZagCprzSfo/tKumRN1BNOWhg==}
+  '@deck.gl/widgets@9.3.10':
+    resolution: {integrity: sha512-eEQuxQeqIkm04d9MgUH0MtGTmW3xSvqS/nkyIGPhaoAj6VWGu850JfXVdQbnORxFweoQWPI1jfU0Q8j8twhkEA==}
     peerDependencies:
       '@deck.gl/core': ~9.3.0
-      '@luma.gl/core': ~9.3.3
+      '@luma.gl/core': ~9.3.5
 
   '@emnapi/runtime@1.11.1':
     resolution: {integrity: sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw==}
@@ -540,22 +540,22 @@ packages:
     peerDependencies:
       '@loaders.gl/core': ~4.4.0
 
-  '@luma.gl/core@9.3.4':
-    resolution: {integrity: sha512-NJ6u+HXs1aXf9JrjnN6/RMwt43iyDCqvlbZPKcgdyKWZwNFQ9HWoEHSfUFrhb3ZaEyyNd0HYVKrdfq8xsE3fdQ==}
+  '@luma.gl/core@9.3.6':
+    resolution: {integrity: sha512-eqHnCPh2xHYkdd9rEkiIIkGMixNiJkq1ROrnTob6npvmZNVHXL0ubIw5KueL7rqW0+J1tm+p2+TXZaCmn0sP7Q==}
 
-  '@luma.gl/engine@9.3.4':
-    resolution: {integrity: sha512-DT93o+2q12QtaJmVUdQaAZc7VwJ3PJxYXiVV6UHDtSlkN+l2K46t8393PzPfdVYUjYcrJI7+WOnmvwGh+SbrNw==}
+  '@luma.gl/engine@9.3.6':
+    resolution: {integrity: sha512-NYTdhn2NaH/MjN8qXCl2ukrT1Ac9iTKu1mgN0wz11XRd1QYnlMNBXswRROD7IZ2PUsBWdmYHc9qE8wKBQqMuIA==}
     peerDependencies:
       '@luma.gl/core': ~9.3.0
       '@luma.gl/shadertools': ~9.3.0
 
-  '@luma.gl/shadertools@9.3.4':
-    resolution: {integrity: sha512-6JszXZ1uBpwkfvgqe9l64fuxjduJSNndzDb9IitqTNLapF5ioM3ISDpWF4qRluCaLd9lvNgGPgpc48xrO27KZw==}
+  '@luma.gl/shadertools@9.3.6':
+    resolution: {integrity: sha512-dDuD8lCOkAE1L7hJGZEyZAi7upR1HG3wEEIQ1gCLaTTbJWC7tNtnVz853lqUA+VXgjgS9NiQFFRcosiIZmW4Vg==}
     peerDependencies:
       '@luma.gl/core': ~9.3.0
 
-  '@luma.gl/webgl@9.3.4':
-    resolution: {integrity: sha512-qZoNyQO1UpQBxUftgvg5hSPSoAs3e0l27a3mZjb1W8LnFH5upplT7ok4pMmt1C+bIILCvho700/8F8jUgmeaiw==}
+  '@luma.gl/webgl@9.3.6':
+    resolution: {integrity: sha512-tGm7FGWPmJKxGZMvkRPRi219x3tKmBxR7Uke09nTp2ujNak/O5V9xPIQ9lUBGTxqAb8U2yjKkXG8j+f/4b2+sw==}
     peerDependencies:
       '@luma.gl/core': ~9.3.0
 
@@ -2578,14 +2578,14 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@deck.gl/core@9.3.7':
+  '@deck.gl/core@9.3.10':
     dependencies:
       '@loaders.gl/core': 4.4.3
       '@loaders.gl/images': 4.4.3(@loaders.gl/core@4.4.3)
-      '@luma.gl/core': 9.3.4
-      '@luma.gl/engine': 9.3.4(@luma.gl/core@9.3.4)(@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4))
-      '@luma.gl/shadertools': 9.3.4(@luma.gl/core@9.3.4)
-      '@luma.gl/webgl': 9.3.4(@luma.gl/core@9.3.4)
+      '@luma.gl/core': 9.3.6
+      '@luma.gl/engine': 9.3.6(@luma.gl/core@9.3.6)(@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6))
+      '@luma.gl/shadertools': 9.3.6(@luma.gl/core@9.3.6)
+      '@luma.gl/webgl': 9.3.6(@luma.gl/core@9.3.6)
       '@math.gl/core': 4.1.0
       '@math.gl/sun': 4.1.0
       '@math.gl/types': 4.1.0
@@ -2599,15 +2599,15 @@ snapshots:
     transitivePeerDependencies:
       - '@75lb/nature'
 
-  '@deck.gl/layers@9.3.7(@deck.gl/core@9.3.7)(@loaders.gl/core@4.4.3)(@luma.gl/core@9.3.4)(@luma.gl/engine@9.3.4(@luma.gl/core@9.3.4)(@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4)))':
+  '@deck.gl/layers@9.3.10(@deck.gl/core@9.3.10)(@loaders.gl/core@4.4.3)(@luma.gl/core@9.3.6)(@luma.gl/engine@9.3.6(@luma.gl/core@9.3.6)(@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6)))':
     dependencies:
-      '@deck.gl/core': 9.3.7
+      '@deck.gl/core': 9.3.10
       '@loaders.gl/core': 4.4.3
       '@loaders.gl/images': 4.4.3(@loaders.gl/core@4.4.3)
       '@loaders.gl/schema': 4.4.3
-      '@luma.gl/core': 9.3.4
-      '@luma.gl/engine': 9.3.4(@luma.gl/core@9.3.4)(@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4))
-      '@luma.gl/shadertools': 9.3.4(@luma.gl/core@9.3.4)
+      '@luma.gl/core': 9.3.6
+      '@luma.gl/engine': 9.3.6(@luma.gl/core@9.3.6)(@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6))
+      '@luma.gl/shadertools': 9.3.6(@luma.gl/core@9.3.6)
       '@mapbox/tiny-sdf': 2.2.0
       '@math.gl/core': 4.1.0
       '@math.gl/polygon': 4.1.0
@@ -2617,18 +2617,18 @@ snapshots:
     transitivePeerDependencies:
       - '@75lb/nature'
 
-  '@deck.gl/react@9.3.7(@deck.gl/core@9.3.7)(@deck.gl/widgets@9.3.7(@deck.gl/core@9.3.7)(@luma.gl/core@9.3.4))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@deck.gl/react@9.3.10(@deck.gl/core@9.3.10)(@deck.gl/widgets@9.3.10(@deck.gl/core@9.3.10)(@luma.gl/core@9.3.6))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@deck.gl/core': 9.3.7
-      '@deck.gl/widgets': 9.3.7(@deck.gl/core@9.3.7)(@luma.gl/core@9.3.4)
+      '@deck.gl/core': 9.3.10
+      '@deck.gl/widgets': 9.3.10(@deck.gl/core@9.3.10)(@luma.gl/core@9.3.6)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@deck.gl/widgets@9.3.7(@deck.gl/core@9.3.7)(@luma.gl/core@9.3.4)':
+  '@deck.gl/widgets@9.3.10(@deck.gl/core@9.3.10)(@luma.gl/core@9.3.6)':
     dependencies:
-      '@deck.gl/core': 9.3.7
+      '@deck.gl/core': 9.3.10
       '@floating-ui/dom': 1.7.6
-      '@luma.gl/core': 9.3.4
+      '@luma.gl/core': 9.3.6
       preact: 10.29.2
 
   '@emnapi/runtime@1.11.1':
@@ -2907,7 +2907,7 @@ snapshots:
     dependencies:
       '@loaders.gl/core': 4.4.3
 
-  '@luma.gl/core@9.3.4':
+  '@luma.gl/core@9.3.6':
     dependencies:
       '@math.gl/types': 4.1.0
       '@probe.gl/env': 4.1.1
@@ -2915,24 +2915,24 @@ snapshots:
       '@probe.gl/stats': 4.1.1
       '@types/offscreencanvas': 2019.7.3
 
-  '@luma.gl/engine@9.3.4(@luma.gl/core@9.3.4)(@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4))':
+  '@luma.gl/engine@9.3.6(@luma.gl/core@9.3.6)(@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6))':
     dependencies:
-      '@luma.gl/core': 9.3.4
-      '@luma.gl/shadertools': 9.3.4(@luma.gl/core@9.3.4)
+      '@luma.gl/core': 9.3.6
+      '@luma.gl/shadertools': 9.3.6(@luma.gl/core@9.3.6)
       '@math.gl/core': 4.1.0
       '@math.gl/types': 4.1.0
       '@probe.gl/log': 4.1.1
       '@probe.gl/stats': 4.1.1
 
-  '@luma.gl/shadertools@9.3.4(@luma.gl/core@9.3.4)':
+  '@luma.gl/shadertools@9.3.6(@luma.gl/core@9.3.6)':
     dependencies:
-      '@luma.gl/core': 9.3.4
+      '@luma.gl/core': 9.3.6
       '@math.gl/core': 4.1.0
       '@math.gl/types': 4.1.0
 
-  '@luma.gl/webgl@9.3.4(@luma.gl/core@9.3.4)':
+  '@luma.gl/webgl@9.3.6(@luma.gl/core@9.3.6)':
     dependencies:
-      '@luma.gl/core': 9.3.4
+      '@luma.gl/core': 9.3.6
       '@math.gl/types': 4.1.0
       '@probe.gl/env': 4.1.1
 
