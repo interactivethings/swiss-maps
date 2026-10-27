@@ -19,4 +19,3 @@ minimumReleaseAgeExclude:
   - '@next/swc-win32-x64-msvc@16.4.1'
   - 'next@16.4.1'
   - 'undici@8.12.2'
-  - 'zod@4.6.6'
