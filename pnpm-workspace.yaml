@@ -7,5 +7,3 @@ allowBuilds:
   sharp: false
 
 minimumReleaseAge: 21600
-minimumReleaseAgeExclude:
-  - 'undici@8.12.2'
