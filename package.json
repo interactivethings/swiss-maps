@@ -28,7 +28,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "mapshaper": "^0.7.68"
+    "mapshaper": "^0.7.101"
   },
   "publishConfig": {
     "access": "public",
