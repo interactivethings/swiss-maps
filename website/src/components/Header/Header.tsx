@@ -1,7 +1,7 @@
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -32,11 +32,7 @@ function Header(props: Props, ref: any) {
               Swiss Maps Generator
             </MUI.Link>
           </Link>
-          <MUI.Typography
-            variant="body1"
-            color="primary"
-            style={{ marginTop: 4 }}
-          >
+          <MUI.Typography variant="body1" color="primary" style={{ marginTop: 4 }}>
             A free tool to generate TopoJSON or SVG from Swisstopo geodata.
           </MUI.Typography>
         </div>
@@ -86,8 +82,7 @@ const Pattern = styled("div", {
     left: 0,
     right: 0,
     bottom: 0,
-    background:
-      "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)",
+    background: "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)",
   },
 }));
 

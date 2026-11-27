@@ -1,5 +1,6 @@
 import { JSDOM } from "jsdom";
 import { NextApiHandler } from "next";
+
 import { MunicipalityMigrationData } from "@/domain/municipality-migrations";
 
 async function fetchAndParse(dateFrom: string, dateTo: string) {
@@ -33,9 +34,7 @@ async function fetchAndParse(dateFrom: string, dateTo: string) {
 const handler: NextApiHandler = async (req, res) => {
   const { from: dateFrom, to: dateTo } = req.query;
   if (!dateFrom || !dateTo) {
-    return res
-      .status(400)
-      .send('Please provide "from" and "to" query parameters');
+    return res.status(400).send('Please provide "from" and "to" query parameters');
   }
   const content = await fetchAndParse(dateFrom as string, dateTo as string);
 

@@ -1,0 +1,42 @@
+name: Pull Request Verification
+
+on: pull_request
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prv-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-flake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: cachix/install-nix-action@382a9ed9481c7c1f94f68b72ef105b3417c73877 # v32.1.0
+      - run: nix flake check
+
+  integrity:
+    needs: check-flake
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: cachix/install-nix-action@382a9ed9481c7c1f94f68b72ef105b3417c73877 # v32.1.0
+      - run: nix run .#nix-develop .#workflow
+
+      - run: biome migrate --write
+      - run: git diff --exit-code
+
+  prv:
+    needs: check-flake
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: cachix/install-nix-action@382a9ed9481c7c1f94f68b72ef105b3417c73877 # v32.1.0
+      - run: nix run .#nix-develop .#workflow
+
+      - run: biome ci

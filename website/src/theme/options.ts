@@ -1,6 +1,7 @@
-import shadows from "./shadows";
-import * as colors from "./colors";
 import { Shadows, ThemeOptions } from "@mui/material";
+
+import * as colors from "./colors";
+import shadows from "./shadows";
 
 const fontStyleOptions = {
   fontWeightLight: 300,

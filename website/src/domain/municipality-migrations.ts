@@ -31,9 +31,10 @@ export const MunicipalityMigrationData = z
           municipalityName: val[6],
           radiationReason: val[7],
           inscriptionReason: val[8],
-        }))
+        })),
     ),
-    mutations: z.record(z.string(),
+    mutations: z.record(
+      z.string(),
       z
         .object({
           t: z.number(),
@@ -42,7 +43,7 @@ export const MunicipalityMigrationData = z
         .transform((val) => ({
           type: val.t,
           date: val.d,
-        }))
+        })),
     ),
   })
   .transform((val) => {
@@ -56,9 +57,7 @@ export const MunicipalityMigrationData = z
         type: mutationTypes[mutation.type as keyof typeof mutationTypes],
       };
     });
-    const grouped = groupBy<(typeof items)[number]>(
-      (x) => `${x.migrationNumber}`
-    )(items);
+    const grouped = groupBy<(typeof items)[number]>((x) => `${x.migrationNumber}`)(items);
     return Object.entries(grouped).map(([migrationNumber, items]) => {
       const added = items.filter((x) => x.inscriptionReason);
       const removed = items.filter((x) => x.radiationReason);
@@ -72,8 +71,6 @@ export const MunicipalityMigrationData = z
     });
   });
 
-export type MunicipalityMigrationData = z.infer<
-  typeof MunicipalityMigrationData
->;
+export type MunicipalityMigrationData = z.infer<typeof MunicipalityMigrationData>;
 
 export type MunicipalityMigrationDataItem = MunicipalityMigrationData[number];

@@ -1,12 +1,8 @@
 import { palette } from "./colors";
+
 export * from "./provider";
 
-const fluid = (
-  prop: string,
-  min: number,
-  max: number,
-  f: (n: number) => unknown
-) => ({
+const fluid = (prop: string, min: number, max: number, f: (n: number) => unknown) => ({
   [prop]: [f(min), f((min + max) / 2), f(max)],
 });
 

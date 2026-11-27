@@ -1,12 +1,11 @@
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
-import {
-  SupportedColorSchema,
-  SUPPORTED_COLOR_LIST,
-} from "@/domain/color-schema";
+
+import { SUPPORTED_COLOR_LIST, SupportedColorSchema } from "@/domain/color-schema";
+
 import { useContext } from "../context";
 import ShapeOption from "./ShapeOption";
-import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -99,9 +98,7 @@ function Panel(props: Props) {
                 disabled={state.options.projection !== "cartesian"}
                 slotProps={{
                   input: {
-                    startAdornment: (
-                      <MUI.InputAdornment position="start">W</MUI.InputAdornment>
-                    ),
+                    startAdornment: <MUI.InputAdornment position="start">W</MUI.InputAdornment>,
                   },
                 }}
                 value={state.options.dimensions.width}
@@ -117,9 +114,7 @@ function Panel(props: Props) {
                 disabled={state.options.projection !== "cartesian"}
                 slotProps={{
                   input: {
-                    startAdornment: (
-                      <MUI.InputAdornment position="start">H</MUI.InputAdornment>
-                    ),
+                    startAdornment: <MUI.InputAdornment position="start">H</MUI.InputAdornment>,
                   },
                 }}
                 value={state.options.dimensions.height}
@@ -140,8 +135,7 @@ function Panel(props: Props) {
         <MUI.Typography variant="h3">Simplification</MUI.Typography>
 
         <MUI.Typography variant="body2" color="textSecondary">
-          Move the slider to the right to simplify the shapes. This will remove
-          detail but also decrease the file size.
+          Move the slider to the right to simplify the shapes. This will remove detail but also decrease the file size.
         </MUI.Typography>
 
         <div style={{ marginTop: 8 }}>
@@ -233,10 +227,7 @@ function Panel(props: Props) {
           }}
           size="small"
         >
-          {[
-            2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
-            2021, 2022, 2023, 2024,
-          ]
+          {[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
             .reverse()
             .map((year) => (
               <MUI.MenuItem key={year} value={`${year}`}>

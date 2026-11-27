@@ -1,9 +1,11 @@
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
+
 import { Shape } from "@/shared";
 import * as colors from "@/theme/colors";
+
 import { useContext } from "../context";
-import { styled } from "@mui/material/styles";
 
 const Root = styled("div", {
   name: "SwissMaps-Generator-ShareOption",
@@ -18,13 +20,7 @@ const Root = styled("div", {
   },
 }));
 
-export default function ShapeOption({
-  shape,
-  label,
-}: {
-  shape: Shape;
-  label: React.ReactNode;
-}) {
+export default function ShapeOption({ shape, label }: { shape: Shape; label: React.ReactNode }) {
   const { state, mutate } = useContext();
 
   return (

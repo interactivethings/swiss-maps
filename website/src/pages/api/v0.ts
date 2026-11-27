@@ -1,11 +1,13 @@
+import { promises as fs } from "fs";
+import * as path from "path";
+
 import Cors from "cors";
 import { either } from "fp-ts";
-import { promises as fs } from "fs";
 import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
-import * as path from "path";
+
 import { defaultOptions, Shape } from "@/shared";
 
 /**
@@ -30,7 +32,7 @@ function initMiddleware(middleware: $FixMe) {
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "OPTIONS"],
-  })
+  }),
 );
 
 const Query = t.type({
@@ -41,16 +43,11 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
 
-    const query = either.getOrElseW<unknown, undefined>(() => undefined)(
-      Query.decode(req.query)
-    );
+    const query = either.getOrElseW<unknown, undefined>(() => undefined)(Query.decode(req.query));
 
     if (!query) {
       res.statusCode = 200;
@@ -84,15 +81,8 @@ export default async function handler(
           async (ext) =>
             [
               `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public/swiss-maps",
-                  year,
-                  `${shape}.${ext}`
-                )
-              ),
-            ] as const
+              await fs.readFile(path.join(process.cwd(), "public/swiss-maps", year, `${shape}.${ext}`)),
+            ] as const,
         );
       });
       return Object.fromEntries(await Promise.all(props));
@@ -106,9 +96,7 @@ export default async function handler(
       "-clean",
       `-proj ${format === "topojson" ? "wgs84" : "somerc"}`,
       // svg coloring, otherwise is all bblack
-      shapes.has("cantons")
-        ? `-style fill='#e6e6e6' stroke='#999' target='cantons'`
-        : "",
+      shapes.has("cantons") ? `-style fill='#e6e6e6' stroke='#999' target='cantons'` : "",
       shapes.has("lakes") ? `-style fill='#a1d0f7' target='lakes'` : "",
       `-o output.${format} format=${format} target=*`,
     ].join("\n");
@@ -121,10 +109,7 @@ export default async function handler(
     switch (format) {
       case "topojson": {
         if (query.download !== undefined) {
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename="swiss-maps.json"`
-          );
+          res.setHeader("Content-Disposition", `attachment; filename="swiss-maps.json"`);
         }
 
         res.setHeader("Content-Type", "application/json");
@@ -136,10 +121,7 @@ export default async function handler(
         res.setHeader("Content-Type", "image/svg+xml");
 
         if (query.download !== undefined) {
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename="swiss-maps.svg"`
-          );
+          res.setHeader("Content-Disposition", `attachment; filename="swiss-maps.svg"`);
         }
         res.status(200).send(output["output.svg"]);
         break;
