@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { FlyToInterpolator } from "@deck.gl/core";
+import { Close, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -14,28 +15,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import dynamic from "next/dynamic";
-import { GeoDataFeature, useGeoData } from "@/domain/geodata";
-import {
-  MunicipalityMigrationData,
-  MunicipalityMigrationDataItem,
-} from "@/domain/municipality-migrations";
-import * as turf from "@turf/turf";
-import { FlyToInterpolator } from "@deck.gl/core";
 import { useQuery } from "@tanstack/react-query";
-import { Close, ExpandMore } from "@mui/icons-material";
-import { DiffLabel } from "@/components/Mutations/DiffLabel";
+import * as turf from "@turf/turf";
+import dynamic from "next/dynamic";
 import Head from "next/head";
+import { useEffect, useMemo, useState } from "react";
+
+import { DiffLabel } from "@/components/Mutations/DiffLabel";
+import { GeoDataFeature, useGeoData } from "@/domain/geodata";
+import { MunicipalityMigrationData, MunicipalityMigrationDataItem } from "@/domain/municipality-migrations";
 
 const MutationsMap = dynamic(() => import("../components/Mutations/Map"), {
   ssr: false,
 });
-const MutationsMinimap = dynamic(
-  () => import("../components/Mutations/Minimap"),
-  {
-    ssr: false,
-  }
-);
+const MutationsMinimap = dynamic(() => import("../components/Mutations/Minimap"), {
+  ssr: false,
+});
 
 const INITIAL_VIEW_STATE = {
   latitude: 46.8182,
@@ -61,8 +56,7 @@ export default function Page() {
       return mutations;
     },
   });
-  const [migrationItem, setMigrationItem] =
-    useState<MunicipalityMigrationDataItem>();
+  const [migrationItem, setMigrationItem] = useState<MunicipalityMigrationDataItem>();
 
   const handleMutationSelect = (parsed: MunicipalityMigrationDataItem) => {
     setMigrationItem(parsed);
@@ -106,8 +100,7 @@ export default function Page() {
     const all = [...added, ...removed].map((x) => x.ofsNumber);
     const findFeature = (x: GeoDataFeature) => all.includes(x.properties?.id);
     const municipality =
-      geoData1.municipalities?.features.find(findFeature) ??
-      geoData2.municipalities?.features.find(findFeature);
+      geoData1.municipalities?.features.find(findFeature) ?? geoData2.municipalities?.features.find(findFeature);
     if (municipality) {
       const mbbox = turf.center(municipality);
       setViewState((prev) => ({
@@ -132,14 +125,11 @@ export default function Page() {
   const all = useMemo(() => {
     const def = { added: [], removed: [] };
     return (
-      groupedMutations?.reduce<{ added: number[]; removed: number[] }>(
-        (acc, curr) => {
-          acc.added.push(...(curr.added.map((x) => x.ofsNumber) ?? []));
-          acc.removed.push(...(curr.removed.map((x) => x.ofsNumber) ?? []));
-          return acc;
-        },
-        def
-      ) ?? def
+      groupedMutations?.reduce<{ added: number[]; removed: number[] }>((acc, curr) => {
+        acc.added.push(...(curr.added.map((x) => x.ofsNumber) ?? []));
+        acc.removed.push(...(curr.removed.map((x) => x.ofsNumber) ?? []));
+        return acc;
+      }, def) ?? def
     );
   }, [groupedMutations]);
   const highlightedMunicipalities = migrationItem
@@ -175,9 +165,7 @@ export default function Page() {
           if (!groupedMutations) {
             return;
           }
-          const index = migrationItem
-            ? groupedMutations.indexOf(migrationItem)
-            : -1;
+          const index = migrationItem ? groupedMutations.indexOf(migrationItem) : -1;
           if (ev.key === "ArrowDown" && index < groupedMutations.length - 1) {
             ev.preventDefault();
             handleMutationSelect(groupedMutations[index + 1]);
@@ -196,15 +184,9 @@ export default function Page() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2">
-              Below you can see all municipality changes from {year1} to {year2}
-              . The mutations data comes from the{" "}
-              <Link
-                href="https://www.agvchapp.bfs.admin.ch/de"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Swiss Federal Statistical Office's Application of Swiss
-                Municipalities API
+              Below you can see all municipality changes from {year1} to {year2}. The mutations data comes from the{" "}
+              <Link href="https://www.agvchapp.bfs.admin.ch/de" target="_blank" rel="noopener noreferrer">
+                Swiss Federal Statistical Office's Application of Swiss Municipalities API
               </Link>
               . You can query the data yourself at{" "}
               <Link
@@ -218,11 +200,7 @@ export default function Page() {
             </Typography>
             <Typography variant="body2">
               The municipality geoshapes are provided by{" "}
-              <Link
-                href="https://www.npmjs.com/package/swiss-maps"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link href="https://www.npmjs.com/package/swiss-maps" target="_blank" rel="noopener noreferrer">
                 swiss-maps
               </Link>
               .
@@ -230,11 +208,7 @@ export default function Page() {
             {/* Mentions that it was made by InteractiveThings in Zürich https://www.interactivethings.com */}
             <Typography variant="body2">
               Made by{" "}
-              <Link
-                href="https://www.interactivethings.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link href="https://www.interactivethings.com" target="_blank" rel="noopener noreferrer">
                 Interactive Things
               </Link>{" "}
               in Zürich.
@@ -285,8 +259,7 @@ export default function Page() {
                 borderWidth: "4px",
                 borderStyle: "solid",
                 cursor: "pointer",
-                borderColor: (theme) =>
-                  selected ? theme.palette.primary.main : "transparent",
+                borderColor: (theme) => (selected ? theme.palette.primary.main : "transparent"),
               }}
               onClick={(ev) => {
                 if (ev.defaultPrevented) {
@@ -294,11 +267,7 @@ export default function Page() {
                 }
                 handleMutationSelect(parsed);
               }}
-              ref={
-                selected
-                  ? (node) => node?.scrollIntoView({ behavior: "smooth" })
-                  : undefined
-              }
+              ref={selected ? (node) => node?.scrollIntoView({ behavior: "smooth" }) : undefined}
             >
               {/* IconButton with Close icon to setMigrationItem to undefined */}
               {selected ? (
@@ -323,9 +292,7 @@ export default function Page() {
                 primary={
                   <>
                     <Tooltip title="Migration number" arrow enterDelay={500}>
-                      <Typography variant="overline">
-                        {parsed.migrationNumber}
-                      </Typography>
+                      <Typography variant="overline">{parsed.migrationNumber}</Typography>
                     </Tooltip>
                     <br />
                     <Typography variant="inherit">
@@ -333,9 +300,7 @@ export default function Page() {
                     </Typography>
                   </>
                 }
-                secondary={`${parsed.year}${
-                  parsed.type ? ` - ${parsed.type?.toLowerCase()}` : ""
-                }`}
+                secondary={`${parsed.year}${parsed.type ? ` - ${parsed.type?.toLowerCase()}` : ""}`}
               />
             </ListItem>
           );
@@ -362,9 +327,7 @@ export default function Page() {
               <MutationsMap
                 viewState={viewState}
                 geoData={geoData1}
-                onViewStateChange={({ viewState }: { viewState: $FixMe }) =>
-                  setViewState(viewState)
-                }
+                onViewStateChange={({ viewState }: { viewState: $FixMe }) => setViewState(viewState)}
                 highlightedMunicipalities={highlightedMunicipalities}
               />
             </Box>

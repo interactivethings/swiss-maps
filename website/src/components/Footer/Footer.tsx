@@ -1,8 +1,9 @@
-import * as React from "react";
 import * as MUI from "@mui/material";
-import * as colors from "@/theme/colors";
-import * as Icons from "@/icons";
 import { styled } from "@mui/material/styles";
+import * as React from "react";
+
+import * as Icons from "@/icons";
+import * as colors from "@/theme/colors";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -28,45 +29,29 @@ function Footer(props: Props, ref: any) {
         <Left>
           <Icons.InteractiveThingsBrandmark40 />
 
-          <MUI.Typography
-            variant="body1"
-            style={{ marginLeft: 16, marginRight: "auto" }}
-          >
+          <MUI.Typography variant="body1" style={{ marginLeft: 16, marginRight: "auto" }}>
             Swiss Maps is created by Interactive Things.
           </MUI.Typography>
         </Left>
 
         <Right>
-          <Website href="https://www.interactivethings.com/">
-            Visit Website
-          </Website>
+          <Website href="https://www.interactivethings.com/">Visit Website</Website>
 
-          <Social
-            aria-label="Interactive Things on Facebook"
-            href="https://facebook.com/interactivethings/"
-          >
+          <Social aria-label="Interactive Things on Facebook" href="https://facebook.com/interactivethings/">
             <Icons.Facebook24 />
           </Social>
 
-          <Social
-            aria-label="Interactive Things on Twitter"
-            href="https://twitter.com/ixt"
-          >
+          <Social aria-label="Interactive Things on Twitter" href="https://twitter.com/ixt">
             <Icons.Twitter24 />
           </Social>
 
-          <Social
-            aria-label="Interactive Things on Instagram"
-            href="https://instagram.com/interactivethings/"
-          >
+          <Social aria-label="Interactive Things on Instagram" href="https://instagram.com/interactivethings/">
             <Icons.Instagram24 />
           </Social>
         </Right>
       </Bar>
 
-      <Copyright>
-        Copyright © 2020 Interactive Things All rights reserved.
-      </Copyright>
+      <Copyright>Copyright © 2020 Interactive Things All rights reserved.</Copyright>
     </Root>
   );
 }

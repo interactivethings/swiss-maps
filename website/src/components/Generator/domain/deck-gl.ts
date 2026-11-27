@@ -9,11 +9,7 @@ export const CH_BBOX: BBox = [
 
 export const LINE_COLOR = [100, 100, 100, 127] as const;
 
-export const constrainZoom = (
-  viewState: $FixMe,
-  bbox: BBox,
-  { padding = 60 }: { padding?: number } = {},
-) => {
+export const constrainZoom = (viewState: $FixMe, bbox: BBox, { padding = 60 }: { padding?: number } = {}) => {
   const vp = new WebMercatorViewport(viewState);
 
   const { width, height, zoom, longitude, latitude } = viewState;
@@ -32,10 +28,8 @@ export const constrainZoom = (
   const h2 = h / 2;
   const w2 = w / 2;
 
-  const y2 =
-    y1 - y0 < h ? cy : y - h2 < y0 ? y0 + h2 : y + h2 > y1 ? y1 - h2 : y;
-  const x2 =
-    x1 - x0 < w ? cx : x - w2 < x0 ? x0 + w2 : x + w2 > x1 ? x1 - w2 : x;
+  const y2 = y1 - y0 < h ? cy : y - h2 < y0 ? y0 + h2 : y + h2 > y1 ? y1 - h2 : y;
+  const x2 = x1 - x0 < w ? cx : x - w2 < x0 ? x0 + w2 : x + w2 > x1 ? x1 - w2 : x;
 
   const p = vp.unproject([x2, y2]);
 

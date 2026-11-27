@@ -1,20 +1,10 @@
 import BezierEasing from "bezier-easing";
 
-const fixed = (num: number, precision = 1) =>
-  parseFloat(num.toFixed(precision)).toString();
+const fixed = (num: number, precision = 1) => parseFloat(num.toFixed(precision)).toString();
 
-const rgba = (r: number, g: number, b: number, a: number) =>
-  `rgba(${r}, ${g}, ${b}, ${fixed(a, 3)})`;
-const shadow = (
-  left: number,
-  top: number,
-  blur: number,
-  spread: number,
-  color: string
-) =>
-  `${fixed(left)}px ${fixed(top)}px ${fixed(blur)}px ${fixed(
-    spread
-  )}px ${color}`;
+const rgba = (r: number, g: number, b: number, a: number) => `rgba(${r}, ${g}, ${b}, ${fixed(a, 3)})`;
+const shadow = (left: number, top: number, blur: number, spread: number, color: string) =>
+  `${fixed(left)}px ${fixed(top)}px ${fixed(blur)}px ${fixed(spread)}px ${color}`;
 
 const makeShadow = (config: typeof baseConfig) => {
   const alphaEasing = BezierEasing(...config.alphaEasingValue);
@@ -52,7 +42,7 @@ const makeShadow = (config: typeof baseConfig) => {
 
   const boxShadow = boxShadowValues
     .map(([leftOffset, topOffset, blur, spread, alpha]) =>
-      shadow(leftOffset, topOffset, blur, spread, rgba(0, 0, 0, alpha))
+      shadow(leftOffset, topOffset, blur, spread, rgba(0, 0, 0, alpha)),
     )
     .join(",");
 
@@ -88,14 +78,11 @@ export const spec = Array.from({ length: 24 }).map((_, i) => {
     shadowLayers: 4,
     offset: 4 + BezierEasing(0.2, 0.2, 0.8, 0.8)((i + 1) / 24) * (40 - 4),
     blur: 5 + BezierEasing(0.2, 0.2, 0.8, 0.8)((i + 1) / 24) * (60 - 5),
-    alpha:
-      0.02 + BezierEasing(0.5, 0.2, 0.8, 0.5)((i + 1) / 24) * (0.21 - 0.02),
+    alpha: 0.02 + BezierEasing(0.5, 0.2, 0.8, 0.5)((i + 1) / 24) * (0.21 - 0.02),
     spread: 0 + BezierEasing(0.2, 0.2, 0.8, 0.8)((i + 1) / 24) * (-8 - 0),
   });
 
   return { ambientShadow, keyShadow };
 });
 
-export default spec.map(
-  ({ ambientShadow, keyShadow }) => keyShadow + "," + ambientShadow
-);
+export default spec.map(({ ambientShadow, keyShadow }) => keyShadow + "," + ambientShadow);

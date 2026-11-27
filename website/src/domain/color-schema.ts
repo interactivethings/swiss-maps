@@ -25,14 +25,7 @@ export const COLOR_SCHEMA_ZVV = [
   "rgb(228, 200, 179)",
 ];
 
-export const COLOR_SCHEMA_CHEYSSON = [
-  "#e8d364",
-  "#f1dfa4",
-  "#f9ece3",
-  "#f0bbb5",
-  "#e06766",
-  "#85aab2",
-];
+export const COLOR_SCHEMA_CHEYSSON = ["#e8d364", "#f1dfa4", "#f9ece3", "#f0bbb5", "#e06766", "#85aab2"];
 // export const COLOR_SCHEMA_JUICE = ["#E39F97", "#E2AC41", "#40909D", "#D1D1D1"];
 
 export const COLOR_SCHEMA_MAP = {

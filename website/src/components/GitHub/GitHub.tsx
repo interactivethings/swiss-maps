@@ -1,8 +1,9 @@
-import * as React from "react";
 import * as MUI from "@mui/material";
-import * as colors from "@/theme/colors";
-import { GitHub as IcGitHub } from "react-feather";
 import { styled } from "@mui/material/styles";
+import * as React from "react";
+import { GitHub as IcGitHub } from "react-feather";
+
+import * as colors from "@/theme/colors";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -24,9 +25,7 @@ function GitHub(props: Props, ref: any) {
   return (
     <Root ref={ref} {...rest}>
       <IcGitHub width="72" height="72" />
-      <MUI.Typography variant="subtitle1">
-        Swiss Maps is open source and freely available on GitHub.
-      </MUI.Typography>
+      <MUI.Typography variant="subtitle1">Swiss Maps is open source and freely available on GitHub.</MUI.Typography>
       <MUI.Button
         component="a"
         href="https://github.com/interactivethings/swiss-maps"

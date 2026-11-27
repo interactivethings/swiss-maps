@@ -1,11 +1,13 @@
+import { promises as fs } from "fs";
+import * as path from "path";
+
 import Cors from "cors";
 import { either } from "fp-ts";
-import { promises as fs } from "fs";
 import { enableMapSet, produce } from "immer";
 import * as t from "io-ts";
 import * as mapshaper from "mapshaper";
 import { NextApiRequest, NextApiResponse } from "next";
-import * as path from "path";
+
 import { defaultOptions, Shape } from "@/shared";
 
 enableMapSet();
@@ -36,16 +38,11 @@ const Query = t.type({
   download: t.union([t.undefined, t.string]),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await cors(req, res);
 
-    const query = either.getOrElseW<unknown, undefined>(() => undefined)(
-      Query.decode(req.query),
-    );
+    const query = either.getOrElseW<unknown, undefined>(() => undefined)(Query.decode(req.query));
 
     if (!query) {
       res.statusCode = 200;
@@ -75,15 +72,7 @@ export default async function handler(
           async (ext) =>
             [
               `${shape}.${ext}`,
-              await fs.readFile(
-                path.join(
-                  process.cwd(),
-                  "public",
-                  "swiss-maps",
-                  year,
-                  `${shape}.${ext}`,
-                ),
-              ),
+              await fs.readFile(path.join(process.cwd(), "public", "swiss-maps", year, `${shape}.${ext}`)),
             ] as const,
         );
       });
@@ -108,10 +97,7 @@ export default async function handler(
 
     if (format === "topojson") {
       if (query.download !== undefined) {
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="swiss-maps.json"`,
-        );
+        res.setHeader("Content-Disposition", `attachment; filename="swiss-maps.json"`);
       }
 
       res.setHeader("Content-Type", "application/json");
@@ -120,10 +106,7 @@ export default async function handler(
       res.setHeader("Content-Type", "image/svg+xml");
 
       if (query.download !== undefined) {
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="swiss-maps.svg"`,
-        );
+        res.setHeader("Content-Disposition", `attachment; filename="swiss-maps.svg"`);
       }
       res.status(200).send(output["output.svg"]);
     }

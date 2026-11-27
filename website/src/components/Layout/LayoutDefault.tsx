@@ -1,6 +1,7 @@
 import { Footer } from "@/components/Footer";
 import { GitHub } from "@/components/GitHub";
 import { Header } from "@/components/Header";
+
 import { HeadMeta } from "../HeadMeta";
 import { MetaProps } from "../HeadMeta/HeadMeta";
 

@@ -2,14 +2,16 @@ import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import * as d3 from "d3";
 import * as React from "react";
-import { COLOR_SCHEMA_MAP } from "@/domain/color-schema";
 import { useImmer } from "use-immer";
+
+import { COLOR_SCHEMA_MAP } from "@/domain/color-schema";
+import { useGeoData } from "@/domain/geodata";
+
 import { useContext } from "../context";
 import { CH_BBOX, constrainZoom, LINE_COLOR } from "../domain/deck-gl";
-import { useGeoData } from "@/domain/geodata";
-import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -66,10 +68,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
   const onResize = React.useCallback(
     ({ width, height }: { width: number; height: number }) => {
       mutate((draft) => {
-        draft.viewState = constrainZoom(
-          { ...draft.viewState, width, height },
-          CH_BBOX,
-        );
+        draft.viewState = constrainZoom({ ...draft.viewState, width, height }, CH_BBOX);
       });
     },
     [mutate],
@@ -101,12 +100,7 @@ export const Preview = React.forwardRef(({}: Props, deckRef: any) => {
         // domain is decided by coloring item size
         // currently only support cantons
         // if not exist, a random number 30 is assigned
-        .domain([
-          "1",
-          geoData.cantons?.features?.length
-            ? `${geoData.cantons.features.length}`
-            : "30",
-        ])
+        .domain(["1", geoData.cantons?.features?.length ? `${geoData.cantons.features.length}` : "30"])
         .range(color)
     );
   }, [options.color, geoData.cantons]);

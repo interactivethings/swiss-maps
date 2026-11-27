@@ -1,8 +1,9 @@
-import { ThemeProvider } from "@/theme";
+import { AppCacheProvider } from "@mui/material-nextjs/v15-pagesRouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { enableMapSet } from "immer";
 import { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppCacheProvider } from "@mui/material-nextjs/v15-pagesRouter";
+
+import { ThemeProvider } from "@/theme";
 
 enableMapSet();
 

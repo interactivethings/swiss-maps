@@ -14,7 +14,7 @@ declare module "@deck.gl/core" {
       options?: {
         padding?: number;
         offset?: [number, number];
-      }
+      },
     ): {
       zoom: number;
       longitude: number;

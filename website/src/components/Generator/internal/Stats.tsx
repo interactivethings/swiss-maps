@@ -1,10 +1,12 @@
 import * as MUI from "@mui/material";
-import * as React from "react";
-import { downloadUrl } from "@/shared";
-import { useImmer } from "use-immer";
-import { useContext } from "../context";
-import { useQuery } from "@tanstack/react-query";
 import { styled } from "@mui/material/styles";
+import { useQuery } from "@tanstack/react-query";
+import * as React from "react";
+import { useImmer } from "use-immer";
+
+import { downloadUrl } from "@/shared";
+
+import { useContext } from "../context";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -36,31 +38,13 @@ function Stats(props: Props) {
   });
 
   const { data: topoData } = useQuery({
-    queryKey: [
-      "stat",
-      "topojson",
-      options.year,
-      options.simplify,
-      ...options.shapes,
-    ],
-    queryFn: () =>
-      fetch(downloadUrl({ ...options, format: "topojson" }, "v0")).then((res) =>
-        res.text(),
-      ),
+    queryKey: ["stat", "topojson", options.year, options.simplify, ...options.shapes],
+    queryFn: () => fetch(downloadUrl({ ...options, format: "topojson" }, "v0")).then((res) => res.text()),
   });
 
   const { data: svgData } = useQuery({
-    queryKey: [
-      "stat",
-      "svg",
-      options.year,
-      options.simplify,
-      ...options.shapes,
-    ],
-    queryFn: () =>
-      fetch(downloadUrl({ ...options, format: "svg" }, "v0")).then((res) =>
-        res.text(),
-      ),
+    queryKey: ["stat", "svg", options.year, options.simplify, ...options.shapes],
+    queryFn: () => fetch(downloadUrl({ ...options, format: "svg" }, "v0")).then((res) => res.text()),
   });
 
   React.useEffect(() => {
@@ -108,10 +92,7 @@ function humanFileSize(bytes: number, si = false, dp = 1) {
   do {
     bytes /= thresh;
     ++u;
-  } while (
-    Math.round(Math.abs(bytes) * r) / r >= thresh &&
-    u < units.length - 1
-  );
+  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
   return bytes.toFixed(dp) + " " + units[u];
 }

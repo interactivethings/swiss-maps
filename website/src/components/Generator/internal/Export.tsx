@@ -1,10 +1,12 @@
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
 import { Download } from "react-feather";
+
 import { downloadUrl } from "@/shared";
+
 import { useContext } from "../context";
 import { domDataUrlDownload } from "../domain/dom";
-import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -68,13 +70,7 @@ function Export(props: Props) {
         SVG
       </MUI.Button>
 
-      <MUI.Button
-        size="large"
-        variant="contained"
-        color="primary"
-        startIcon={<Download />}
-        onClick={exportCanvas}
-      >
+      <MUI.Button size="large" variant="contained" color="primary" startIcon={<Download />} onClick={exportCanvas}>
         PNG
       </MUI.Button>
     </Root>

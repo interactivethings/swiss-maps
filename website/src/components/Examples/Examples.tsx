@@ -1,6 +1,6 @@
-import * as React from "react";
 import * as MUI from "@mui/material";
 import { styled } from "@mui/material/styles";
+import * as React from "react";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -63,11 +63,7 @@ function Examples(props: Props, ref: any) {
           </MUI.CardMedia>
         </Card>
         <Card elevation={4}>
-          <img
-            src="/screenshot-mutations.jpg"
-            width="100%"
-            alt="Screenshot of mutations tool"
-          />
+          <img src="/screenshot-mutations.jpg" width="100%" alt="Screenshot of mutations tool" />
           <CardFooter>
             <CardAuthor>InteractiveThings</CardAuthor>
             <CardTitle href="/mutations">Municipalities change audit</CardTitle>

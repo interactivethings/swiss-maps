@@ -1,9 +1,10 @@
+import { MapController } from "@deck.gl/core";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
-import { ComponentProps } from "react";
-import { useGeoData } from "@/domain/geodata";
-import { MapController } from "@deck.gl/core";
 import { color } from "d3";
+import { ComponentProps } from "react";
+
+import { useGeoData } from "@/domain/geodata";
 
 export const LINE_COLOR = [100, 100, 100, 127] as const;
 const createColor = (colorString: string) => {
@@ -32,11 +33,7 @@ const MutationsMap = ({
   return (
     <DeckGL
       controller={MapController}
-      getTooltip={({
-        object,
-      }: {
-        object: { properties: { name: string } };
-      }) => {
+      getTooltip={({ object }: { object: { properties: { name: string } } }) => {
         if (!object) {
           return;
         }
@@ -62,8 +59,8 @@ const MutationsMap = ({
             return highlightedMunicipalities.added.includes(d.properties.id)
               ? ADDED_COLOR.array
               : highlightedMunicipalities.removed.includes(d.properties.id)
-              ? REMOVED_COLOR.array
-              : [255, 255, 255];
+                ? REMOVED_COLOR.array
+                : [255, 255, 255];
           }}
         />
       )}

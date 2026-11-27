@@ -1,10 +1,5 @@
 import { Preview } from "./Preview";
 
-export default function WrappedPreview({
-  deckRef,
-  ...props
-}: {
-  deckRef: any;
-}) {
+export default function WrappedPreview({ deckRef, ...props }: { deckRef: any }) {
   return <Preview ref={deckRef} {...props} />;
 }

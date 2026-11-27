@@ -1,12 +1,14 @@
+import { styled } from "@mui/material/styles";
 import dynamic from "next/dynamic";
 import * as React from "react";
-import { defaultOptions } from "@/shared";
 import { useImmer } from "use-immer";
+
+import { defaultOptions } from "@/shared";
+
 import { Provider, State } from "./context";
 import Export from "./internal/Export";
 import Panel from "./internal/Panel";
 import Stats from "./internal/Stats";
-import { styled } from "@mui/material/styles";
 
 /**
  * The underlying DOM element which is rendered by this component.
@@ -43,10 +45,7 @@ function Generator(props: Props, ref: any) {
           <Panel />
           <Right>
             <Preview deckRef={deckRef} />
-            <Export
-              deckRef={deckRef}
-              style={{ marginTop: "-80px", marginRight: "40px" }}
-            />
+            <Export deckRef={deckRef} style={{ marginTop: "-80px", marginRight: "40px" }} />
           </Right>
         </Container>
         <Stats />

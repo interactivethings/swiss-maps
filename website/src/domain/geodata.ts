@@ -1,9 +1,11 @@
-import cityData from "@/public/swiss-city-topo.json";
 import { useQuery } from "@tanstack/react-query";
-import { previewSourceUrl } from "@/shared";
+import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import * as topojson from "topojson-client";
+
+import cityData from "@/public/swiss-city-topo.json";
+import { previewSourceUrl } from "@/shared";
+
 import { Value } from "../components/Generator/context";
-import { Feature, Geometry, GeoJsonProperties } from "geojson";
 
 export type GeoDataFeature = Feature<Geometry, GeoJsonProperties>;
 
@@ -13,32 +15,15 @@ const castFeatures = (d: any) => {
 
 const getGeoData = (json: any) => {
   const geoData = {
-    country: json.objects?.country
-      ? castFeatures(topojson.feature(json, json.objects.country))
-      : undefined,
-    cantons: json.objects?.cantons
-      ? castFeatures(topojson.feature(json, json.objects.cantons))
-      : undefined,
-    neighbors: json.objects?.cantons
-      ? topojson.neighbors(json.objects.cantons.geometries)
-      : undefined,
-    districts: json.objects?.districts
-      ? castFeatures(topojson.feature(json, json.objects.districts))
-      : undefined,
+    country: json.objects?.country ? castFeatures(topojson.feature(json, json.objects.country)) : undefined,
+    cantons: json.objects?.cantons ? castFeatures(topojson.feature(json, json.objects.cantons)) : undefined,
+    neighbors: json.objects?.cantons ? topojson.neighbors(json.objects.cantons.geometries) : undefined,
+    districts: json.objects?.districts ? castFeatures(topojson.feature(json, json.objects.districts)) : undefined,
     municipalities: json.objects?.municipalities
       ? castFeatures(topojson.feature(json, json.objects.municipalities))
       : undefined,
-    lakes: json.objects?.lakes
-      ? castFeatures(topojson.feature(json, json.objects.lakes))
-      : undefined,
-    city: cityData
-      ? castFeatures(
-          topojson.feature(
-            cityData as any,
-            cityData.objects["swiss-city"] as any
-          )
-        )
-      : undefined,
+    lakes: json.objects?.lakes ? castFeatures(topojson.feature(json, json.objects.lakes)) : undefined,
+    city: cityData ? castFeatures(topojson.feature(cityData as any, cityData.objects["swiss-city"] as any)) : undefined,
   };
   return geoData;
 };
@@ -57,12 +42,11 @@ export const useGeoData = (
   },
   queryOptions?: {
     enabled?: boolean;
-  }
+  },
 ) => {
   const query = useQuery({
     queryKey: ["geoData", options.year!, options.simplify, ...options.shapes],
-    queryFn: () =>
-      options ? fetchGeoData(options as Value["state"]["options"]) : undefined,
+    queryFn: () => (options ? fetchGeoData(options as Value["state"]["options"]) : undefined),
     enabled: options && options.year ? queryOptions?.enabled : false,
   });
 

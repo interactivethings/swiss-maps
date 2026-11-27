@@ -1,9 +1,10 @@
-import { domCopyText } from "@/components/Generator/domain/dom";
-import LayoutDefault from "@/components/Layout/LayoutDefault";
 import * as MUI from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { GetServerSideProps } from "next";
 import { Copy, Download } from "react-feather";
-import { styled } from "@mui/material/styles";
+
+import { domCopyText } from "@/components/Generator/domain/dom";
+import LayoutDefault from "@/components/Layout/LayoutDefault";
 
 type Props = { host: string };
 
@@ -22,8 +23,7 @@ const API_PARAMETERS = [
   },
   {
     name: "shapes",
-    description:
-      "Which kinds of shapes you want to include (comma-separation).",
+    description: "Which kinds of shapes you want to include (comma-separation).",
     value: ["country", "lakes", "cantons", "municipalities"],
     defaultValue: "country,cantons,lakes",
   },
@@ -97,38 +97,36 @@ export default function Page(props: Props) {
             <div className={"th"}>Description</div>
             <div className={"th"}>Value</div>
             <div className={"th"}>Example value</div>
-            {API_PARAMETERS.map(
-              ({ name, description, value, defaultValue }) => {
-                return (
-                  <>
-                    <div>{name}</div>
-                    <div>{description}</div>
-                    <div>
-                      {Array.isArray(value) ? (
-                        <ValueList>
-                          {value.map((x, i) => (
-                            <Value key={i}>{x}</Value>
-                          ))}
-                        </ValueList>
-                      ) : (
-                        <Value>{value}</Value>
-                      )}
-                    </div>
-                    <div>
-                      {Array.isArray(defaultValue) ? (
-                        <ValueList>
-                          {defaultValue.map((x, i) => (
-                            <ValueExample key={i}>{x}</ValueExample>
-                          ))}
-                        </ValueList>
-                      ) : (
-                        <ValueExample>{defaultValue}</ValueExample>
-                      )}
-                    </div>
-                  </>
-                );
-              },
-            )}
+            {API_PARAMETERS.map(({ name, description, value, defaultValue }) => {
+              return (
+                <>
+                  <div>{name}</div>
+                  <div>{description}</div>
+                  <div>
+                    {Array.isArray(value) ? (
+                      <ValueList>
+                        {value.map((x, i) => (
+                          <Value key={i}>{x}</Value>
+                        ))}
+                      </ValueList>
+                    ) : (
+                      <Value>{value}</Value>
+                    )}
+                  </div>
+                  <div>
+                    {Array.isArray(defaultValue) ? (
+                      <ValueList>
+                        {defaultValue.map((x, i) => (
+                          <ValueExample key={i}>{x}</ValueExample>
+                        ))}
+                      </ValueList>
+                    ) : (
+                      <ValueExample>{defaultValue}</ValueExample>
+                    )}
+                  </div>
+                </>
+              );
+            })}
           </ParameterTable>
         </Section>
 
@@ -146,18 +144,12 @@ export default function Page(props: Props) {
                   <span>{url}</span>
 
                   <div style={{ display: "flex", flexWrap: "nowrap" }}>
-                    <CopyIconButton
-                      size="small"
-                      onClick={() => domCopyText(url)}
-                    >
+                    <CopyIconButton size="small" onClick={() => domCopyText(url)}>
                       <Tooltip className="tooltip">Copy to clipboard</Tooltip>
 
                       <Copy width={16} height={16} />
                     </CopyIconButton>
-                    <CopyIconButton
-                      size="small"
-                      {...{ component: "a", download: true, href: downloadUrl }}
-                    >
+                    <CopyIconButton size="small" {...{ component: "a", download: true, href: downloadUrl }}>
                       <Tooltip className="tooltip">Download the data</Tooltip>
 
                       <Download width={16} height={16} />
@@ -313,9 +305,7 @@ const Tooltip = styled("span", {
   },
 }));
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context,
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const host = context.req.headers.host;
   if (!host) {
     return {

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.5/schema.json",
+
+  "files": {
+    "includes": ["**", "!**/.direnv", "!**/.next", "!**/node_modules"]
+  },
+
+  "linter": {
+    "enabled": false
+  },
+
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 120
+  },
+
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":NODE:"],
+              ":BLANK_LINE:",
+              [":PACKAGE:"],
+              ":BLANK_LINE:",
+              [":ALIAS:"],
+              ":BLANK_LINE:",
+              [":PATH:"]
+            ]
+          }
+        }
+      }
+    }
+  }
+}
