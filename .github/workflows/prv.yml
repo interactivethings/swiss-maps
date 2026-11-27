@@ -26,7 +26,9 @@ jobs:
   integrity:
     if: github.event.pull_request.draft == false
     name: Integrity
-    needs: check-flake
+    needs:
+      - check-flake
+
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -41,7 +43,9 @@ jobs:
   prv:
     if: github.event.pull_request.draft == false
     name: Pull Request Verification
-    needs: check-flake
+    needs:
+      - check-flake
+
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
