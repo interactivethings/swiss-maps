@@ -1,6 +1,8 @@
 name: Pull Request Verification
 
-on: pull_request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -11,6 +13,8 @@ concurrency:
 
 jobs:
   check-flake:
+    if: github.event.pull_request.draft == false
+    name: Check Flake
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -19,6 +23,8 @@ jobs:
       - run: nix flake check
 
   integrity:
+    if: github.event.pull_request.draft == false
+    name: Integrity
     needs: check-flake
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -31,6 +37,8 @@ jobs:
       - run: git diff --exit-code
 
   prv:
+    if: github.event.pull_request.draft == false
+    name: Pull Request Verification
     needs: check-flake
     runs-on: ubuntu-latest
     timeout-minutes: 15
